@@ -1,0 +1,5 @@
+dist/
+src/main/webapp/dist/
+src/main/webapp/painel/elm-stuff/
+.idea/
+painel.iml
