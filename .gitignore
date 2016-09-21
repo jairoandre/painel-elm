@@ -1,5 +1,6 @@
 dist/
-src/main/webapp/dist/
-src/main/webapp/painel/elm-stuff/
+target/
+src/main/elm/elm-stuff/
+src/main/elm/node_modules/
 .idea/
 painel.iml

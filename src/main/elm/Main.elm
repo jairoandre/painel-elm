@@ -6,6 +6,7 @@ import Html.Events exposing (onClick)
 import Http
 import Json.Decode exposing (Decoder, object2, string, int, (:=))
 import Task
+import Model exposing (..)
 
 
 
@@ -21,20 +22,19 @@ main =
 -- MODEL
 
 type alias Model =
-  { name : String
-  , qtd : Int
+  { rooms : Room
   }
 
 init : (Model, Cmd Msg)
 init =
-  ( Model "nothing" 0, Cmd.none)
+  ( Model mockRoom, Cmd.none)
 
 
 -- UDATE
 
 type Msg
   = MorePlease
-  | FetchSucceed  Model
+  | FetchSucceed RoomJson
   | FetchFail Http.Error
 
 
@@ -42,10 +42,10 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update message model =
   case message of
     MorePlease ->
-      (model, getPainel)
+      (model, dashBoard)
 
-    FetchSucceed newModel ->
-      (newModel, Cmd.none)
+    FetchSucceed json ->
+      (model, Cmd.none)
 
     FetchFail _ ->
       (model, Cmd.none)
@@ -57,8 +57,7 @@ update message model =
 view : Model -> Html Msg
 view model =
   div []
-    [ h2 [] [ text (model.name ++ ": " ++ (toString model.qtd)) ]
-    , button [onClick MorePlease] [ text "More Please" ]
+    [ h2 [] [ text (toString model) ]
     ]
 
 -- SUBSCRIPTIONS
@@ -69,10 +68,6 @@ subscriptions model =
 
 -- HTTP
 
-getPainel : Cmd Msg
-getPainel =
-  Task.perform FetchFail FetchSucceed (Http.get decodeModel "rest/api/painel")
-
-decodeModel : Decoder Model
-decodeModel =
-  object2 Model ("name" := string) ("qtd" := int)
+dashBoard : Cmd Msg
+dashBoard =
+  Task.perform FetchFail FetchSucceed (Http.get roomJsonDecoder "rest/api/painel")
