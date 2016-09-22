@@ -33,10 +33,10 @@ type alias RoomJson =
   , scp : Int
   , fallRisk : Int
   , pressureUlcer : Int
-  , allergies : String
-  , exams : String
+  , allergies : List String
+  , exams : List String
   , surgery : String
-  , fasting : List String
+  , fasting : String
   }
 
 roomJsonDecoder : Decoder RoomJson
@@ -53,10 +53,10 @@ roomJsonDecoder =
     |> optional "scp" int -1
     |> optional "fallRisk" int -1
     |> optional "pressureUlcer" int -1
-    |> optional "allergies" string ""
-    |> optional "exams" string ""
+    |> optional "allergies" (list string) []
+    |> optional "exams" (list string) []
     |> optional "surgery" string ""
-    |> optional "fasting" (list string)
+    |> optional "fasting" string ""
 
 type RoomStatus
   = Occupied
@@ -68,6 +68,28 @@ type RoomStatus
   | Maintenance
   | Interdicted
   | EmptyRoom
+
+stringToRoomStatus : String -> RoomStatus
+stringToRoomStatus status =
+  case status of
+    "Occupied" ->
+      Occupied
+    "MedicalRelease" ->
+      MedicalRelease
+    "Vacancy" ->
+      Vacancy
+    "Companion" ->
+      Companion
+    "Cleaning" ->
+      Cleaning
+    "Reserved" ->
+      Reserved
+    "Maintenance" ->
+      Maintenance
+    "Interdicted" ->
+      Interdicted
+    "EmptyRoom" ->
+      EmptyRoom
 
 type CautionLevel
   = Default
@@ -86,9 +108,13 @@ type RiskLevel
   | Average
   | High
 
+
+
 roomJsonToObject : RoomJson -> Room
 roomJsonToObject json =
-  mockRoom
+  let
+    status =
+
 
 mockRoom : Room
 mockRoom =
