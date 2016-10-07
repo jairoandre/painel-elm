@@ -1,4 +1,4 @@
-module Model exposing (Room, RoomJson, RoomStatus, CautionLevel, RiskLevel, mockRoom, roomJsonDecoder)
+module Model exposing (Room, RoomJson, UserJson, testJsonDecoder, RoomStatus, CautionLevel, RiskLevel, mockRoom, roomJsonDecoder)
 
 import Json.Decode exposing (Decoder, int, string, float, list, null, oneOf)
 import Json.Decode.Pipeline exposing (decode, required, optional, hardcoded)
@@ -36,7 +36,7 @@ type alias RoomJson =
   , allergies : String
   , exams : String
   , surgery : String
-  , fasting : List String
+  , fasting : String
   }
 
 roomJsonDecoder : Decoder RoomJson
@@ -56,7 +56,45 @@ roomJsonDecoder =
     |> optional "allergies" string ""
     |> optional "exams" string ""
     |> optional "surgery" string ""
-    |> optional "fasting" (list string)
+    |> optional "fasting" string ""
+
+type alias Company =
+  { name : String
+  , catchPhrase : String
+  , bs : String
+  }
+
+companyDecoder : Decoder Company
+companyDecoder =
+  decode Company
+    |> required "name" string
+    |> required "catchPhrase" string
+    |> required "bs" string
+
+type alias UserJson =
+  { id : Int
+  , name : String
+  , username : String
+  , email : String
+  , phone : String
+  , website : String
+  , company : Company
+  }
+
+userJsonDecoder : Decoder UserJson
+userJsonDecoder =
+  decode UserJson
+    |> required "id" int
+    |> required "name" string
+    |> required "username" string
+    |> required "email" string
+    |> required "phone" string
+    |> required "website" string
+    |> required "company" companyDecoder
+
+testJsonDecoder : Decoder (List UserJson)
+testJsonDecoder =
+  list userJsonDecoder
 
 type RoomStatus
   = Occupied
@@ -107,4 +145,4 @@ mockRoom =
     Nothing
     Nothing
     Nothing
-    Nothing
+    (Just "lactose")

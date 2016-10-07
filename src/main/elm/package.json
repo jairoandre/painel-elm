@@ -4,14 +4,23 @@
   "description": "Hospital dashboard",
   "main": "index.js",
   "scripts": {
+    "start": "node_modules/.bin/webpack-dev-server --hot --colors --inline --content-base src/",
     "build": "node_modules/.bin/webpack --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "css-loader": "^0.25.0",
     "elm-webpack-loader": "^3.0.6",
+    "extract-text-webpack-plugin": "^1.0.1",
     "html-webpack-plugin": "^2.22.0",
-    "webpack": "^1.13.2"
+    "less": "^2.7.1",
+    "less-loader": "^2.2.3",
+    "path": "^0.12.7",
+    "postcss-loader": "^0.13.0",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.2"
   }
 }

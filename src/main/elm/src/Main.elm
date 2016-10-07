@@ -1,4 +1,5 @@
 module Main exposing (..)
+
 import Html exposing (Html, div, h2, button, text)
 import Html.App as App
 import Html.Attributes exposing (..)
@@ -7,6 +8,8 @@ import Http
 import Json.Decode exposing (Decoder, object2, string, int, (:=))
 import Task
 import Model exposing (..)
+import Time exposing(Time, minute)
+import View exposing(..)
 
 
 
@@ -23,29 +26,34 @@ main =
 
 type alias Model =
   { rooms : Room
+  , users : List UserJson
   }
 
 init : (Model, Cmd Msg)
 init =
-  ( Model mockRoom, Cmd.none)
+  ( Model mockRoom [], dashBoard)
 
 
 -- UDATE
 
 type Msg
-  = MorePlease
+  = MorePlease Time
   | FetchSucceed RoomJson
+  | TestSucceed (List UserJson)
   | FetchFail Http.Error
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update message model =
   case message of
-    MorePlease ->
+    MorePlease newTime ->
       (model, dashBoard)
 
     FetchSucceed json ->
       (model, Cmd.none)
+
+    TestSucceed json ->
+      ({ model | users = json }, Cmd.none)
 
     FetchFail _ ->
       (model, Cmd.none)
@@ -54,20 +62,24 @@ update message model =
 
 -- VIEW
 
+printModel : Model -> Html Msg
+printModel model =
+  h2 [] [text (toString model)]
+
 view : Model -> Html Msg
 view model =
-  div []
-    [ h2 [] [ text (toString model) ]
+  div [id "app", style [("width", "100%")]]
+    [ header
     ]
 
 -- SUBSCRIPTIONS
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+  Time.every minute MorePlease
 
 -- HTTP
 
 dashBoard : Cmd Msg
 dashBoard =
-  Task.perform FetchFail FetchSucceed (Http.get roomJsonDecoder "rest/api/painel")
+  Task.perform FetchFail TestSucceed (Http.get testJsonDecoder "https://jsonplaceholder.typicode.com/users")
