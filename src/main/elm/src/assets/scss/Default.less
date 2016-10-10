@@ -1,0 +1,60 @@
+@width: 1920px;
+@height: 1080px;
+@headerHeight: 50px;
+
+@headerFactor: 0.15;
+
+@titleWrapperWidth: (1 - 2 * @headerFactor) * @width;
+@titleWrapperOffset: @headerFactor * @width;
+
+@dateWrapperWidth: @headerFactor * @width;
+@dateWrapperOffset: (1 - @headerFactor) * @width;
+
+body {
+	margin: 0;
+}
+
+.app {
+	position: relative;
+	transform-origin: top left;
+}
+
+.header__wrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+.logo__wrapper {
+	position: absolute;	
+	width: @dateWrapperWidth;
+	height: @headerHeight;
+}
+
+.logo__wrapper img {
+	height: @headerHeight * 0.8;
+	margin-top: 0.2 * @headerHeight / 2;
+	margin-left: (@dateWrapperWidth - 151.89) / 4;
+}
+
+.title__wrapper {
+	position: absolute;
+	text-align: center;
+	font-size: 40px;
+	background: #233269;
+	color: #fff;
+	left: @titleWrapperOffset;
+	width: @titleWrapperWidth;
+	height: @headerHeight;
+	line-height: @headerHeight; 
+}
+
+.date__wrapper {
+	position: absolute;
+	text-align: center;
+	font-size: 30px;
+	left: @dateWrapperOffset;
+	width: @dateWrapperWidth;
+	height: @headerHeight;
+	line-height: @headerHeight;
+}
