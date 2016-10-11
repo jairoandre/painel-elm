@@ -2,13 +2,15 @@
 @height: 1080px;
 @headerHeight: 50px;
 
-@headerFactor: 0.15;
+@headerFactor: 0.1;
 
 @titleWrapperWidth: (1 - 2 * @headerFactor) * @width;
 @titleWrapperOffset: @headerFactor * @width;
 
 @dateWrapperWidth: @headerFactor * @width;
 @dateWrapperOffset: (1 - @headerFactor) * @width;
+
+@thinBlue: #7481ae;
 
 body {
 	margin: 0;
@@ -27,14 +29,12 @@ body {
 
 .logo__wrapper {
 	position: absolute;	
-	width: @dateWrapperWidth;
-	height: @headerHeight;
 }
 
 .logo__wrapper img {
-	height: @headerHeight * 0.8;
-	margin-top: 0.2 * @headerHeight / 2;
-	margin-left: (@dateWrapperWidth - 151.89) / 4;
+	height: 40px;
+	margin-top: (@headerHeight - 40) / 2;
+	margin-left: (@dateWrapperWidth - 135) / 2;
 }
 
 .title__wrapper {
@@ -49,12 +49,112 @@ body {
 	line-height: @headerHeight; 
 }
 
+.title__wrapper--inner {
+	border-bottom: 1px solid #fff;
+}
+
 .date__wrapper {
 	position: absolute;
 	text-align: center;
-	font-size: 30px;
+	font-size: 20px;
 	left: @dateWrapperOffset;
 	width: @dateWrapperWidth;
 	height: @headerHeight;
 	line-height: @headerHeight;
+}
+
+// COLUMNS
+
+@columnHeaderHeight: 30px;
+.column__header__wrapper {
+	position: absolute;
+	top: @headerHeight;
+}
+
+.column__header {
+	position: absolute;
+	height: @columnHeaderHeight;
+	background-color: @thinBlue;
+	color: #fff;
+	line-height: @columnHeaderHeight;
+}
+
+.column__header__inner {
+	padding-left: 5px;
+	border-right: 1px solid #fff;
+}
+
+@specialtyWidth: 150px;
+.column__header--specialty {
+	width: @specialtyWidth;
+}
+
+@riskWidth: 130px;
+@riskOffset: @specialtyWidth;
+.column__header--risk {
+	width: @riskWidth;
+	left: @riskOffset;
+}
+
+@patientWidth: 350px;
+@patientOffset: @riskOffset + @riskWidth;
+.column__header--patient {
+	width: @patientWidth;
+	left: @patientOffset;
+}
+
+@convenioWidth: 150px;
+@convenioOffset: @patientOffset + @patientWidth;
+.column__header--convenio {
+	width: @convenioWidth;
+	left: @convenioOffset;
+}
+
+@obsWidth: 250px;
+@obsOffset: @convenioOffset + @convenioWidth;
+.column__header--obs {
+	width: @obsWidth;
+	left: @obsOffset;
+}
+
+@localizacaoWidth: 150px;
+@localizacaoOffset: @obsWidth + @obsOffset;
+.column__header--localizacao {
+	width: @localizacaoWidth;
+	left: @localizacaoOffset;
+}
+
+@tempoWidth: 140px;
+@tempoOffset: @localizacaoWidth + @localizacaoOffset;
+.column__header--tempo {
+	width: @tempoWidth;
+	left: @tempoOffset;
+}
+
+@alergiaWidth: 150px;
+@alergiaOffset: @tempoWidth + @tempoOffset;
+.column__header--alergia {
+	width: @alergiaWidth;
+	left: @alergiaOffset;
+}
+
+@exameWidth: 150px;
+@exameOffset: @alergiaWidth + @alergiaOffset;
+.column__header--exame {
+	width: @exameWidth;
+	left: @exameOffset;
+}
+
+@protocoloWidth: 150px;
+@protocoloOffset: @exameWidth + @exameOffset;
+.column__header--protocolo {
+	width: @protocoloWidth;
+	left: @protocoloOffset;
+}
+
+@internacaoWidth: 150px;
+@internacaoOffset: @protocoloWidth + @protocoloOffset;
+.column__header--internacao {
+	width: @internacaoWidth;
+	left: @internacaoOffset;
 }

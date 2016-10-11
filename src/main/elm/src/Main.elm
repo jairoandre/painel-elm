@@ -92,7 +92,8 @@ printModel model =
 view : Model -> Html Msg
 view model =
     div [ id "app", class "app", style [ ( "transform", "scale(" ++ (toString model.scale) ++ ")" ) ] ]
-        [ header "HOMERO MASSENA" model.date
+        [ header "PRONTO SOCORRO" model.date
+        , columnHeader
         ]
 
 
@@ -105,6 +106,7 @@ subscriptions model =
     Sub.batch
         [ Time.every minute MorePlease
         , Time.every second TickClock
+        , Window.resizes Resize
         ]
 
 
@@ -122,16 +124,85 @@ convertDate time =
     let
         date =
             Date.fromTime time
+
+        day =
+            Date.day date
+
+        dayStr =
+            if day < 10 then
+                "0" ++ toString day
+            else
+                toString day
+
+        monthStr =
+            case (Date.month date) of
+                Date.Jan ->
+                    "01"
+
+                Date.Feb ->
+                    "02"
+
+                Date.Mar ->
+                    "03"
+
+                Date.Apr ->
+                    "04"
+
+                Date.May ->
+                    "05"
+
+                Date.Jun ->
+                    "06"
+
+                Date.Jul ->
+                    "07"
+
+                Date.Aug ->
+                    "08"
+
+                Date.Sep ->
+                    "09"
+
+                Date.Oct ->
+                    "10"
+
+                Date.Nov ->
+                    "11"
+
+                Date.Dec ->
+                    "12"
+
+        yearStr =
+            toString <| Date.year <| date
+
+        hour =
+            Date.hour date
+
+        minute =
+            Date.minute date
+
+        second =
+            Date.second date
+
+        hourStr =
+            if hour < 10 then
+                "0" ++ toString hour
+            else
+                toString hour
+
+        minuteStr =
+            if minute < 10 then
+                "0" ++ toString minute
+            else
+                toString minute
+
+        secondStr =
+            if second < 10 then
+                "0" ++ toString second
+            else
+                toString second
     in
-        (toString <| Date.year <| date)
-            ++ "/"
-            ++ (toString <| Date.day <| date)
-            ++ " "
-            ++ (toString <| Date.hour <| date)
-            ++ ":"
-            ++ (toString <| Date.minute <| date)
-            ++ ":"
-            ++ (toString <| Date.second <| date)
+        dayStr ++ "/" ++ monthStr ++ "/" ++ yearStr ++ " " ++ hourStr ++ ":" ++ minuteStr ++ ":" ++ secondStr
 
 
 dashBoard : Cmd Msg
