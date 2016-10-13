@@ -4,7 +4,7 @@
   "description": "Hospital dashboard",
   "main": "index.js",
   "scripts": {
-    "start": "node_modules/.bin/webpack-dev-server --hot --colors --inline --content-base src/",
+    "start": "node_modules/.bin/webpack-dev-server --hot --host 10.1.8.118 --port 3000 --colors --inline --content-base src/",
     "build": "node_modules/.bin/webpack --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

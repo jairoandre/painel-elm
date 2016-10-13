@@ -40,7 +40,7 @@ columnHeader =
         , columnH "PACIENTE" "patient"
         , columnH "CONVÊNIO" "convenio"
         , columnH "OBSERVAÇÃO" "obs"
-        , columnH "LOCALIZ." "localizacao"
+        , columnH "LOCALIZAÇÃO" "localizacao"
         , columnH "TEMPO PERM." "tempo"
         , columnH "ALERGIA" "alergia"
         , columnH "EXAMES" "exame"

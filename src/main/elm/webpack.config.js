@@ -13,7 +13,7 @@ if (TARGET_ENV === 'development') {
   module.exports = {
 
     entry: [
-        'webpack-dev-server/client?http://localhost:8080',
+        'webpack-dev-server/client?http://localhost:3000',
         path.join(__dirname, 'index.js')
     ],
 

@@ -12,6 +12,7 @@ import Time exposing (Time, minute, second)
 import Date exposing (Date)
 import View exposing (..)
 import Window exposing (Size)
+import Utils exposing (..)
 
 
 main =
@@ -70,7 +71,7 @@ update message model =
             ( model, Cmd.none )
 
         TickClock newTime ->
-            ( { model | date = convertDate newTime }, Cmd.none )
+            ( { model | date = timeToStr newTime }, Cmd.none )
 
         Resize size ->
             let
@@ -92,7 +93,8 @@ printModel model =
 view : Model -> Html Msg
 view model =
     div [ id "app", class "app", style [ ( "transform", "scale(" ++ (toString model.scale) ++ ")" ) ] ]
-        [ header "PRONTO SOCORRO" model.date
+        [ div [ style [ ( "position", "absolute" ), ( "top", "500px" ) ] ] [ text (toString model) ]
+        , header "PRONTO SOCORRO" model.date
         , columnHeader
         ]
 
@@ -117,92 +119,6 @@ subscriptions model =
 initializeDimensions : Cmd Msg
 initializeDimensions =
     Task.perform (\_ -> Debug.crash "Oopss!!!") Resize Window.size
-
-
-convertDate : Time -> String
-convertDate time =
-    let
-        date =
-            Date.fromTime time
-
-        day =
-            Date.day date
-
-        dayStr =
-            if day < 10 then
-                "0" ++ toString day
-            else
-                toString day
-
-        monthStr =
-            case (Date.month date) of
-                Date.Jan ->
-                    "01"
-
-                Date.Feb ->
-                    "02"
-
-                Date.Mar ->
-                    "03"
-
-                Date.Apr ->
-                    "04"
-
-                Date.May ->
-                    "05"
-
-                Date.Jun ->
-                    "06"
-
-                Date.Jul ->
-                    "07"
-
-                Date.Aug ->
-                    "08"
-
-                Date.Sep ->
-                    "09"
-
-                Date.Oct ->
-                    "10"
-
-                Date.Nov ->
-                    "11"
-
-                Date.Dec ->
-                    "12"
-
-        yearStr =
-            toString <| Date.year <| date
-
-        hour =
-            Date.hour date
-
-        minute =
-            Date.minute date
-
-        second =
-            Date.second date
-
-        hourStr =
-            if hour < 10 then
-                "0" ++ toString hour
-            else
-                toString hour
-
-        minuteStr =
-            if minute < 10 then
-                "0" ++ toString minute
-            else
-                toString minute
-
-        secondStr =
-            if second < 10 then
-                "0" ++ toString second
-            else
-                toString second
-    in
-        dayStr ++ "/" ++ monthStr ++ "/" ++ yearStr ++ " " ++ hourStr ++ ":" ++ minuteStr ++ ":" ++ secondStr
 
 
 dashBoard : Cmd Msg
