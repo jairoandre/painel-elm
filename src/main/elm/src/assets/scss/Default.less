@@ -14,6 +14,7 @@
 
 body {
 	margin: 0;
+	font-family: Helvetica;
 }
 
 .app {
@@ -43,6 +44,7 @@ body {
 	font-size: 40px;
 	background: #233269;
 	color: #fff;
+  	text-shadow: #222 2px 2px 5px;
 	left: @titleWrapperOffset;
 	width: @titleWrapperWidth;
 	height: @headerHeight;
@@ -75,12 +77,19 @@ body {
 	position: absolute;
 	height: @columnHeaderHeight;
 	background-color: @thinBlue;
-	color: #fff;
+	color: #fff;	
+  	text-shadow: #111 2px 2px 5px;
+  	font-weight: bold;
 	line-height: @columnHeaderHeight;
 }
 
 .column__header__inner {
 	padding-left: 5px;
+	border-right: 1px solid #fff;
+}
+
+.column__header__inner--center {
+	text-align: center;
 	border-right: 1px solid #fff;
 }
 
@@ -157,4 +166,189 @@ body {
 .column__header--internacao {
 	width: @internacaoWidth;
 	left: @internacaoOffset;
+}
+
+
+// ESTILOS ASA
+
+@aptoWidth: 95px;
+.column__header--apto {
+	width: @aptoWidth;
+}
+
+
+
+@statusWidth: 80px;
+@statusOffset: @aptoWidth;
+.column__header--status {
+	width: @statusWidth;
+	left: @statusOffset;
+}
+
+@pacienteASAWidth: 300px;
+@pacienteASAOffset: @statusWidth + @statusOffset;
+.column__header--pacienteASA {
+	width: @pacienteASAWidth;
+	left: @pacienteASAOffset;
+}
+
+@medicoASAWidth: 200px;
+@medicoASAOffset: @pacienteASAWidth + @pacienteASAOffset;
+.column__header--medicoASA {
+	width: @medicoASAWidth;
+	left: @medicoASAOffset;
+}
+
+@convenioASAWidth: 120px;
+@convenioASAOffset: @medicoASAWidth + @medicoASAOffset;
+.column__header--convenioASA {
+	width: @convenioASAWidth;
+	left: @convenioASAOffset;
+}
+
+@obsASAWidth: 150px;
+@obsASAOffset: @convenioASAWidth + @convenioASAOffset;
+.column__header--obsASA {
+	width: @obsASAWidth;
+	left: @obsASAOffset;
+}
+
+@previsaoASAWidth: 75px;
+@previsaoASAOffset: @obsASAWidth + @obsASAOffset;
+.column__header--previsaoASA {
+	width: @previsaoASAWidth;
+	left: @previsaoASAOffset;
+	font-size: 10px;
+	background-color: red;
+}
+
+@precaucaoWidth: 75px;
+@precaucaoOffset: @previsaoASAWidth + @previsaoASAOffset;
+.column__header--precaucao {
+	width: @precaucaoWidth;
+	left: @precaucaoOffset;
+	font-size: 10px;
+	background-color: #4b3f9d;
+}
+
+@scpWidth: 75px;
+@scpOffset: @precaucaoWidth + @precaucaoOffset;
+.column__header--scp {
+	width: @scpWidth;
+	left: @scpOffset;
+	font-size: 10px;
+	background-color: #00afee;
+}
+
+@riscoWidth: 75px;
+@riscoOffset: @scpWidth + @scpOffset;
+.column__header--risco {
+	width: @riscoWidth;
+	left: @riscoOffset;
+	font-size: 10px;
+	background-color: #00a95a;
+}
+
+@ulceraWidth: 75px;
+@ulceraOffset: @riscoWidth + @riscoOffset;
+.column__header--ulcera {
+	width: @ulceraWidth;
+	left: @ulceraOffset;
+	font-size: 10px;
+	background-color: #a95b41;
+}
+
+@alergiaASAWidth: 150px;
+@alergiaASAOffset: @ulceraWidth + @ulceraOffset;
+.column__header--alergiaASA {
+	width: @alergiaASAWidth;
+	left: @alergiaASAOffset;
+	background-color: #ff6fbc;
+}
+
+@alergiaASAWidth: 175px;
+@alergiaASAOffset: @ulceraWidth + @ulceraOffset;
+.column__header--alergiaASA {
+	width: @alergiaASAWidth;
+	left: @alergiaASAOffset;
+	background-color: #ff6fbc;
+}
+
+@exameASAWidth: 175px;
+@exameASAOffset: @alergiaASAWidth + @alergiaASAOffset;
+.column__header--exameASA {
+	width: @exameASAWidth;
+	left: @exameASAOffset;
+	background-color: #989898;
+}
+
+@cirurgiaWidth: 125px;
+@cirurgiaOffset: @exameASAWidth + @exameASAOffset;
+.column__header--cirurgia {
+	width: @cirurgiaWidth;
+	left: @cirurgiaOffset;
+	background-color: #f38634;
+}
+
+@jejumWidth: 125px;
+@jejumOffset: @cirurgiaWidth + @cirurgiaOffset;
+.column__header--jejum {
+	width: @jejumWidth;
+	left: @jejumOffset;
+	background-color: #85706d;
+}
+
+// COLUMNS ASA
+
+.rows__wrapper {
+	position: absolute;
+	top: 80px;
+	font-size: 20px;
+
+}
+
+.column__wrapper--padding {
+	padding: 5px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.row__wrapper {
+	position: absolute;
+	width: 1920px;
+	height: 50px;
+
+	  
+}
+
+.row__wrapper--zebra {
+	background-color: #dffcff;
+}
+
+.columnASA__wrapper {
+	height: 50px;
+	line-height: 50px;
+	position: absolute;
+
+}
+
+.columnASA__wrapper--apto {
+	width: @aptoWidth;
+}
+
+
+.columnASA__wrapper--status {
+	width: @statusWidth;
+	left: @statusOffset;
+}
+
+.columnASA__wrapper--patient {
+	width: @pacienteASAWidth;
+	left: @pacienteASAOffset;
+}
+
+.columnASA__wrapper--physician {
+	width: @medicoASAWidth;
+	left: @medicoASAOffset;
 }

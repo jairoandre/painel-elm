@@ -29,7 +29,7 @@ main =
 
 
 type alias Model =
-    { rooms : Room
+    { rooms : List Room
     , users : List UserJson
     , date : String
     , size : Window.Size
@@ -39,7 +39,7 @@ type alias Model =
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model mockRoom [] "Loading..." { width = 1920, height = 1080 } 1.0, initializeDimensions )
+    ( Model mockRooms [] "Loading..." { width = 1920, height = 1080 } 1.0, initializeDimensions )
 
 
 
@@ -93,9 +93,10 @@ printModel model =
 view : Model -> Html Msg
 view model =
     div [ id "app", class "app", style [ ( "transform", "scale(" ++ (toString model.scale) ++ ")" ) ] ]
-        [ div [ style [ ( "position", "absolute" ), ( "top", "500px" ) ] ] [ text (toString model) ]
-        , header "PRONTO SOCORRO" model.date
-        , columnHeader
+        [ header "HOMERO MASSENA" model.date
+          --, columnHeaderPS
+        , columnHeaderASA
+        , roomsToHtml model.rooms
         ]
 
 
