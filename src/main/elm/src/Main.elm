@@ -8,6 +8,7 @@ import Http
 import Json.Decode exposing (Decoder, object2, string, int, (:=))
 import Task
 import Model exposing (..)
+import Mock exposing (..)
 import Time exposing (Time, minute, second)
 import Date exposing (Date)
 import View exposing (..)
@@ -52,6 +53,7 @@ type Msg
     | TestSucceed (List UserJson)
     | FetchFail Http.Error
     | TickClock Time
+    | RollItems Time
     | Resize Size
 
 
@@ -73,12 +75,33 @@ update message model =
         TickClock newTime ->
             ( { model | date = timeToStr newTime }, Cmd.none )
 
+        RollItems newTime ->
+            rollItems model
+
         Resize size ->
             let
                 scale =
                     (toFloat size.width) / 1920.0
             in
                 ( { model | size = size, scale = scale }, dashBoard )
+
+
+rollItems : Model -> ( Model, Cmd Msg )
+rollItems model =
+    let
+        head =
+            List.take 5 model.rooms
+
+        tail =
+            List.drop 5 model.rooms
+
+        tempList =
+            List.append tail head
+
+        updatedList =
+            List.indexedMap updateRoomIndex tempList
+    in
+        ( { model | rooms = updatedList }, Cmd.none )
 
 
 
@@ -108,6 +131,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Time.every minute MorePlease
+        , Time.every (10 * minute) RollItems
         , Time.every second TickClock
         , Window.resizes Resize
         ]

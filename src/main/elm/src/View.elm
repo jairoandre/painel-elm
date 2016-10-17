@@ -5,6 +5,8 @@ import Html.Attributes exposing (..)
 import Model exposing (..)
 import Time
 import Task
+import Svg
+import Svg.Attributes as SvgAtt
 
 
 header : String -> String -> Html a
@@ -68,7 +70,7 @@ columnHeaderASA =
         , columnH "CONVÊNIO" "convenioASA"
         , columnH "OBS." "obsASA"
         , columnHC "PREV. ALTA" "previsaoASA"
-        , columnHC "PRECAUÇÃO" "precaucao"
+        , columnHC "PRECAU." "precaucao"
         , columnHC "SCP" "scp"
         , columnHC "RIS. QUEDA" "risco"
         , columnHC "ÚLC. PRES." "ulcera"
@@ -79,12 +81,139 @@ columnHeaderASA =
         ]
 
 
-columnTextASA : String -> String -> Html a
-columnTextASA value classR =
-    div [ class ("columnASA__wrapper columnASA__wrapper--" ++ classR) ]
+columnTextPadding : String -> String -> Html a
+columnTextPadding value classR =
+    div [ class ("column__wrapper column__wrapper--" ++ classR) ]
         [ div [ class "column__wrapper--padding" ]
             [ text value ]
         ]
+
+
+columnTextCenter : String -> String -> Html a
+columnTextCenter value classR =
+    div [ class ("column__wrapper column__wrapper--" ++ classR) ]
+        [ div [ class "column__wrapper--center" ]
+            [ text value ]
+        ]
+
+
+columnHtml : Html a -> String -> Html a
+columnHtml content classR =
+    div [ class ("column__wrapper column__wrapper--" ++ classR) ]
+        [ content ]
+
+
+roomStatusToHtml : RoomStatus -> Html a
+roomStatusToHtml status =
+    let
+        ( image, classR ) =
+            case status of
+                Occupied ->
+                    ( "man-user.png", "ocupada" )
+
+                MedicalRelease ->
+                    ( "man-user.png", "alta" )
+
+                Vacancy ->
+                    ( "hotel-single-bed.png", "vago" )
+
+                Companion ->
+                    ( "man-user.png", "acompanhante" )
+
+                Cleaning ->
+                    ( "wiping-swipe-for-floors.png", "higienizacao" )
+
+                Reserved ->
+                    ( "hotel-door-key.png", "reservada" )
+
+                Maintenance ->
+                    ( "handyman-tools.png", "manutencao" )
+
+                Interdicted ->
+                    ( "close-sign-for-door.png", "interditado" )
+
+                EmptyRoom ->
+                    ( "cancel.png", "empty" )
+    in
+        img [ src ("assets/imgs/" ++ image), class ("image__icon image__icon--" ++ classR) ] []
+
+
+precaucaoToHtml : CautionLevel -> Html a
+precaucaoToHtml status =
+    let
+        ( image, classR ) =
+            case status of
+                Default ->
+                    ( "handle-with-care.png", "precaucao--padrao" )
+
+                Preventive ->
+                    ( "handle-with-care.png", "precaucao--preventiva" )
+
+                Aerosols ->
+                    ( "spray.png", "precaucao--aerossois" )
+
+                Contact ->
+                    ( "hand.png", "precaucao--contato" )
+
+                ContactAerosols ->
+                    ( "hand-spray.png", "precaucao--contato--aerossois" )
+
+                ContactDroplets ->
+                    ( "hand-drops.png", "precaucao--contato--goticulas" )
+
+                Droplets ->
+                    ( "drops.png", "precaucao--goticulas" )
+
+                NoCaution ->
+                    ( "cancel.png", "precaucao--sem" )
+    in
+        img [ src ("assets/imgs/" ++ image), class ("image__icon image__icon--" ++ classR) ] []
+
+
+scpToHtml : RiskLevel -> Html a
+scpToHtml scp =
+    case scp of
+        NoRisk ->
+            text ""
+
+        VeryLow ->
+            Svg.svg [ SvgAtt.height "40", SvgAtt.width "40" ]
+                [ Svg.polygon
+                    [ SvgAtt.points "0,40 40,40 20,0"
+                    , SvgAtt.fill "green"
+                    ]
+                    []
+                ]
+
+        Low ->
+            Svg.svg [ SvgAtt.height "40", SvgAtt.width "40" ]
+                [ Svg.circle
+                    [ SvgAtt.cx "20"
+                    , SvgAtt.cy "20"
+                    , SvgAtt.r "20"
+                    , SvgAtt.fill "#cc0099"
+                    ]
+                    []
+                ]
+
+        Average ->
+            Svg.svg [ SvgAtt.height "40", SvgAtt.width "40" ]
+                [ Svg.rect
+                    [ SvgAtt.width "40"
+                    , SvgAtt.height "40"
+                    , SvgAtt.fill "orange"
+                    ]
+                    []
+                ]
+
+        High ->
+            Svg.svg [ SvgAtt.height "40", SvgAtt.width "40" ]
+                [ Svg.polygon
+                    [ SvgAtt.points "20,0 0,18 8,40 32,40 40,18"
+                    , SvgAtt.fill "#ff3333"
+                    ]
+                    []
+                ]
 
 
 roomToHtml : Room -> Html a
@@ -107,19 +236,64 @@ roomToHtml room =
                 Just s ->
                     s
 
-        physician =
-            case room.physician of
+        medico =
+            case room.medico of
                 Nothing ->
                     "-"
 
                 Just m ->
                     m
+
+        convenio =
+            case room.convenio of
+                Nothing ->
+                    "-"
+
+                Just s ->
+                    s
+
+        observacao =
+            case room.observacao of
+                Nothing ->
+                    "-"
+
+                Just s ->
+                    s
+
+        previsao =
+            case room.previsao of
+                Just s ->
+                    s
+
+                _ ->
+                    "?"
+
+        precaucao =
+            case room.precaucao of
+                Just p ->
+                    precaucaoToHtml p
+
+                Nothing ->
+                    text "-"
+
+        scp =
+            case room.scp of
+                Just p ->
+                    scpToHtml p
+
+                Nothing ->
+                    text ""
     in
         div [ class rowClass, style [ ( "top", top ) ] ]
-            [ columnTextASA room.apto "apto"
-            , columnTextASA (toString room.status) "status"
-            , columnTextASA patient "patient"
-            , columnTextASA physician "physician"
+            [ columnTextPadding room.apto "apto"
+            , columnHtml (roomStatusToHtml room.status) "status"
+            , columnTextPadding patient "patient"
+            , columnTextPadding medico "medico"
+            , columnTextPadding convenio "convenio"
+            , columnTextPadding observacao "observacao"
+            , columnTextCenter previsao "previsao"
+            , columnHtml precaucao "precaucao"
+            , columnHtml scp "scp"
             ]
 
 

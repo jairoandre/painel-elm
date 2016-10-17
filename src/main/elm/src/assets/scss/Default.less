@@ -41,7 +41,7 @@ body {
 .title__wrapper {
 	position: absolute;
 	text-align: center;
-	font-size: 40px;
+	font-size: 50px;
 	background: #233269;
 	color: #fff;
   	text-shadow: #222 2px 2px 5px;
@@ -178,7 +178,7 @@ body {
 
 
 
-@statusWidth: 80px;
+@statusWidth: 70px;
 @statusOffset: @aptoWidth;
 .column__header--status {
 	width: @statusWidth;
@@ -192,7 +192,7 @@ body {
 	left: @pacienteASAOffset;
 }
 
-@medicoASAWidth: 200px;
+@medicoASAWidth: 230px;
 @medicoASAOffset: @pacienteASAWidth + @pacienteASAOffset;
 .column__header--medicoASA {
 	width: @medicoASAWidth;
@@ -213,7 +213,7 @@ body {
 	left: @obsASAOffset;
 }
 
-@previsaoASAWidth: 75px;
+@previsaoASAWidth: 110px;
 @previsaoASAOffset: @obsASAWidth + @obsASAOffset;
 .column__header--previsaoASA {
 	width: @previsaoASAWidth;
@@ -222,7 +222,7 @@ body {
 	background-color: red;
 }
 
-@precaucaoWidth: 75px;
+@precaucaoWidth: 70px;
 @precaucaoOffset: @previsaoASAWidth + @previsaoASAOffset;
 .column__header--precaucao {
 	width: @precaucaoWidth;
@@ -231,7 +231,7 @@ body {
 	background-color: #4b3f9d;
 }
 
-@scpWidth: 75px;
+@scpWidth: 70px;
 @scpOffset: @precaucaoWidth + @precaucaoOffset;
 .column__header--scp {
 	width: @scpWidth;
@@ -240,7 +240,7 @@ body {
 	background-color: #00afee;
 }
 
-@riscoWidth: 75px;
+@riscoWidth: 70px;
 @riscoOffset: @scpWidth + @scpOffset;
 .column__header--risco {
 	width: @riscoWidth;
@@ -249,7 +249,7 @@ body {
 	background-color: #00a95a;
 }
 
-@ulceraWidth: 75px;
+@ulceraWidth: 70px;
 @ulceraOffset: @riscoWidth + @riscoOffset;
 .column__header--ulcera {
 	width: @ulceraWidth;
@@ -258,7 +258,7 @@ body {
 	background-color: #a95b41;
 }
 
-@alergiaASAWidth: 150px;
+@alergiaASAWidth: 165px;
 @alergiaASAOffset: @ulceraWidth + @ulceraOffset;
 .column__header--alergiaASA {
 	width: @alergiaASAWidth;
@@ -266,15 +266,7 @@ body {
 	background-color: #ff6fbc;
 }
 
-@alergiaASAWidth: 175px;
-@alergiaASAOffset: @ulceraWidth + @ulceraOffset;
-.column__header--alergiaASA {
-	width: @alergiaASAWidth;
-	left: @alergiaASAOffset;
-	background-color: #ff6fbc;
-}
-
-@exameASAWidth: 175px;
+@exameASAWidth: 165px;
 @exameASAOffset: @alergiaASAWidth + @alergiaASAOffset;
 .column__header--exameASA {
 	width: @exameASAWidth;
@@ -282,7 +274,7 @@ body {
 	background-color: #989898;
 }
 
-@cirurgiaWidth: 125px;
+@cirurgiaWidth: 110px;
 @cirurgiaOffset: @exameASAWidth + @exameASAOffset;
 .column__header--cirurgia {
 	width: @cirurgiaWidth;
@@ -308,17 +300,26 @@ body {
 }
 
 .column__wrapper--padding {
-	padding: 5px;
+	padding-left: 5px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
 
+.column__wrapper--center {
+	text-align: center;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+@rowHeight: 50px;
+
 .row__wrapper {
 	position: absolute;
 	width: 1920px;
-	height: 50px;
-
+	font-size: 20px;
+	height: @rowHeight;
 	  
 }
 
@@ -326,29 +327,140 @@ body {
 	background-color: #dffcff;
 }
 
-.columnASA__wrapper {
-	height: 50px;
-	line-height: 50px;
+.column__wrapper {
+	height: @rowHeight;
+	line-height: @rowHeight;
 	position: absolute;
 
 }
 
-.columnASA__wrapper--apto {
+.column__wrapper--apto {
 	width: @aptoWidth;
 }
 
 
-.columnASA__wrapper--status {
+.column__wrapper--status {
 	width: @statusWidth;
 	left: @statusOffset;
+	text-align: center;
+	margin-top: 5px;
 }
 
-.columnASA__wrapper--patient {
+.column__wrapper--patient {
 	width: @pacienteASAWidth;
 	left: @pacienteASAOffset;
 }
 
-.columnASA__wrapper--physician {
+.column__wrapper--medico {
 	width: @medicoASAWidth;
 	left: @medicoASAOffset;
+}
+
+.column__wrapper--convenio {
+	width: @convenioASAWidth;
+	left: @convenioASAOffset;
+}
+
+.column__wrapper--observacao {
+	width: @obsASAWidth;
+	left: @obsASAOffset;
+}
+
+.column__wrapper--previsao {
+	width: @previsaoASAWidth;
+	left: @previsaoASAOffset;
+	font-size: 18px;
+	text-align: center;
+}
+
+.column__wrapper--precaucao {
+	width: @precaucaoWidth;
+	left: @precaucaoOffset;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.column__wrapper--scp {
+	width: @scpWidth;
+	left: @scpOffset;
+	text-align: center;
+	margin-top: 5px;
+}
+
+// IMAGE
+
+.image__icon {
+	width: 30px;
+	height: 30px;
+	padding: 5px;
+	border-radius: 5px;
+}
+
+// STATUS
+
+.image__icon--ocupada {
+	background-color: red;
+}
+
+.image__icon--alta {
+	background-color: #55F98B;	
+}
+
+.image__icon--vago {
+	background-color: #31DE52;
+}
+
+.image__icon--acompanhante {
+	background-color: orange;
+}
+
+.image__icon--higienizacao {
+	background-color: #00E3CB;
+}
+
+.image__icon--reservada {
+	background-color: #FBAD50;
+}
+
+.image__icon--manutencao {
+	background-color: #9567FF;
+}
+
+.image__icon--interditado {
+	background-color: #FF5980;
+}
+
+.image__icon--interditado {
+	background-color: #FF5980;
+}
+
+.image__icon--empty {
+	background-color: #A3A3A3;
+}
+
+// PRECAUÇÃO CONTATO
+
+.image__icon--precaucao--padrao {
+	background-color: #88dc88;
+}
+.image__icon--precaucao--preventiva {
+	background-color: #ff9933;
+}
+.image__icon--precaucao--aerossois {
+	background-color: #33ccff;
+}
+.image__icon--precaucao--contato {
+	background-color: #FFEB42;
+}
+.image__icon--precaucao--contato--aerossois {
+	background-color: #FF7C49;
+}
+.image__icon--precaucao--contato--goticulas {
+	background-color: #FF4B33;
+}
+.image__icon--precaucao--goticulas {
+	background-color: #33ABFF;
+}
+.image__icon--precaucao--sem {
+	background-color: #fff;
 }
