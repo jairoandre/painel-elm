@@ -1,6 +1,6 @@
 module Main exposing (..)
 
-import Html exposing (Html, div, h2, button, text)
+import Html exposing (Html, div, h2, button, text, img)
 import Html.App as App
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
@@ -14,6 +14,9 @@ import Date exposing (Date)
 import View exposing (..)
 import Window exposing (Size)
 import Utils exposing (..)
+import AnimationFrame
+import Ease
+import Debug
 
 
 main =
@@ -35,12 +38,13 @@ type alias Model =
     , date : String
     , size : Window.Size
     , scale : Float
+    , loadOpacity : Float
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model mockRooms [] "Loading..." { width = 1920, height = 1080 } 1.0, initializeDimensions )
+    ( Model mockRooms [] "Loading..." { width = 1920, height = 1080 } 1.0 1.0, initializeDimensions )
 
 
 
@@ -54,6 +58,8 @@ type Msg
     | FetchFail Http.Error
     | TickClock Time
     | RollItems Time
+    | RollListItems Time
+    | FadeOutLoading Time
     | Resize Size
 
 
@@ -77,6 +83,19 @@ update message model =
 
         RollItems newTime ->
             rollItems model
+
+        RollListItems newTime ->
+            rollListItems model
+
+        FadeOutLoading diff ->
+            let
+                newOpacity =
+                    if model.loadOpacity <= 0 then
+                        0.0
+                    else
+                        model.loadOpacity * 0.25
+            in
+                ( { model | loadOpacity = newOpacity }, Cmd.none )
 
         Resize size ->
             let
@@ -104,8 +123,36 @@ rollItems model =
         ( { model | rooms = updatedList }, Cmd.none )
 
 
+shiftListString : List String -> List String
+shiftListString listStr =
+    let
+        headList =
+            List.take 1 listStr
+
+        tailList =
+            List.drop 1 listStr
+    in
+        List.append tailList headList
+
+
+rollListItems : Model -> ( Model, Cmd Msg )
+rollListItems model =
+    let
+        updatedRoomsList =
+            List.map (\r -> { r | alergias = (shiftListString r.alergias), exames = (shiftListString r.exames) }) model.rooms
+    in
+        ( { model | rooms = updatedRoomsList }, Cmd.none )
+
+
 
 -- VIEW
+
+
+loadingLayer : Model -> Html Msg
+loadingLayer model =
+    div [ class "loadingLayer", style [ ( "display", "none" ) ] ]
+        [ img [ class "loadingLayer--image", src "assets/imgs/logo.png", width 500 ] []
+        ]
 
 
 printModel : Model -> Html Msg
@@ -120,6 +167,7 @@ view model =
           --, columnHeaderPS
         , columnHeaderASA
         , roomsToHtml model.rooms
+        , loadingLayer model
         ]
 
 
@@ -131,8 +179,10 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ Time.every minute MorePlease
-        , Time.every (10 * minute) RollItems
+        , Time.every (10 * second) RollItems
+        , Time.every (3 * second) RollListItems
         , Time.every second TickClock
+          -- , AnimationFrame.diffs FadeOutLoading
         , Window.resizes Resize
         ]
 

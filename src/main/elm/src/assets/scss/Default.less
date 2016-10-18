@@ -15,6 +15,7 @@
 body {
 	margin: 0;
 	font-family: Helvetica;
+	overflow: hidden;
 }
 
 .app {
@@ -105,15 +106,15 @@ body {
 	left: @riskOffset;
 }
 
-@patientWidth: 350px;
-@patientOffset: @riskOffset + @riskWidth;
-.column__header--patient {
-	width: @patientWidth;
-	left: @patientOffset;
+@pacienteWidth: 350px;
+@pacienteOffset: @riskOffset + @riskWidth;
+.column__header--paciente {
+	width: @pacienteWidth;
+	left: @pacienteOffset;
 }
 
 @convenioWidth: 150px;
-@convenioOffset: @patientOffset + @patientWidth;
+@convenioOffset: @pacienteOffset + @pacienteWidth;
 .column__header--convenio {
 	width: @convenioWidth;
 	left: @convenioOffset;
@@ -218,7 +219,8 @@ body {
 .column__header--previsaoASA {
 	width: @previsaoASAWidth;
 	left: @previsaoASAOffset;
-	font-size: 10px;
+	font-size: 15px;
+	font-weight: bold;
 	background-color: red;
 }
 
@@ -227,7 +229,8 @@ body {
 .column__header--precaucao {
 	width: @precaucaoWidth;
 	left: @precaucaoOffset;
-	font-size: 10px;
+	font-size: 13px;
+	font-weight: bold;
 	background-color: #4b3f9d;
 }
 
@@ -236,7 +239,8 @@ body {
 .column__header--scp {
 	width: @scpWidth;
 	left: @scpOffset;
-	font-size: 10px;
+	font-size: 13px;
+	font-weight: bold;
 	background-color: #00afee;
 }
 
@@ -245,7 +249,7 @@ body {
 .column__header--risco {
 	width: @riscoWidth;
 	left: @riscoOffset;
-	font-size: 10px;
+	font-size: 11px;
 	background-color: #00a95a;
 }
 
@@ -254,7 +258,7 @@ body {
 .column__header--ulcera {
 	width: @ulceraWidth;
 	left: @ulceraOffset;
-	font-size: 10px;
+	font-size: 12px;
 	background-color: #a95b41;
 }
 
@@ -346,7 +350,7 @@ body {
 	margin-top: 5px;
 }
 
-.column__wrapper--patient {
+.column__wrapper--paciente {
 	width: @pacienteASAWidth;
 	left: @pacienteASAOffset;
 }
@@ -385,6 +389,62 @@ body {
 	left: @scpOffset;
 	text-align: center;
 	margin-top: 5px;
+}
+
+.column__wrapper--riscoQueda {
+	width: @riscoWidth;
+	left: @riscoOffset;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.column__wrapper--ulceraPressao {
+	width: @ulceraWidth;
+	left: @ulceraOffset;
+	text-align: center;
+	margin-top: 5px;
+}
+
+.column__wrapper--alergiaASA {
+	width: @alergiaASAWidth;
+	left: @alergiaASAOffset;
+	text-align: center;
+	overflow: hidden;
+	font-size: 15px;
+	white-space: normal;
+}
+
+.column__wrapper--examesASA {
+	width: @exameASAWidth;
+	left: @exameASAOffset;
+	text-align: center;
+	overflow: hidden;
+	font-size: 15px;
+	white-space: normal;
+}
+
+.column__wrapper--cirurgia {
+	width: @cirurgiaWidth;
+	left: @cirurgiaOffset;
+	font-size: 15px;
+}
+
+.column__wrapper--jejum {
+	width: @jejumWidth;
+	left: @jejumOffset;
+	font-size: 15px;
+}
+
+// UL LI LISTS
+
+.ul__painel {
+	display: block;
+    list-style-type: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
 }
 
 // IMAGE
@@ -444,13 +504,13 @@ body {
 	background-color: #88dc88;
 }
 .image__icon--precaucao--preventiva {
-	background-color: #ff9933;
+	background-color: #F7AA25;
 }
 .image__icon--precaucao--aerossois {
 	background-color: #33ccff;
 }
 .image__icon--precaucao--contato {
-	background-color: #FFEB42;
+	background-color: #FF4200;
 }
 .image__icon--precaucao--contato--aerossois {
 	background-color: #FF7C49;
@@ -463,4 +523,37 @@ body {
 }
 .image__icon--precaucao--sem {
 	background-color: #fff;
+}
+
+// RISCO QUEDA
+
+.image__icon--ulceraLow, .image__icon--riscoQuedaLow {
+	background-color: #88dc88;
+}
+
+.image__icon--ulceraAverage, .image__icon--riscoQuedaAverage {
+	background-color: #ff9933;
+}
+
+.image__icon--ulceraHigh, .image__icon--riscoQuedaHigh {
+	background-color: #FF3333;
+}
+
+// LOADING LAYER
+
+.loadingLayer {
+	position: absolute;
+	background-color: #fff;
+	text-align: center;
+	width: @width;
+	height: @height;
+}
+
+.loadingLayer--image {
+	position: absolute;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }

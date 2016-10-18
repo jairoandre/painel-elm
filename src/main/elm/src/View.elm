@@ -1,6 +1,6 @@
 module View exposing (..)
 
-import Html exposing (Html, div, img, h2, button, text)
+import Html exposing (Html, div, ul, li, img, h2, button, text)
 import Html.Attributes exposing (..)
 import Model exposing (..)
 import Time
@@ -48,7 +48,7 @@ columnHeaderPS =
         [ class "column__header__wrapper" ]
         [ columnH "ESPECIALIDADE" "specialty"
         , columnH "CLASS. RISCO" "risk"
-        , columnH "PACIENTE" "patient"
+        , columnH "PACIENTE" "paciente"
         , columnH "CONVÊNIO" "convenio"
         , columnH "OBSERVAÇÃO" "obs"
         , columnH "LOCALIZAÇÃO" "localizacao"
@@ -74,7 +74,7 @@ columnHeaderASA =
         , columnHC "SCP" "scp"
         , columnHC "RIS. QUEDA" "risco"
         , columnHC "ÚLC. PRES." "ulcera"
-        , columnHC "ALERGIA" "alergiaASA"
+        , columnHC "ALERGIAS" "alergiaASA"
         , columnHC "EXAMES" "exameASA"
         , columnHC "CIRURGIA" "cirurgia"
         , columnHC "JEJUM" "jejum"
@@ -144,10 +144,10 @@ precaucaoToHtml status =
         ( image, classR ) =
             case status of
                 Default ->
-                    ( "handle-with-care.png", "precaucao--padrao" )
+                    ( "hand.png", "precaucao--padrao" )
 
                 Preventive ->
-                    ( "handle-with-care.png", "precaucao--preventiva" )
+                    ( "hand.png", "precaucao--preventiva" )
 
                 Aerosols ->
                     ( "spray.png", "precaucao--aerossois" )
@@ -216,6 +216,72 @@ scpToHtml scp =
                 ]
 
 
+riscoQuedaToHtml : RiskLevel -> Html a
+riscoQuedaToHtml risk =
+    let
+        riskClass =
+            case risk of
+                Low ->
+                    "riscoQuedaLow"
+
+                Average ->
+                    "riscoQuedaAverage"
+
+                High ->
+                    "riscoQuedaHigh"
+
+                _ ->
+                    ""
+
+        result =
+            if riskClass == "" then
+                text ""
+            else
+                img [ src "assets/imgs/slide.png", class ("image__icon image__icon--" ++ riskClass) ] []
+    in
+        result
+
+
+ulceraToHtml : RiskLevel -> Html a
+ulceraToHtml risk =
+    let
+        riskClass =
+            case risk of
+                Low ->
+                    "ulceraLow"
+
+                Average ->
+                    "ulceraAverage"
+
+                High ->
+                    "ulceraHigh"
+
+                _ ->
+                    ""
+
+        result =
+            if riskClass == "" then
+                text ""
+            else
+                img [ src "assets/imgs/bed.png", class ("image__icon image__icon--" ++ riskClass) ] []
+    in
+        result
+
+
+stringItemToHtml : String -> Html a
+stringItemToHtml s =
+    li [] [ text s ]
+
+
+stringListToHtml : List String -> Html a
+stringListToHtml l =
+    let
+        items =
+            List.map stringItemToHtml l
+    in
+        ul [ class "ul__painel" ] items
+
+
 roomToHtml : Room -> Html a
 roomToHtml room =
     let
@@ -228,8 +294,8 @@ roomToHtml room =
             else
                 "row__wrapper row__wrapper--zebra"
 
-        patient =
-            case room.patient of
+        paciente =
+            case room.paciente of
                 Nothing ->
                     "-"
 
@@ -246,19 +312,19 @@ roomToHtml room =
 
         convenio =
             case room.convenio of
-                Nothing ->
-                    "-"
-
                 Just s ->
                     s
+
+                Nothing ->
+                    "-"
 
         observacao =
             case room.observacao of
-                Nothing ->
-                    "-"
-
                 Just s ->
                     s
+
+                Nothing ->
+                    ""
 
         previsao =
             case room.previsao of
@@ -266,7 +332,7 @@ roomToHtml room =
                     s
 
                 _ ->
-                    "?"
+                    ""
 
         precaucao =
             case room.precaucao of
@@ -274,7 +340,7 @@ roomToHtml room =
                     precaucaoToHtml p
 
                 Nothing ->
-                    text "-"
+                    text ""
 
         scp =
             case room.scp of
@@ -283,17 +349,61 @@ roomToHtml room =
 
                 Nothing ->
                     text ""
+
+        riscoQueda =
+            case room.riscoQueda of
+                Just risk ->
+                    riscoQuedaToHtml risk
+
+                Nothing ->
+                    text ""
+
+        ulceraPressao =
+            case room.ulceraPressao of
+                Just ulcera ->
+                    ulceraToHtml ulcera
+
+                Nothing ->
+                    text ""
+
+        alergias =
+            stringListToHtml room.alergias
+
+        exames =
+            stringListToHtml room.exames
+
+        cirurgia =
+            case room.cirurgia of
+                Just c ->
+                    c
+
+                Nothing ->
+                    ""
+
+        jejum =
+            case room.jejum of
+                Just d ->
+                    d
+
+                Nothing ->
+                    ""
     in
         div [ class rowClass, style [ ( "top", top ) ] ]
             [ columnTextPadding room.apto "apto"
             , columnHtml (roomStatusToHtml room.status) "status"
-            , columnTextPadding patient "patient"
+            , columnTextPadding paciente "paciente"
             , columnTextPadding medico "medico"
             , columnTextPadding convenio "convenio"
             , columnTextPadding observacao "observacao"
             , columnTextCenter previsao "previsao"
             , columnHtml precaucao "precaucao"
             , columnHtml scp "scp"
+            , columnHtml riscoQueda "riscoQueda"
+            , columnHtml ulceraPressao "ulceraPressao"
+            , columnHtml alergias "alergiaASA"
+            , columnHtml exames "examesASA"
+            , columnTextCenter cirurgia "cirurgia"
+            , columnTextCenter jejum "jejum"
             ]
 
 

@@ -162,12 +162,12 @@ mockRoom idx seed =
         (randomRisk (idx + 1) seed)
         (randomRisk (idx + 2) seed)
         (randomRisk (idx + 3) seed)
-        Nothing
         -- ALERGIA
-        Nothing
+        [ "Dipirona", "123456890123456890123456890", "Lactose" ]
         -- EXAMES
-        Nothing
+        [ "Endoscopia" ]
         -- CIRURGIA
-        (Just "lactose")
+        (Just "10/10/2016")
         -- DIETA
+        (Just "lactose")
         idx

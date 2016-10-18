@@ -8,7 +8,7 @@ import Random
 type alias Room =
     { apto : String
     , status : RoomStatus
-    , patient : Maybe String
+    , paciente : Maybe String
     , medico : Maybe String
     , convenio : Maybe String
     , observacao : Maybe String
@@ -17,10 +17,10 @@ type alias Room =
     , scp : Maybe RiskLevel
     , riscoQueda : Maybe RiskLevel
     , ulceraPressao : Maybe RiskLevel
-    , alergia : Maybe (List String)
-    , exames : Maybe (List String)
+    , alergias : List String
+    , exames : List String
     , cirurgia : Maybe String
-    , dieta : Maybe String
+    , jejum : Maybe String
     , idx : Int
     }
 
@@ -28,11 +28,11 @@ type alias Room =
 type alias RoomJson =
     { apto : String
     , status : Int
-    , patient : String
+    , paciente : String
     , medico : String
     , convenio : String
     , observacao : String
-    , prediction : String
+    , previsao : String
     , caution : Int
     , scp : Int
     , fallRisk : Int
@@ -49,7 +49,7 @@ roomJsonDecoder =
     decode RoomJson
         |> required "apto" string
         |> required "status" int
-        |> optional "patient" string ""
+        |> optional "paciente" string ""
         |> optional "medico" string ""
         |> optional "convenio" string ""
         |> optional "observacao" string ""
