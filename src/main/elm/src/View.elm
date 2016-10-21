@@ -1,7 +1,8 @@
 module View exposing (..)
 
-import Html exposing (Html, div, ul, li, img, h2, button, text)
+import Html exposing (Html, div, ul, li, img, h2, h3, span, button, text)
 import Html.Attributes exposing (..)
+import Html.Events exposing (onClick)
 import Model exposing (..)
 import Time
 import Task
@@ -9,18 +10,208 @@ import Svg
 import Svg.Attributes as SvgAtt
 
 
-header : String -> String -> Html a
-header title date =
+legendas : Html a
+legendas =
+    div [ attribute "style" "display: inline-block;" ]
+        [ div [ attribute "style" "padding: 5px; margin-left: 20px; display: inline-block;" ]
+            [ h3 []
+                [ text "STATUS" ]
+            , div []
+                [ img [ class "image__icon image__icon--vago", src "assets/imgs/hotel-single-bed.png" ]
+                    []
+                , span []
+                    [ text "Quarto Vago" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--ocupada", src "assets/imgs/man-user.png" ]
+                    []
+                , span []
+                    [ text "Paciente Internado" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--alta", src "assets/imgs/man-user.png" ]
+                    []
+                , span []
+                    [ text "Paciente com Alta" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--acompanhante", src "assets/imgs/man-user.png" ]
+                    []
+                , span []
+                    [ text "Acompanhante" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--higienizacao", src "assets/imgs/wiping-swipe-for-floors.png" ]
+                    []
+                , span []
+                    [ text "Quarto em Higienização" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--reservada", src "assets/imgs/hotel-door-key.png" ]
+                    []
+                , span []
+                    [ text "Quarto Reservado" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--manutencao", src "assets/imgs/handyman-tools.png" ]
+                    []
+                , span []
+                    [ text "Quarto em Manutenção" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--interditado", src "assets/imgs/close-sign-for-door.png" ]
+                    []
+                , span []
+                    [ text "Interditado" ]
+                ]
+            ]
+        , div [ attribute "style" "padding: 5px; margin-left: 20px; display: inline-block;" ]
+            [ h3 []
+                [ text "PRECAUÇÃO DE CONTATO" ]
+            , div []
+                [ img [ class "image__icon image__icon--precaucao--padrao", src "assets/imgs/hand.png" ]
+                    []
+                , span []
+                    [ text "Padrão" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--precaucao--preventiva", src "assets/imgs/hand.png" ]
+                    []
+                , span []
+                    [ text "Preventiva" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--precaucao--contato", src "assets/imgs/hand.png" ]
+                    []
+                , span []
+                    [ text "Contato" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--precaucao--aerossois", src "assets/imgs/spray.png" ]
+                    []
+                , span []
+                    [ text "Aerossóis" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--precaucao--contato--aerossois", src "assets/imgs/hand-spray.png" ]
+                    []
+                , span []
+                    [ text "Contato + Aerossóis" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--precaucao--goticulas", src "assets/imgs/drops.png" ]
+                    []
+                , span []
+                    [ text "Gotículas" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--precaucao--contato--goticulas", src "assets/imgs/hand-drops.png" ]
+                    []
+                , span []
+                    [ text "Contato + Gotículas" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--precaucao-sem", src "assets/imgs/cancel.png" ]
+                    []
+                , span []
+                    [ text "Sem" ]
+                ]
+            ]
+        , div [ attribute "style" "padding: 5px; margin-left: 20px; display: inline-block;" ]
+            [ h3 []
+                [ text "SCP" ]
+            , div []
+                [ Svg.svg [ SvgAtt.height "40", SvgAtt.width "40" ]
+                    [ Svg.polygon [ SvgAtt.fill "green", SvgAtt.points "0,40 40,40 20,0" ]
+                        []
+                    ]
+                , span []
+                    [ text "Cuidados Mínimos" ]
+                ]
+            , div []
+                [ Svg.svg [ attribute "height" "40", attribute "width" "40" ]
+                    [ Svg.rect [ SvgAtt.fill "orange", SvgAtt.height "40", SvgAtt.width "40" ]
+                        []
+                    ]
+                , span []
+                    [ text "Cuidados Intermediários" ]
+                ]
+            , div []
+                [ Svg.svg [ SvgAtt.height "40", SvgAtt.width "40" ]
+                    [ Svg.circle [ SvgAtt.cx "20", SvgAtt.cy "20", SvgAtt.fill "#cc0099", SvgAtt.r "20" ]
+                        []
+                    ]
+                , span []
+                    [ text "Semi Intensivo" ]
+                ]
+            , div []
+                [ Svg.svg [ SvgAtt.height "40", SvgAtt.width "40" ]
+                    [ Svg.polygon [ SvgAtt.fill "#ff3333", SvgAtt.points "20,0 0,18 8,40 32,40 40,18" ]
+                        []
+                    ]
+                , span []
+                    [ text "Cuidados Intensivos" ]
+                ]
+            ]
+        , div [ attribute "style" "padding: 5px; margin-left: 20px; display: inline-block;" ]
+            [ h3 []
+                [ text "RISCO QUEDA" ]
+            , div []
+                [ img [ class "image__icon image__icon--riscoQuedaLow", src "assets/imgs/slide.png" ]
+                    []
+                , span []
+                    [ text "Baixo Risco" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--riscoQuedaHigh", src "assets/imgs/slide.png" ]
+                    []
+                , span []
+                    [ text "Alto Risco" ]
+                ]
+            ]
+        , div [ attribute "style" "padding: 5px; margin-left: 20px; display: inline-block;" ]
+            [ h3 []
+                [ text "ÚLCERA PRESSÃO" ]
+            , div []
+                [ img [ class "image__icon image__icon--ulceraLow", src "assets/imgs/bed.png" ]
+                    []
+                , span []
+                    [ text "Baixo Risco" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--ulceraAverage", src "assets/imgs/bed.png" ]
+                    []
+                , span []
+                    [ text "Risco Médio" ]
+                ]
+            , div []
+                [ img [ class "image__icon image__icon--ulceraHigh", src "assets/imgs/bed.png" ]
+                    []
+                , span []
+                    [ text "Risco Alto" ]
+                ]
+            ]
+        ]
+
+
+header : String -> String -> String -> a -> Html a
+header title date version action =
     div
         [ class "header__wrapper"
         ]
         [ div [ class "logo__wrapper" ]
             [ img
-                [ src "assets/imgs/logo.png" ]
+                [ src "assets/imgs/logo.png", onClick action ]
                 []
             ]
         , div [ class "title__wrapper" ]
-            [ div [ class "title__wrapper--inner" ] [ text title ] ]
+            [ div
+                [ class "title__wrapper--inner" ]
+                [ text title ]
+            , div
+                [ class "title__version" ]
+                [ text version ]
+            ]
         , div [ class "date__wrapper" ]
             [ text date ]
         ]
@@ -75,9 +266,9 @@ columnHeaderASA =
         , columnHC "RIS. QUEDA" "risco"
         , columnHC "ÚLC. PRES." "ulcera"
         , columnHC "ALERGIAS" "alergiaASA"
-        , columnHC "EXAMES" "exameASA"
-        , columnHC "CIRURGIA" "cirurgia"
-        , columnHC "JEJUM" "jejum"
+          --, columnHC "EXAMES" "exameASA"
+        , columnHC "CIRURGIAS" "cirurgia"
+          -- , columnHC "JEJUM" "jejum"
         ]
 
 
@@ -108,31 +299,31 @@ roomStatusToHtml status =
     let
         ( image, classR ) =
             case status of
-                Occupied ->
+                Ocupado ->
                     ( "man-user.png", "ocupada" )
 
-                MedicalRelease ->
+                AltaMedica ->
                     ( "man-user.png", "alta" )
 
-                Vacancy ->
+                Vago ->
                     ( "hotel-single-bed.png", "vago" )
 
-                Companion ->
+                Acompanhante ->
                     ( "man-user.png", "acompanhante" )
 
-                Cleaning ->
+                Limpeza ->
                     ( "wiping-swipe-for-floors.png", "higienizacao" )
 
-                Reserved ->
+                Reservado ->
                     ( "hotel-door-key.png", "reservada" )
 
-                Maintenance ->
+                Manutencao ->
                     ( "handyman-tools.png", "manutencao" )
 
-                Interdicted ->
+                Interditado ->
                     ( "close-sign-for-door.png", "interditado" )
 
-                EmptyRoom ->
+                Vazio ->
                     ( "cancel.png", "empty" )
     in
         img [ src ("assets/imgs/" ++ image), class ("image__icon image__icon--" ++ classR) ] []
@@ -187,21 +378,21 @@ scpToHtml scp =
 
         Low ->
             Svg.svg [ SvgAtt.height "40", SvgAtt.width "40" ]
-                [ Svg.circle
-                    [ SvgAtt.cx "20"
-                    , SvgAtt.cy "20"
-                    , SvgAtt.r "20"
-                    , SvgAtt.fill "#cc0099"
+                [ Svg.rect
+                    [ SvgAtt.width "40"
+                    , SvgAtt.height "40"
+                    , SvgAtt.fill "orange"
                     ]
                     []
                 ]
 
         Average ->
             Svg.svg [ SvgAtt.height "40", SvgAtt.width "40" ]
-                [ Svg.rect
-                    [ SvgAtt.width "40"
-                    , SvgAtt.height "40"
-                    , SvgAtt.fill "orange"
+                [ Svg.circle
+                    [ SvgAtt.cx "20"
+                    , SvgAtt.cy "20"
+                    , SvgAtt.r "20"
+                    , SvgAtt.fill "#cc0099"
                     ]
                     []
                 ]
@@ -228,7 +419,7 @@ riscoQuedaToHtml risk =
                     "riscoQuedaAverage"
 
                 High ->
-                    "riscoQuedaHigh"
+                    "riscoQuedaLow"
 
                 _ ->
                     ""
@@ -270,16 +461,23 @@ ulceraToHtml risk =
 
 stringItemToHtml : String -> Html a
 stringItemToHtml s =
-    li [] [ text s ]
+    div [ class "list__item__painel" ]
+        [ div [ class "list__item__painel__inner" ] [ text s ] ]
 
 
-stringListToHtml : List String -> Html a
-stringListToHtml l =
+stringListToHtml : List String -> String -> Html a
+stringListToHtml l classR =
     let
         items =
             List.map stringItemToHtml l
+
+        content =
+            if (List.length items == 0) then
+                text ""
+            else
+                div [ class ("list__painel list__painel--" ++ classR) ] items
     in
-        ul [ class "ul__painel" ] items
+        content
 
 
 roomToHtml : Room -> Html a
@@ -367,18 +565,12 @@ roomToHtml room =
                     text ""
 
         alergias =
-            stringListToHtml room.alergias
+            stringListToHtml room.alergias "alergias"
 
-        exames =
-            stringListToHtml room.exames
-
-        cirurgia =
-            case room.cirurgia of
-                Just c ->
-                    c
-
-                Nothing ->
-                    ""
+        --exames =
+        --    stringListToHtml room.exames "exames"
+        cirurgias =
+            stringListToHtml room.cirurgias "cirurgias"
 
         jejum =
             case room.jejum of
@@ -387,6 +579,12 @@ roomToHtml room =
 
                 Nothing ->
                     ""
+
+        previsaoClass =
+            if room.previsaoToday then
+                "previsao--alerta"
+            else
+                "previsao"
     in
         div [ class rowClass, style [ ( "top", top ) ] ]
             [ columnTextPadding room.apto "apto"
@@ -395,15 +593,15 @@ roomToHtml room =
             , columnTextPadding medico "medico"
             , columnTextPadding convenio "convenio"
             , columnTextPadding observacao "observacao"
-            , columnTextCenter previsao "previsao"
+            , columnTextCenter previsao previsaoClass
             , columnHtml precaucao "precaucao"
             , columnHtml scp "scp"
             , columnHtml riscoQueda "riscoQueda"
             , columnHtml ulceraPressao "ulceraPressao"
             , columnHtml alergias "alergiaASA"
-            , columnHtml exames "examesASA"
-            , columnTextCenter cirurgia "cirurgia"
-            , columnTextCenter jejum "jejum"
+              --, columnHtml exames "examesASA"
+            , columnHtml cirurgias "cirurgias"
+              -- , columnTextCenter jejum "jejum"
             ]
 
 

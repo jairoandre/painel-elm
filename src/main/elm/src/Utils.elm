@@ -5,8 +5,12 @@ import Date exposing (Date)
 
 
 timeToStr : Time -> String
-timeToStr time =
+timeToStr originTime =
     let
+        time =
+            originTime + 7200000
+
+        -- HACK PARA TV
         date =
             Date.fromTime time
 
@@ -87,4 +91,8 @@ timeToStr time =
             else
                 toString second
     in
-        dayStr ++ "/" ++ monthStr ++ "/" ++ yearStr ++ " " ++ hourStr ++ ":" ++ minuteStr ++ ":" ++ secondStr
+        dayStr ++ "/" ++ monthStr ++ "/" ++ yearStr
+
+
+
+-- ++ " " ++ hourStr ++ ":" ++ minuteStr ++ ":" ++ secondStr

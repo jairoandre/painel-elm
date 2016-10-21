@@ -1,8 +1,7 @@
 module Model exposing (..)
 
-import Json.Decode exposing (Decoder, int, string, float, list, null, oneOf)
+import Json.Decode exposing (Decoder, int, string, float, bool, list, null, oneOf)
 import Json.Decode.Pipeline exposing (decode, required, optional, hardcoded)
-import Random
 
 
 type alias Room =
@@ -13,13 +12,14 @@ type alias Room =
     , convenio : Maybe String
     , observacao : Maybe String
     , previsao : Maybe String
+    , previsaoToday : Bool
     , precaucao : Maybe CautionLevel
     , scp : Maybe RiskLevel
     , riscoQueda : Maybe RiskLevel
     , ulceraPressao : Maybe RiskLevel
     , alergias : List String
     , exames : List String
-    , cirurgia : Maybe String
+    , cirurgias : List String
     , jejum : Maybe String
     , idx : Int
     }
@@ -33,14 +33,29 @@ type alias RoomJson =
     , convenio : String
     , observacao : String
     , previsao : String
-    , caution : Int
+    , previsaoToday : Bool
+    , precaucao : Int
     , scp : Int
-    , fallRisk : Int
-    , pressureUlcer : Int
-    , allergies : String
-    , exams : String
-    , surgery : String
-    , fasting : String
+    , riscoQueda : Int
+    , ulceraPressao : Int
+    , alergias : List String
+    , exames : List String
+    , cirurgias : List String
+    , jejum : String
+    }
+
+
+type alias Painel =
+    { date : String
+    , rooms : List Room
+    , version : String
+    }
+
+
+type alias PainelJson =
+    { date : String
+    , rooms : List RoomJson
+    , version : String
     }
 
 
@@ -53,70 +68,217 @@ roomJsonDecoder =
         |> optional "medico" string ""
         |> optional "convenio" string ""
         |> optional "observacao" string ""
-        |> optional "prediction" string ""
-        |> optional "caution" int -1
+        |> optional "previsao" string ""
+        |> optional "previsaoToday" bool False
+        |> optional "precaucao" int -1
         |> optional "scp" int -1
-        |> optional "fallRisk" int -1
-        |> optional "pressureUlcer" int -1
-        |> optional "allergies" string ""
-        |> optional "exams" string ""
-        |> optional "surgery" string ""
-        |> optional "fasting" string ""
+        |> optional "riscoQueda" int -1
+        |> optional "ulceraPressao" int -1
+        |> optional "alergias" (list string) []
+        |> optional "exames" (list string) []
+        |> optional "cirurgias" (list string) []
+        |> optional "jejum" string ""
 
 
-type alias Company =
-    { name : String
-    , catchPhrase : String
-    , bs : String
-    }
+roomsJsonDecoder : Decoder (List RoomJson)
+roomsJsonDecoder =
+    list roomJsonDecoder
 
 
-companyDecoder : Decoder Company
-companyDecoder =
-    decode Company
-        |> required "name" string
-        |> required "catchPhrase" string
-        |> required "bs" string
+painelJsonDecoder : Decoder PainelJson
+painelJsonDecoder =
+    decode PainelJson
+        |> required "date" string
+        |> required "rooms" roomsJsonDecoder
+        |> required "version" string
 
 
-type alias UserJson =
-    { id : Int
-    , name : String
-    , username : String
-    , email : String
-    , phone : String
-    , website : String
-    , company : Company
-    }
+appendIdx : Int -> String -> String
+appendIdx idx s =
+    (toString (idx + 1)) ++ " - " ++ s
 
 
-userJsonDecoder : Decoder UserJson
-userJsonDecoder =
-    decode UserJson
-        |> required "id" int
-        |> required "name" string
-        |> required "username" string
-        |> required "email" string
-        |> required "phone" string
-        |> required "website" string
-        |> required "company" companyDecoder
+roomJsonToModel : Int -> RoomJson -> Room
+roomJsonToModel idx json =
+    let
+        apto =
+            json.apto
+
+        status =
+            case json.status of
+                0 ->
+                    Ocupado
+
+                1 ->
+                    AltaMedica
+
+                2 ->
+                    Vago
+
+                3 ->
+                    Acompanhante
+
+                4 ->
+                    Limpeza
+
+                5 ->
+                    Reservado
+
+                6 ->
+                    Manutencao
+
+                7 ->
+                    Interditado
+
+                _ ->
+                    Vazio
+
+        paciente =
+            Just json.paciente
+
+        medico =
+            Just json.medico
+
+        convenio =
+            Just json.convenio
+
+        observacao =
+            Just json.observacao
+
+        previsao =
+            Just json.previsao
+
+        precaucao =
+            case json.precaucao of
+                6 ->
+                    Just Default
+
+                7 ->
+                    Just Preventive
+
+                1 ->
+                    Just Aerosols
+
+                2 ->
+                    Just Contact
+
+                3 ->
+                    Just ContactAerosols
+
+                4 ->
+                    Just ContactDroplets
+
+                5 ->
+                    Just Droplets
+
+                _ ->
+                    Nothing
+
+        scp =
+            case json.scp of
+                0 ->
+                    Just VeryLow
+
+                1 ->
+                    Just Low
+
+                2 ->
+                    Just Average
+
+                3 ->
+                    Just High
+
+                4 ->
+                    Just NoRisk
+
+                _ ->
+                    Nothing
+
+        riscoQueda =
+            case json.riscoQueda of
+                0 ->
+                    Just Low
+
+                1 ->
+                    Just Average
+
+                2 ->
+                    Just High
+
+                _ ->
+                    Nothing
+
+        ulceraPressao =
+            case json.ulceraPressao of
+                0 ->
+                    Just Low
+
+                1 ->
+                    Just Average
+
+                2 ->
+                    Just High
+
+                _ ->
+                    Nothing
+
+        alergias =
+            List.indexedMap appendIdx json.alergias
+
+        exames =
+            List.indexedMap appendIdx json.exames
+
+        cirurgias =
+            List.indexedMap appendIdx json.cirurgias
+
+        jejum =
+            case json.jejum of
+                "" ->
+                    Nothing
+
+                _ ->
+                    Just json.jejum
+    in
+        Room
+            apto
+            status
+            paciente
+            medico
+            convenio
+            observacao
+            previsao
+            json.previsaoToday
+            precaucao
+            scp
+            riscoQueda
+            ulceraPressao
+            alergias
+            exames
+            cirurgias
+            jejum
+            idx
 
 
-testJsonDecoder : Decoder (List UserJson)
-testJsonDecoder =
-    list userJsonDecoder
+roomsJsonToModel : List RoomJson -> List Room
+roomsJsonToModel roomsJson =
+    List.indexedMap roomJsonToModel roomsJson
+
+
+painelJsonToModel : PainelJson -> Painel
+painelJsonToModel painelJson =
+    Painel painelJson.date (roomsJsonToModel painelJson.rooms) painelJson.version
 
 
 type RoomStatus
-    = Occupied
-    | MedicalRelease
-    | Vacancy
-    | Companion
-    | Cleaning
-    | Reserved
-    | Maintenance
-    | Interdicted
-    | EmptyRoom
+    = Ocupado
+    | AltaMedica
+    | Vago
+    | Acompanhante
+    | Limpeza
+    | Reservado
+    | Manutencao
+    | Interditado
+    | Vazio
 
 
 type CautionLevel

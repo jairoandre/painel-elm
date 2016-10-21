@@ -1,6 +1,7 @@
 @width: 1920px;
 @height: 1080px;
 @headerHeight: 50px;
+@cellHeight: 50px;
 
 @headerFactor: 0.1;
 
@@ -37,6 +38,7 @@ body {
 	height: 40px;
 	margin-top: (@headerHeight - 40) / 2;
 	margin-left: (@dateWrapperWidth - 135) / 2;
+	cursor: pointer;
 }
 
 .title__wrapper {
@@ -56,10 +58,19 @@ body {
 	border-bottom: 1px solid #fff;
 }
 
+.title__version {
+	position: absolute;
+	font-size: 15px;
+	text-align: right;
+	right: 0;
+	top: 0;
+	padding-right: 5px;
+}
+
 .date__wrapper {
 	position: absolute;
 	text-align: center;
-	font-size: 20px;
+	font-size: 30px;
 	left: @dateWrapperOffset;
 	width: @dateWrapperWidth;
 	height: @headerHeight;
@@ -186,7 +197,7 @@ body {
 	left: @statusOffset;
 }
 
-@pacienteASAWidth: 300px;
+@pacienteASAWidth: 300px + 125px; // JEJUM WIDTH
 @pacienteASAOffset: @statusWidth + @statusOffset;
 .column__header--pacienteASA {
 	width: @pacienteASAWidth;
@@ -258,7 +269,7 @@ body {
 .column__header--ulcera {
 	width: @ulceraWidth;
 	left: @ulceraOffset;
-	font-size: 12px;
+	font-size: 10px;
 	background-color: #a95b41;
 }
 
@@ -278,8 +289,9 @@ body {
 	background-color: #989898;
 }
 
-@cirurgiaWidth: 110px;
-@cirurgiaOffset: @exameASAWidth + @exameASAOffset;
+@cirurgiaWidth: @exameASAWidth + 110px;
+//@cirurgiaOffset: @exameASAWidth + @exameASAOffset;
+@cirurgiaOffset: @alergiaASAWidth + @alergiaASAOffset;
 .column__header--cirurgia {
 	width: @cirurgiaWidth;
 	left: @cirurgiaOffset;
@@ -300,7 +312,8 @@ body {
 	position: absolute;
 	top: 80px;
 	font-size: 20px;
-
+	height: 1000px;
+	width: 1920px;
 }
 
 .column__wrapper--padding {
@@ -340,6 +353,7 @@ body {
 
 .column__wrapper--apto {
 	width: @aptoWidth;
+	font-size: 16px;
 }
 
 
@@ -352,7 +366,9 @@ body {
 
 .column__wrapper--paciente {
 	width: @pacienteASAWidth;
-	left: @pacienteASAOffset;
+	left: @pacienteASAOffset;	
+	font-size: 25px;
+	font-height: bold;
 }
 
 .column__wrapper--medico {
@@ -363,6 +379,7 @@ body {
 .column__wrapper--convenio {
 	width: @convenioASAWidth;
 	left: @convenioASAOffset;
+	font-size: 16px;
 }
 
 .column__wrapper--observacao {
@@ -370,11 +387,17 @@ body {
 	left: @obsASAOffset;
 }
 
-.column__wrapper--previsao {
+.column__wrapper--previsao, .column__wrapper--previsao--alerta {
 	width: @previsaoASAWidth;
 	left: @previsaoASAOffset;
 	font-size: 18px;
 	text-align: center;
+}
+
+.column__wrapper--previsao--alerta {
+	background-color: #ff4300;
+	color: #fff;
+	font-weight: bold;
 }
 
 .column__wrapper--precaucao {
@@ -398,6 +421,14 @@ body {
 	margin-top: 5px;
 }
 
+.button__asa {
+	width: 250px;
+	height: 100px;
+	font-size: 20px;
+	margin: 5px;
+	padding: 0;
+}
+
 .column__wrapper--ulceraPressao {
 	width: @ulceraWidth;
 	left: @ulceraOffset;
@@ -408,10 +439,13 @@ body {
 .column__wrapper--alergiaASA {
 	width: @alergiaASAWidth;
 	left: @alergiaASAOffset;
-	text-align: center;
+	text-align: left;
 	overflow: hidden;
 	font-size: 15px;
-	white-space: normal;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	line-height: normal;
 }
 
 .column__wrapper--examesASA {
@@ -423,7 +457,7 @@ body {
 	white-space: normal;
 }
 
-.column__wrapper--cirurgia {
+.column__wrapper--cirurgias {
 	width: @cirurgiaWidth;
 	left: @cirurgiaOffset;
 	font-size: 15px;
@@ -437,14 +471,43 @@ body {
 
 // UL LI LISTS
 
-.ul__painel {
-	display: block;
-    list-style-type: none;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 0;
+.list__painel {
+	font-size: 12px;
+	line-height: 15px;
+	text-align: left;
+	overflow: hidden;
+	border-radius: 5px;
+	height: @cellHeight - 2;
+	white-space: nowrap;
+	position: absolute;
+	top: 1px;
+	left: 1px;
+}
+
+.list__painel--exames {
+	width: @exameASAWidth - 2;
+	background-color: #ddd;
+}
+
+.list__painel--alergias {
+	width: @alergiaASAWidth - 2;
+	background-color: #FFAFBC;
+}
+
+.list__painel--cirurgias {
+	width: @cirurgiaWidth - 2;
+	background-color: #ffd1a0;
+}
+
+.list__item__painel {
+	width: 100%;
+	overflow: hidden;
+}
+
+.list__item__painel__inner {	
+	text-overflow: ellipsis;
+	padding-left: 5px;
+	overflow: hidden;
 }
 
 // IMAGE
@@ -455,51 +518,33 @@ body {
 	padding: 5px;
 	border-radius: 5px;
 }
-
-// STATUS
-
 .image__icon--ocupada {
-	background-color: red;
+	background-color: #ff5f33;
 }
-
 .image__icon--alta {
-	background-color: #55F98B;	
+	background-color: #59f956;
 }
-
 .image__icon--vago {
-	background-color: #31DE52;
+	background-color: #5dde93;
 }
-
 .image__icon--acompanhante {
-	background-color: orange;
+	background-color: #dc6fff;
 }
-
 .image__icon--higienizacao {
 	background-color: #00E3CB;
 }
-
 .image__icon--reservada {
 	background-color: #FBAD50;
 }
-
 .image__icon--manutencao {
-	background-color: #9567FF;
+	background-color: #ffeb21;
 }
-
 .image__icon--interditado {
-	background-color: #FF5980;
+	background-color: #ff9540;
 }
-
-.image__icon--interditado {
-	background-color: #FF5980;
-}
-
 .image__icon--empty {
 	background-color: #A3A3A3;
 }
-
-// PRECAUÇÃO CONTATO
-
 .image__icon--precaucao--padrao {
 	background-color: #88dc88;
 }
@@ -507,16 +552,16 @@ body {
 	background-color: #F7AA25;
 }
 .image__icon--precaucao--aerossois {
-	background-color: #33ccff;
+	background-color: #ffeb21;
 }
 .image__icon--precaucao--contato {
 	background-color: #FF4200;
 }
 .image__icon--precaucao--contato--aerossois {
-	background-color: #FF7C49;
+	background-color: #ffbe1e;
 }
 .image__icon--precaucao--contato--goticulas {
-	background-color: #FF4B33;
+	background-color: #548cff;
 }
 .image__icon--precaucao--goticulas {
 	background-color: #33ABFF;
@@ -524,18 +569,16 @@ body {
 .image__icon--precaucao--sem {
 	background-color: #fff;
 }
-
-// RISCO QUEDA
-
-.image__icon--ulceraLow, .image__icon--riscoQuedaLow {
+.image__icon--ulceraLow,
+.image__icon--riscoQuedaLow {
 	background-color: #88dc88;
 }
-
-.image__icon--ulceraAverage, .image__icon--riscoQuedaAverage {
+.image__icon--ulceraAverage,
+.image__icon--riscoQuedaAverage {
 	background-color: #ff9933;
 }
-
-.image__icon--ulceraHigh, .image__icon--riscoQuedaHigh {
+.image__icon--ulceraHigh,
+.image__icon--riscoQuedaHigh {
 	background-color: #FF3333;
 }
 
@@ -543,13 +586,23 @@ body {
 
 .loadingLayer {
 	position: absolute;
-	background-color: #fff;
+	background-color: #ccc;
 	text-align: center;
 	width: @width;
 	height: @height;
+	opacity: 0.8;
 }
 
 .loadingLayer--image {
+	position: absolute;
+    margin: auto;
+    top: -300px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.loadingLayer--gif {
 	position: absolute;
     margin: auto;
     top: 0;

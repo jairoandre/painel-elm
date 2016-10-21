@@ -8,31 +8,31 @@ genRoomStatus : Int -> RoomStatus
 genRoomStatus newInt =
     case newInt of
         1 ->
-            Occupied
+            Ocupado
 
         2 ->
-            MedicalRelease
+            AltaMedica
 
         3 ->
-            Vacancy
+            Vago
 
         4 ->
-            Companion
+            Acompanhante
 
         5 ->
-            Cleaning
+            Limpeza
 
         6 ->
-            Reserved
+            Reservado
 
         7 ->
-            Maintenance
+            Manutencao
 
         8 ->
-            Interdicted
+            Interditado
 
         _ ->
-            EmptyRoom
+            Vazio
 
 
 genRiskLevel : Int -> Maybe RiskLevel
@@ -158,6 +158,7 @@ mockRoom idx seed =
         (Just ("Convênio Extenso " ++ (toString idx)))
         (Just ("Observação " ++ (toString idx)))
         (Just "01/01/2016")
+        False
         (randomCaution idx seed)
         (randomRisk (idx + 1) seed)
         (randomRisk (idx + 2) seed)
@@ -167,7 +168,7 @@ mockRoom idx seed =
         -- EXAMES
         [ "Endoscopia" ]
         -- CIRURGIA
-        (Just "10/10/2016")
+        [ "Cirurgia" ]
         -- DIETA
         (Just "lactose")
         idx
