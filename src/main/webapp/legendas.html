@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    .image__icon {
+      width: 30px;
+      height: 30px;
+      padding: 5px;
+      border-radius: 5px;
+    }
+    .image__icon--ocupada {
+      background-color: #ff5f33;
+    }
+    .image__icon--alta {
+      background-color: #59f956;
+    }
+    .image__icon--vago {
+      background-color: #5dde93;
+    }
+    .image__icon--acompanhante {
+      background-color: #dc6fff;
+    }
+    .image__icon--higienizacao {
+      background-color: #00E3CB;
+    }
+    .image__icon--reservada {
+      background-color: #FBAD50;
+    }
+    .image__icon--manutencao {
+      background-color: #ffeb21;
+    }
+    .image__icon--interditado {
+      background-color: #ff9540;
+    }
+    .image__icon--empty {
+      background-color: #A3A3A3;
+    }
+    .image__icon--precaucao--padrao {
+      background-color: #88dc88;
+    }
+    .image__icon--precaucao--preventiva {
+      background-color: #F7AA25;
+    }
+    .image__icon--precaucao--aerossois {
+      background-color: #ffeb21;
+    }
+    .image__icon--precaucao--contato {
+      background-color: #FF4200;
+    }
+    .image__icon--precaucao--contato--aerossois {
+      background-color: #ffbe1e;
+    }
+    .image__icon--precaucao--contato--goticulas {
+      background-color: #548cff;
+    }
+    .image__icon--precaucao--goticulas {
+      background-color: #33ABFF;
+    }
+    .image__icon--precaucao--sem {
+      background-color: #fff;
+    }
+    .image__icon--ulceraLow,
+    .image__icon--riscoQuedaLow {
+      background-color: #88dc88;
+    }
+    .image__icon--ulceraAverage,
+    .image__icon--riscoQuedaAverage {
+      background-color: #ff9933;
+    }
+    .image__icon--ulceraHigh,
+    .image__icon--riscoQuedaHigh {
+      background-color: #FF3333;
+    }
+  </style>
+</head>
+<body>
+<div style="display: inline-block;">
+  <div style="padding: 5px; margin-left: 20px; display: inline-block;">
+    <h3>STATUS</h3>
+    <div>
+      <img src="assets/imgs/hotel-single-bed.png" class="image__icon image__icon--vago">
+      <span>Quarto Vago</span>
+    </div>
+    <div>
+      <img src="assets/imgs/man-user.png" class="image__icon image__icon--ocupada">
+      <span>Paciente Internado</span>
+    </div>
+    <div>
+      <img src="assets/imgs/man-user.png" class="image__icon image__icon--alta">
+      <span>Paciente com Alta</span>
+    </div>
+    <div>
+      <img src="assets/imgs/man-user.png" class="image__icon image__icon--acompanhante">
+      <span>Acompanhante</span>
+    </div>
+    <div>
+      <img src="assets/imgs/wiping-swipe-for-floors.png" class="image__icon image__icon--higienizacao">
+      <span>Quarto em Higienização</span>
+    </div>
+    <div>
+      <img src="assets/imgs/hotel-door-key.png" class="image__icon image__icon--reservada">
+      <span>Quarto Reservado</span>
+    </div>
+    <div>
+      <img src="assets/imgs/handyman-tools.png" class="image__icon image__icon--manutencao">
+      <span>Quarto em Manutenção</span>
+    </div>
+    <div>
+      <img src="assets/imgs/close-sign-for-door.png" class="image__icon image__icon--interditado">
+      <span>Interditado</span>
+    </div>
+  </div>
+  <div style="padding: 5px; margin-left: 20px; display: inline-block;">
+    <h3>PRECAUÇÃO DE CONTATO</h3>
+    <div>
+      <img src="assets/imgs/hand.png" class="image__icon image__icon--precaucao--padrao">
+      <span>Padrão</span>
+    </div>
+    <div>
+      <img src="assets/imgs/hand.png" class="image__icon image__icon--precaucao--preventiva">
+      <span>Preventiva</span>
+    </div>
+    <div>
+      <img src="assets/imgs/hand.png" class="image__icon image__icon--precaucao--contato">
+      <span>Contato</span>
+    </div>
+    <div>
+      <img src="assets/imgs/spray.png" class="image__icon image__icon--precaucao--aerossois">
+      <span>Aerossóis</span>
+    </div>
+    <div>
+      <img src="assets/imgs/hand-spray.png" class="image__icon image__icon--precaucao--contato--aerossois">
+      <span>Contato + Aerossóis</span>
+    </div>
+    <div>
+      <img src="assets/imgs/drops.png" class="image__icon image__icon--precaucao--goticulas">
+      <span>Gotículas</span>
+    </div>
+    <div>
+      <img src="assets/imgs/hand-drops.png" class="image__icon image__icon--precaucao--contato--goticulas">
+      <span>Contato + Gotículas</span>
+    </div>
+    <div>
+      <img src="assets/imgs/cancel.png" class="image__icon image__icon--precaucao-sem">
+      <span>Sem</span>
+    </div>
+  </div>
+  <div style="padding: 5px; margin-left: 20px; display: inline-block;">
+    <h3>SCP</h3>
+    <div>
+      <svg height="40" width="40"><polygon points="0,40 40,40 20,0" fill="green"></polygon></svg>
+      <span>Cuidados Mínimos</span>
+    </div>
+    <div>
+      <svg width="40" height="40">
+        <rect width="40" height="40" fill="orange"/>
+      </svg>
+      <span>Cuidados Intermediários</span>
+    </div>
+    <div>
+      <svg width="40" height="40">
+        <circle cx="20" cy="20" r="20" fill="#cc0099"/>
+      </svg>
+      <span>Semi Intensivo</span>
+    </div>
+    <div>
+      <svg width="40" height="40">
+        <polygon fill="#ff3333" points="20,0 0,18 8,40 32,40 40,18"/>
+      </svg>
+      <span>Cuidados Intensivos</span>
+    </div>
+  </div>
+  <div style="padding: 5px; margin-left: 20px; display: inline-block;">
+    <h3>RISCO QUEDA</h3>
+    <div>
+      <img src="assets/imgs/slide.png" class="image__icon image__icon--riscoQuedaLow">
+      <span>Baixo Risco</span>
+    </div>
+    <div>
+      <img src="assets/imgs/slide.png" class="image__icon image__icon--riscoQuedaHigh">
+      <span>Alto Risco</span>
+    </div>
+  </div>
+  <div style="padding: 5px; margin-left: 20px; display: inline-block;">
+    <h3>ÚLCERA PRESSÃO</h3>
+    <div>
+      <img src="assets/imgs/bed.png" class="image__icon image__icon--ulceraLow">
+      <span>Baixo Risco</span>
+    </div>
+    <div>
+      <img src="assets/imgs/bed.png" class="image__icon image__icon--ulceraAverage">
+      <span>Risco Médio</span>
+    </div>
+    <div>
+      <img src="assets/imgs/bed.png" class="image__icon image__icon--ulceraHigh">
+      <span>Risco Alto</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

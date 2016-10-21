@@ -1,9 +1,6 @@
 package br.com.vah.painel.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -17,20 +14,24 @@ public class Atendimento {
   @Column(name = "CD_ATENDIMENTO")
   private Long id;
 
+  @ManyToOne
+  @JoinColumn(name = "CD_LEITO")
+  private Leito leito;
+
   @Column(name = "DT_ALTA_MEDICA")
   private Date dataAltaMedica;
 
-  @Column(name = "CD_PACIENTE")
-  private Long cdPaciente;
+  @ManyToOne
+  @JoinColumn(name = "CD_PRESTADOR")
+  private Prestador prestador;
 
-  @Column(name = "CD_PRESTADOR")
-  private Long cdPrestador;
+  @ManyToOne
+  @JoinColumn(name = "CD_PACIENTE")
+  private Paciente paciente;
 
-  @Column(name = "CD_CONVENIO")
-  private Long cdConvenio;
-
-  @Column(name = "CD_LEITO")
-  private Long cdLeito;
+  @ManyToOne
+  @JoinColumn(name = "CD_CONVENIO")
+  private Convenio convenio;
 
   @Column(name = "TP_ATENDIMENTO")
   private String tpAtendimento;
@@ -57,36 +58,36 @@ public class Atendimento {
     this.dataAltaMedica = dataAltaMedica;
   }
 
-  public Long getCdPaciente() {
-    return cdPaciente;
+  public Paciente getPaciente() {
+    return paciente;
   }
 
-  public void setCdPaciente(Long cdPaciente) {
-    this.cdPaciente = cdPaciente;
+  public void setPaciente(Paciente paciente) {
+    this.paciente = paciente;
   }
 
-  public Long getCdPrestador() {
-    return cdPrestador;
+  public Convenio getConvenio() {
+    return convenio;
   }
 
-  public void setCdPrestador(Long cdPrestador) {
-    this.cdPrestador = cdPrestador;
+  public void setConvenio(Convenio convenio) {
+    this.convenio = convenio;
   }
 
-  public Long getCdConvenio() {
-    return cdConvenio;
+  public Leito getLeito() {
+    return leito;
   }
 
-  public void setCdConvenio(Long cdConvenio) {
-    this.cdConvenio = cdConvenio;
+  public void setLeito(Leito leito) {
+    this.leito = leito;
   }
 
-  public Long getCdLeito() {
-    return cdLeito;
+  public Prestador getPrestador() {
+    return prestador;
   }
 
-  public void setCdLeito(Long cdLeito) {
-    this.cdLeito = cdLeito;
+  public void setPrestador(Prestador prestador) {
+    this.prestador = prestador;
   }
 
   public String getTpAtendimento() {
@@ -112,4 +113,6 @@ public class Atendimento {
   public void setCdMultiEmpresa(Integer cdMultiEmpresa) {
     this.cdMultiEmpresa = cdMultiEmpresa;
   }
+
+
 }
