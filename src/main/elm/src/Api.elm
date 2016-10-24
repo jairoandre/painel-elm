@@ -12,4 +12,4 @@ apiHost =
 
 getJsonPainel : String -> (Http.Error -> a) -> (PainelJson -> a) -> Cmd a
 getJsonPainel asa error success =
-    Task.perform error success (Http.get painelJsonDecoder (apiHost ++ "rest/api/painel/" ++ asa))
+    Task.perform error success (Http.get painelJsonDecoder ("rest/api/painel/" ++ asa))

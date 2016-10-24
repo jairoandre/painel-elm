@@ -11,7 +11,6 @@ import Http
 import Task
 import Debug
 import String
-
 import Model exposing (..)
 import Mock exposing (..)
 import Time exposing (Time, minute, second)
@@ -32,31 +31,38 @@ main =
         }
 
 
+
 -- URL PARSERS
+
 
 toHash : Page -> String
 toHash page =
-  case page of
-    Home ->
-      "#home"
+    case page of
+        Home ->
+            "#home"
 
-    Asa asa ->
-      "#painel/" ++ asa
+        Asa asa ->
+            "#asa/" ++ asa
+
 
 hasParser : Navigation.Location -> Result String Page
 hasParser location =
     UrlParser.parse identity pageParser (String.dropLeft 1 location.hash)
 
+
 pageParser : Parser (Page -> a) a
 pageParser =
     oneOf
-        [ format Home (s "Home")
-        , format Asa (s "painel" </> string)
+        [ format Home (s "")
+        , format Home (s "home")
+        , format Asa (s "asa" </> string)
         ]
+
 
 type Page
     = Home
     | Asa String
+
 
 
 -- MODEL
@@ -77,21 +83,26 @@ type alias Model =
     , loading : Bool
     , subs : Maybe Int
     , version : String
+    , page : Page
     }
 
 
 init : Result String Page -> ( Model, Cmd Msg )
 init result =
-    urlUpdate result ( Model Nothing [] "Loading" { width = 1920, height = 1080 } 1.0 False Nothing "", initializeDimensions )
+    urlUpdate result (Model Nothing [] "Loading" { width = 1920, height = 1080 } 1.0 False Nothing "" Home)
+
 
 urlUpdate : Result String Page -> Model -> ( Model, Cmd Msg )
 urlUpdate result model =
-    case Debug.log "result" result of
+    case result of
         Err _ ->
             ( model, Navigation.modifyUrl (toHash model.page) )
 
-        Ok (Asa asa as page) ->
-            ( { model | page = page, asa = asa }, getPainel asa )
+        Ok (Home as page) ->
+            ( { model | page = page, asa = Nothing, loading = False }, setScale )
+
+        Ok ((Asa asa) as page) ->
+            ( { model | page = page, asa = Just asa, loading = True, subs = Just 1 }, getPainel asa )
 
 
 
@@ -114,10 +125,10 @@ update message model =
         PickAsa newAsa ->
             case newAsa of
                 Nothing ->
-                    ( { model | asa = Nothing, rooms = [], subs = Nothing }, Cmd.none )
+                    ( { model | asa = Nothing, rooms = [], subs = Nothing }, Navigation.modifyUrl "#home" )
 
                 Just asa ->
-                    ( { model | asa = Just asa, loading = True, subs = Just 1 }, getPainel asa )
+                    ( model, Navigation.modifyUrl (toHash (Asa asa)) )
 
         MorePlease newTime ->
             case model.asa of
@@ -132,7 +143,7 @@ update message model =
                 painel =
                     painelJsonToModel painelJson
             in
-                ( { model | rooms = painel.rooms, loading = False, date = painel.date, version = painel.version }, Cmd.none )
+                ( { model | rooms = painel.rooms, loading = False, date = painel.date, version = painel.version }, setScale )
 
         FetchFail e ->
             ( { model | loading = False }, Cmd.none )
@@ -316,8 +327,8 @@ subscriptions model =
 -- HTTP
 
 
-initializeDimensions : Cmd Msg
-initializeDimensions =
+setScale : Cmd Msg
+setScale =
     Task.perform (\_ -> Debug.crash "Oopss!!!") Resize Window.size
 
 
