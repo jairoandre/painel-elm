@@ -142,7 +142,7 @@ legendas =
                         []
                     ]
                 , span []
-                    [ text "Semi Intensivo" ]
+                    [ text "Cuidados Semi Intensivos" ]
                 ]
             , div []
                 [ Svg.svg [ SvgAtt.height "40", SvgAtt.width "40" ]
@@ -171,24 +171,24 @@ legendas =
             ]
         , div [ attribute "style" "padding: 5px; margin-left: 20px; display: inline-block;" ]
             [ h3 []
-                [ text "ÚLCERA PRESSÃO" ]
+                [ text "LESÃO POR PRESSÃO" ]
             , div []
                 [ img [ class "image__icon image__icon--ulceraLow", src "assets/imgs/bed.png" ]
                     []
                 , span []
-                    [ text "Baixo Risco" ]
+                    [ text "Risco Mínimo" ]
                 ]
             , div []
                 [ img [ class "image__icon image__icon--ulceraAverage", src "assets/imgs/bed.png" ]
                     []
                 , span []
-                    [ text "Risco Médio" ]
+                    [ text "Risco Moderado" ]
                 ]
             , div []
                 [ img [ class "image__icon image__icon--ulceraHigh", src "assets/imgs/bed.png" ]
                     []
                 , span []
-                    [ text "Risco Alto" ]
+                    [ text "Risco Elevado" ]
                 ]
             ]
         ]
@@ -264,7 +264,7 @@ columnHeaderASA =
         , columnHC "PRECAU." "precaucao"
         , columnHC "SCP" "scp"
         , columnHC "RIS. QUEDA" "risco"
-        , columnHC "ÚLC. PRES." "ulcera"
+        , columnHC "LESÃO PRES." "ulcera"
         , columnHC "ALERGIAS" "alergiaASA"
           --, columnHC "EXAMES" "exameASA"
         , columnHC "CIRURGIAS" "cirurgia"

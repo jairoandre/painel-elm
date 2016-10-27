@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -35,6 +36,26 @@ public class AtendimentoDAO extends AbstractDAO<Atendimento> {
     criteria.add(Restrictions.eq("l.tpSituacao", "A"));
     criteria.add(Restrictions.eq("cdMultiEmpresa", 1));
     criteria.add(Restrictions.isNull("dtAlta"));
+    criteria.add(Restrictions.eq("tpAtendimento", "I"));
+
+    return criteria.list();
+  }
+
+  public List<Atendimento> listForCepam() {
+    Criteria criteria = createCriteria();
+
+    criteria.createAlias("leito", "l")
+        .add(Restrictions.not(Restrictions.in("l.unidadeInternacao", new Integer[] {12, 10, 6, 17, 7, 8, 9})));
+
+    Calendar cld = Calendar.getInstance();
+    Date today = new Date();
+    cld.setTime(today);
+    cld.add(Calendar.HOUR_OF_DAY, -10);
+    Date tenHoursBefore = cld.getTime();
+
+    criteria.add(Restrictions.between("horaAlta", tenHoursBefore, today));
+
+    criteria.add(Restrictions.eq("cdMultiEmpresa", 1));
     criteria.add(Restrictions.eq("tpAtendimento", "I"));
 
     return criteria.list();
@@ -128,11 +149,11 @@ public class AtendimentoDAO extends AbstractDAO<Atendimento> {
       } else {
         int ulceraPressao = val.intValue();
         if (ulceraPressao >= 4 && ulceraPressao <= 12) {
-          return 0;
+          return 2;
         } else if (ulceraPressao >= 13 && ulceraPressao <= 15) {
           return 1;
-        } else if (ulceraPressao > 15) {
-          return 2;
+        } else if (ulceraPressao >= 16 && ulceraPressao <= 23) {
+          return 0;
         } else {
           return -1;
         }

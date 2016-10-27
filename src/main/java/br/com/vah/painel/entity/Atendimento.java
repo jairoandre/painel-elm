@@ -21,6 +21,12 @@ public class Atendimento {
   @Column(name = "DT_ALTA_MEDICA")
   private Date dataAltaMedica;
 
+  @Column(name = "HR_ALTA")
+  private Date horaAlta;
+
+  @Column(name = "HR_ALTA_MEDICA")
+  private Date horaAltaMedica;
+
   @ManyToOne
   @JoinColumn(name = "CD_PRESTADOR")
   private Prestador prestador;
@@ -104,6 +110,22 @@ public class Atendimento {
 
   public void setDtAlta(Date dtAlta) {
     this.dtAlta = dtAlta;
+  }
+
+  public Date getHoraAlta() {
+    return horaAlta;
+  }
+
+  public void setHoraAlta(Date horaAlta) {
+    this.horaAlta = horaAlta;
+  }
+
+  public Date getHoraAltaMedica() {
+    return horaAltaMedica;
+  }
+
+  public void setHoraAltaMedica(Date horaAltaMedica) {
+    this.horaAltaMedica = horaAltaMedica;
   }
 
   public Integer getCdMultiEmpresa() {

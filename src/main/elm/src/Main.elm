@@ -1,22 +1,20 @@
 module Main exposing (..)
 
 import Html exposing (Html, div, h2, button, text, img)
-import Navigation
-import UrlParser exposing (Parser, (</>), format, int, oneOf, s, string)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
-import Date exposing (Date)
 import Window exposing (Size)
+import Model exposing (..)
+import CepamModel exposing (..)
+import CepamView exposing (..)
+import Time exposing (Time, minute, second)
+import View exposing (..)
+import Api exposing (..)
+import PainelNavigation exposing (..)
+import Navigation
 import Http
 import Task
 import Debug
-import String
-import Model exposing (..)
-import Mock exposing (..)
-import Time exposing (Time, minute, second)
-import View exposing (..)
-import Utils exposing (..)
-import Api exposing (..)
 
 
 main : Program Never
@@ -32,50 +30,12 @@ main =
 
 
 
--- URL PARSERS
-
-
-toHash : Page -> String
-toHash page =
-    case page of
-        Home ->
-            "#home"
-
-        Asa asa ->
-            "#asa/" ++ asa
-
-
-hasParser : Navigation.Location -> Result String Page
-hasParser location =
-    UrlParser.parse identity pageParser (String.dropLeft 1 location.hash)
-
-
-pageParser : Parser (Page -> a) a
-pageParser =
-    oneOf
-        [ format Home (s "")
-        , format Home (s "home")
-        , format Asa (s "asa" </> string)
-        ]
-
-
-type Page
-    = Home
-    | Asa String
-
-
-
 -- MODEL
 
 
-type alias Parse =
-    { url : String
-    , asa : String
-    }
-
-
 type alias Model =
-    { asa : Maybe String
+    { view : AppView
+    , asa : Maybe String
     , rooms : List Room
     , date : String
     , size : Window.Size
@@ -84,12 +44,33 @@ type alias Model =
     , subs : Maybe Int
     , version : String
     , page : Page
+    , cepam : Maybe CepamJson
     }
+
+
+type AppView
+    = HomeView
+    | AsaView
+    | CepamView
+    | FarmaciaView
 
 
 init : Result String Page -> ( Model, Cmd Msg )
 init result =
-    urlUpdate result (Model Nothing [] "Loading" { width = 1920, height = 1080 } 1.0 False Nothing "" Home)
+    urlUpdate result
+        (Model
+            HomeView
+            Nothing
+            []
+            "Loading"
+            { width = 1920, height = 1080 }
+            1.0
+            False
+            Nothing
+            ""
+            Home
+            Nothing
+        )
 
 
 urlUpdate : Result String Page -> Model -> ( Model, Cmd Msg )
@@ -99,10 +80,16 @@ urlUpdate result model =
             ( model, Navigation.modifyUrl (toHash model.page) )
 
         Ok (Home as page) ->
-            ( { model | page = page, asa = Nothing, loading = False }, setScale )
+            ( { model | view = HomeView, page = page, asa = Nothing, loading = False, subs = Nothing, cepam = Nothing }, setScale )
 
         Ok ((Asa asa) as page) ->
-            ( { model | page = page, asa = Just asa, loading = True, subs = Just 1 }, getPainel asa )
+            ( { model | view = AsaView, page = page, asa = Just asa, loading = True, subs = Just 1, cepam = Nothing }, getPainel asa )
+
+        Ok (Cepam as page) ->
+            ( { model | view = CepamView, page = page, asa = Nothing, loading = True, subs = Just 2 }, getCepam )
+
+        Ok (Farmacia as page) ->
+            ( { model | view = FarmaciaView, page = page, asa = Nothing, loading = True, subs = Just 2 }, getCepam )
 
 
 
@@ -112,10 +99,14 @@ urlUpdate result model =
 type Msg
     = PickAsa (Maybe String)
     | MorePlease Time
+    | MorePleaseCepam Time
     | PainelSucceed PainelJson
+    | CepamSucceed CepamJson
     | FetchFail Http.Error
     | RollItems Time
     | RollListItems Time
+    | RollItemsCepam Time
+    | RollListItemsCepam Time
     | Resize Size
 
 
@@ -138,6 +129,9 @@ update message model =
                 Just asa ->
                     ( { model | loading = True }, getPainel asa )
 
+        MorePleaseCepam newTime ->
+            ( { model | loading = True }, getCepam )
+
         PainelSucceed painelJson ->
             let
                 painel =
@@ -145,8 +139,11 @@ update message model =
             in
                 ( { model | rooms = painel.rooms, loading = False, date = painel.date, version = painel.version }, setScale )
 
+        CepamSucceed cepamJson ->
+            ( { model | cepam = Just cepamJson, loading = False, date = cepamJson.date, version = cepamJson.version }, setScale )
+
         FetchFail e ->
-            ( { model | loading = False }, Cmd.none )
+            ( { model | loading = False }, setScale )
 
         RollItems newTime ->
             rollItems model
@@ -154,12 +151,64 @@ update message model =
         RollListItems newTime ->
             rollListItems model
 
+        RollItemsCepam newTime ->
+            rollItemsCepam model
+
+        RollListItemsCepam newTime ->
+            ( model, Cmd.none )
+
         Resize size ->
             let
                 scale =
                     (toFloat size.width) / 1920.0
             in
                 ( { model | size = size, scale = scale }, Cmd.none )
+
+
+rollItemsCepam : Model -> ( Model, Cmd Msg )
+rollItemsCepam model =
+    case model.cepam of
+        Nothing ->
+            ( model, Cmd.none )
+
+        Just cepam ->
+            let
+                currentSetor =
+                    case (List.head <| List.drop cepam.setorCount cepam.setores) of
+                        Nothing ->
+                            emptySetorCepam
+
+                        Just s ->
+                            s
+
+                maxPageCount =
+                    ceiling ((toFloat <| List.length currentSetor.pacientes) / 20)
+
+                lastPage =
+                    (currentSetor.pageCount >= (maxPageCount - 1))
+
+                nextPageCount =
+                    if lastPage then
+                        0
+                    else
+                        currentSetor.pageCount + 1
+
+                nextSetorCount =
+                    if lastPage then
+                        cepam.setorCount + 1
+                    else
+                        cepam.setorCount
+
+                nextCepamSetor =
+                    { currentSetor | pageCount = nextPageCount }
+
+                nextSetores =
+                    (List.take cepam.setorCount cepam.setores) ++ [ nextCepamSetor ] ++ (List.drop (cepam.setorCount + 1) cepam.setores)
+
+                nextCepam =
+                    { cepam | setorCount = nextSetorCount, setores = nextSetores }
+            in
+                ( { model | cepam = (Just nextCepam) }, Cmd.none )
 
 
 rollItems : Model -> ( Model, Cmd Msg )
@@ -240,6 +289,32 @@ listRooms asa model =
     ]
 
 
+cepamListRooms : String -> Model -> List (Html Msg)
+cepamListRooms title model =
+    let
+        cepam =
+            case model.cepam of
+                Just c ->
+                    c
+
+                Nothing ->
+                    CepamJson "" "" [] 0
+
+        currentSetor =
+            case (List.head <| List.drop cepam.setorCount cepam.setores) of
+                Just s ->
+                    s
+
+                Nothing ->
+                    SetorCepamJson "Não Definido" [] 0
+    in
+        [ header (title ++ currentSetor.nome) model.date model.version (PickAsa Nothing)
+        , headerCepam
+        , cepamSetorToHtml currentSetor
+        , loadingLayer model
+        ]
+
+
 asas : List ( String, String )
 asas =
     [ ( "homero", "HOMERO MASSENA" )
@@ -293,12 +368,23 @@ view : Model -> Html Msg
 view model =
     let
         content =
-            case model.asa of
-                Nothing ->
+            case model.view of
+                HomeView ->
                     asaSelection
 
-                Just asa ->
-                    listRooms asa model
+                AsaView ->
+                    case model.asa of
+                        Nothing ->
+                            asaSelection
+
+                        Just asa ->
+                            listRooms asa model
+
+                CepamView ->
+                    cepamListRooms "CEPAM - " model
+
+                FarmaciaView ->
+                    cepamListRooms "FARMÁCIA - " model
     in
         div [ id "app", class "app", style [ ( "transform", "scale(" ++ (toString model.scale) ++ ")" ) ] ]
             content
@@ -311,16 +397,24 @@ view model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     case model.subs of
-        Nothing ->
-            Sub.none
-
-        Just _ ->
+        Just 1 ->
             Sub.batch
                 [ Time.every (5 * minute) MorePlease
                 , Time.every (10 * second) RollItems
                 , Time.every (1 * second) RollListItems
                 , Window.resizes Resize
                 ]
+
+        Just 2 ->
+            Sub.batch
+                [ Time.every (5 * minute) MorePleaseCepam
+                , Time.every (10 * second) RollItemsCepam
+                , Time.every (1 * second) RollListItemsCepam
+                , Window.resizes Resize
+                ]
+
+        _ ->
+            Sub.none
 
 
 
@@ -335,3 +429,8 @@ setScale =
 getPainel : String -> Cmd Msg
 getPainel asa =
     getJsonPainel asa FetchFail PainelSucceed
+
+
+getCepam : Cmd Msg
+getCepam =
+    getJsonCepam FetchFail CepamSucceed

@@ -31,7 +31,7 @@ body {
 }
 
 .logo__wrapper {
-	position: absolute;	
+	position: absolute;
 }
 
 .logo__wrapper img {
@@ -51,7 +51,7 @@ body {
 	left: @titleWrapperOffset;
 	width: @titleWrapperWidth;
 	height: @headerHeight;
-	line-height: @headerHeight; 
+	line-height: @headerHeight;
 }
 
 .title__wrapper--inner {
@@ -89,7 +89,7 @@ body {
 	position: absolute;
 	height: @columnHeaderHeight;
 	background-color: @thinBlue;
-	color: #fff;	
+	color: #fff;
   	text-shadow: #111 2px 2px 5px;
   	font-weight: bold;
 	line-height: @columnHeaderHeight;
@@ -337,7 +337,7 @@ body {
 	width: 1920px;
 	font-size: 20px;
 	height: @rowHeight;
-	  
+
 }
 
 .row__wrapper--zebra {
@@ -366,7 +366,7 @@ body {
 
 .column__wrapper--paciente {
 	width: @pacienteASAWidth;
-	left: @pacienteASAOffset;	
+	left: @pacienteASAOffset;
 	font-size: 25px;
 	font-height: bold;
 }
@@ -504,7 +504,7 @@ body {
 	overflow: hidden;
 }
 
-.list__item__painel__inner {	
+.list__item__painel__inner {
 	text-overflow: ellipsis;
 	padding-left: 5px;
 	overflow: hidden;
@@ -609,4 +609,120 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
+}
+
+// COLUMNS
+
+@aptoCepamWidth: 125px;
+.column__header--aptoCepam {
+	width: @aptoCepamWidth;
+}
+
+.column__wrapper--apto--cepam {
+	width: @aptoCepamWidth;
+}
+
+@atendimentoCepamWidth: 125px;
+@atendimentoCepamOffset: @aptoCepamWidth;
+.column__header--atendimentoCepam {
+	width: @atendimentoCepamWidth;
+	left: @atendimentoCepamOffset;
+}
+
+.column__wrapper--atendimento--cepam {
+	width: @atendimentoCepamWidth;
+	left: @atendimentoCepamOffset;
+}
+
+@pacienteCepamWidth: 300px;
+@pacienteCepamOffset: @atendimentoCepamOffset + @atendimentoCepamWidth;
+.column__header--pacienteCepam {
+	width: @pacienteCepamWidth;
+	left: @pacienteCepamOffset;
+}
+
+.column__wrapper--paciente--cepam {
+	width: @pacienteCepamWidth;
+	left: @pacienteCepamOffset;
+}
+
+
+@altaMedicaCepamWidth: 185px;
+@altaMedicaCepamOffset: @pacienteCepamOffset + @pacienteCepamWidth;
+.column__header--altaMedicaCepam {
+	width: @altaMedicaCepamWidth;
+	left: @altaMedicaCepamOffset;
+}
+
+.column__wrapper--altaMedica--cepam {
+	width: @altaMedicaCepamWidth;
+	left: @altaMedicaCepamOffset;
+}
+
+
+@altaHospitalarCepamWidth: 185px;
+@altaHospitalarCepamOffset: @altaMedicaCepamOffset + @altaMedicaCepamWidth;
+.column__header--altaHospitalarCepam {
+	width: @altaHospitalarCepamWidth;
+	left: @altaHospitalarCepamOffset;
+}
+
+.column__wrapper--altaHospitalar--cepam {
+	width: @altaHospitalarCepamWidth;
+	left: @altaHospitalarCepamOffset;
+}
+
+
+@suspensosCepamWidth: 250px;
+@suspensosCepamOffset: @altaHospitalarCepamOffset + @altaHospitalarCepamWidth;
+.column__header--suspensosCepam {
+	width: @suspensosCepamWidth;
+	left: @suspensosCepamOffset;
+	background-color: #d26b00;
+}
+
+.column__wrapper--suspensos--cepam {
+	width: @suspensosCepamWidth;
+	left: @suspensosCepamOffset;
+}
+
+@agoraCepamWidth: 250px;
+@agoraCepamOffset: @suspensosCepamOffset + @suspensosCepamWidth;
+.column__header--agoraCepam {
+	width: @agoraCepamWidth;
+	left: @agoraCepamOffset;
+	background-color: #d23f00;
+}
+
+.column__wrapper--agora--cepam {
+	width: @agoraCepamWidth;
+	left: @agoraCepamOffset;
+}
+
+
+@urgenteCepamWidth: 250px;
+@urgenteCepamOffset: @agoraCepamOffset + @agoraCepamWidth;
+.column__header--urgenteCepam {
+	width: @urgenteCepamWidth;
+	left: @urgenteCepamOffset;
+	background-color: #d21300;
+}
+
+.column__wrapper--urgente--cepam {
+	width: @urgenteCepamWidth;
+	left: @urgenteCepamOffset;
+}
+
+
+@alergiasCepamWidth: 250px;
+@alergiasCepamOffset: @urgenteCepamOffset + @urgenteCepamWidth;
+.column__header--alergiasCepam {
+	width: @alergiasCepamWidth;
+	left: @alergiasCepamOffset;
+	background-color: #107300;
+}
+
+.column__wrapper--alergias--cepam {
+	width: @alergiasCepamWidth;
+	left: @alergiasCepamOffset;
 }

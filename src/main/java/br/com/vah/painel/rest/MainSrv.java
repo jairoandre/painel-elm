@@ -3,8 +3,7 @@ package br.com.vah.painel.rest;
 import br.com.vah.painel.constants.AsasEnum;
 import br.com.vah.painel.dao.AtendimentoDAO;
 import br.com.vah.painel.dao.LeitoDAO;
-import br.com.vah.painel.dto.Painel;
-import br.com.vah.painel.dto.Room;
+import br.com.vah.painel.dto.*;
 import br.com.vah.painel.entity.Atendimento;
 import br.com.vah.painel.entity.Leito;
 
@@ -63,7 +62,6 @@ public class MainSrv {
     painel.setVersion(VERSION);
     return painel;
   }
-
 
   @GET
   @Path("/list/{asa}")
@@ -142,6 +140,54 @@ public class MainSrv {
       }
     });
     return rooms;
+  }
+
+  @GET
+  @Path("/cepam")
+  @Produces("application/json")
+  public PainelCepam cepam() {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
+    SimpleDateFormat sdfYear = new SimpleDateFormat("dd/MM/yyyy");
+    PainelCepam painel = new PainelCepam();
+    List<Atendimento> atendimentos = atendimentoDAO.listForCepam();
+    Map<AsasEnum, SetorCepam> mapSetor = new HashMap<>();
+    List<SetorCepam> setores = new ArrayList<>();
+    for (Atendimento atendimento : atendimentos) {
+      AsasEnum curr = AsasEnum.byInt(atendimento.getLeito().getUnidadeInternacao());
+      SetorCepam setor = mapSetor.get(curr);
+      if (setor == null) {
+        setor = new SetorCepam();
+        setor.setNome(curr.getLabel());
+        setores.add(setor);
+        mapSetor.put(curr, setor);
+      }
+      PacienteCepam paciente = new PacienteCepam();
+      paciente.setNome(atendimento.getPaciente().getNome());
+      paciente.setApto(atendimento.getLeito().getNome());
+      paciente.setAltaMedica(sdf.format(atendimento.getHoraAltaMedica()));
+      paciente.setAtendimento(atendimento.getId().intValue());
+      setor.getPacientes().add(paciente);
+    }
+
+    Collections.sort(setores, new Comparator<SetorCepam>() {
+      @Override
+      public int compare(SetorCepam o1, SetorCepam o2) {
+        return o1.getNome().compareTo(o2.getNome());
+      }
+    });
+
+    for (SetorCepam setor : setores) {
+      Collections.sort(setor.getPacientes(), new Comparator<PacienteCepam>() {
+        @Override
+        public int compare(PacienteCepam o1, PacienteCepam o2) {
+          return o1.getApto().compareTo(o2.getApto());
+        }
+      });
+    }
+    painel.setDate(sdfYear.format(Calendar.getInstance().getTime()));
+    painel.setVersion(VERSION);
+    painel.setSetores(setores);
+    return painel;
   }
 
 
