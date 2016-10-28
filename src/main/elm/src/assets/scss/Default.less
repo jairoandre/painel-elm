@@ -613,116 +613,140 @@ body {
 
 // COLUMNS
 
-@aptoCepamWidth: 125px;
-.column__header--aptoCepam {
-	width: @aptoCepamWidth;
+@aptoCpamWidth: 155px;
+.column__header--aptoCpam {
+	width: @aptoCpamWidth;
 }
 
-.column__wrapper--apto--cepam {
-	width: @aptoCepamWidth;
+.column__wrapper--apto--cpam {
+	width: @aptoCpamWidth;
 }
 
-@atendimentoCepamWidth: 125px;
-@atendimentoCepamOffset: @aptoCepamWidth;
-.column__header--atendimentoCepam {
-	width: @atendimentoCepamWidth;
-	left: @atendimentoCepamOffset;
+@atendimentoCpamWidth: 95px;
+@atendimentoCpamOffset: @aptoCpamWidth;
+.column__header--atendimentoCpam {
+	width: @atendimentoCpamWidth;
+	left: @atendimentoCpamOffset;
 }
 
-.column__wrapper--atendimento--cepam {
-	width: @atendimentoCepamWidth;
-	left: @atendimentoCepamOffset;
+.column__wrapper--atendimento--cpam {
+	width: @atendimentoCpamWidth;
+	left: @atendimentoCpamOffset;
 }
 
-@pacienteCepamWidth: 300px;
-@pacienteCepamOffset: @atendimentoCepamOffset + @atendimentoCepamWidth;
-.column__header--pacienteCepam {
-	width: @pacienteCepamWidth;
-	left: @pacienteCepamOffset;
+@pacienteCpamWidth: 370px;
+@pacienteCpamOffset: @atendimentoCpamOffset + @atendimentoCpamWidth;
+.column__header--pacienteCpam {
+	width: @pacienteCpamWidth;
+	left: @pacienteCpamOffset;
 }
 
-.column__wrapper--paciente--cepam {
-	width: @pacienteCepamWidth;
-	left: @pacienteCepamOffset;
-}
-
-
-@altaMedicaCepamWidth: 185px;
-@altaMedicaCepamOffset: @pacienteCepamOffset + @pacienteCepamWidth;
-.column__header--altaMedicaCepam {
-	width: @altaMedicaCepamWidth;
-	left: @altaMedicaCepamOffset;
-}
-
-.column__wrapper--altaMedica--cepam {
-	width: @altaMedicaCepamWidth;
-	left: @altaMedicaCepamOffset;
+.column__wrapper--paciente--cpam {
+	width: @pacienteCpamWidth;
+	left: @pacienteCpamOffset;
 }
 
 
-@altaHospitalarCepamWidth: 185px;
-@altaHospitalarCepamOffset: @altaMedicaCepamOffset + @altaMedicaCepamWidth;
-.column__header--altaHospitalarCepam {
-	width: @altaHospitalarCepamWidth;
-	left: @altaHospitalarCepamOffset;
+@altaMedicaCpamWidth: 150px;
+@altaMedicaCpamOffset: @pacienteCpamOffset + @pacienteCpamWidth;
+.column__header--altaMedicaCpam {
+	width: @altaMedicaCpamWidth;
+	left: @altaMedicaCpamOffset;
 }
 
-.column__wrapper--altaHospitalar--cepam {
-	width: @altaHospitalarCepamWidth;
-	left: @altaHospitalarCepamOffset;
+.column__wrapper--altaMedica--cpam {
+	width: @altaMedicaCpamWidth;
+	left: @altaMedicaCpamOffset;
 }
 
 
-@suspensosCepamWidth: 250px;
-@suspensosCepamOffset: @altaHospitalarCepamOffset + @altaHospitalarCepamWidth;
-.column__header--suspensosCepam {
-	width: @suspensosCepamWidth;
-	left: @suspensosCepamOffset;
+@altaHospitalarCpamWidth: 150px;
+@altaHospitalarCpamOffset: @altaMedicaCpamOffset + @altaMedicaCpamWidth;
+.column__header--altaHospitalarCpam {
+	width: @altaHospitalarCpamWidth;
+	left: @altaHospitalarCpamOffset;
+}
+
+.column__wrapper--altaHospitalar--cpam {
+	width: @altaHospitalarCpamWidth;
+	left: @altaHospitalarCpamOffset;
+}
+
+
+@suspensosCpamWidth: 250px;
+@suspensosCpamOffset: @altaHospitalarCpamOffset + @altaHospitalarCpamWidth;
+.column__header--suspensosCpam {
+	width: @suspensosCpamWidth;
+	left: @suspensosCpamOffset;
 	background-color: #d26b00;
 }
 
-.column__wrapper--suspensos--cepam {
-	width: @suspensosCepamWidth;
-	left: @suspensosCepamOffset;
+.column__wrapper--suspensos--cpam {
+	width: @suspensosCpamWidth;
+	left: @suspensosCpamOffset;
 }
 
-@agoraCepamWidth: 250px;
-@agoraCepamOffset: @suspensosCepamOffset + @suspensosCepamWidth;
-.column__header--agoraCepam {
-	width: @agoraCepamWidth;
-	left: @agoraCepamOffset;
+.list__painel--suspensos--cpam {
+	width: @suspensosCpamWidth - 2;
+	background-color: #f0bf8d;
+}
+
+@agoraCpamWidth: 250px;
+@agoraCpamOffset: @suspensosCpamOffset + @suspensosCpamWidth;
+.column__header--agoraCpam {
+	width: @agoraCpamWidth;
+	left: @agoraCpamOffset;
 	background-color: #d23f00;
 }
 
-.column__wrapper--agora--cepam {
-	width: @agoraCepamWidth;
-	left: @agoraCepamOffset;
+.column__wrapper--agora--cpam {
+	width: @agoraCpamWidth;
+	left: @agoraCpamOffset;
 }
 
 
-@urgenteCepamWidth: 250px;
-@urgenteCepamOffset: @agoraCepamOffset + @agoraCepamWidth;
-.column__header--urgenteCepam {
-	width: @urgenteCepamWidth;
-	left: @urgenteCepamOffset;
+@urgenteCpamWidth: 250px;
+@urgenteCpamOffset: @agoraCpamOffset + @agoraCpamWidth;
+.column__header--urgenteCpam {
+	width: @urgenteCpamWidth;
+	left: @urgenteCpamOffset;
 	background-color: #d21300;
 }
 
-.column__wrapper--urgente--cepam {
-	width: @urgenteCepamWidth;
-	left: @urgenteCepamOffset;
+.column__wrapper--urgente--cpam {
+	width: @urgenteCpamWidth;
+	left: @urgenteCpamOffset;
 }
 
 
-@alergiasCepamWidth: 250px;
-@alergiasCepamOffset: @urgenteCepamOffset + @urgenteCepamWidth;
-.column__header--alergiasCepam {
-	width: @alergiasCepamWidth;
-	left: @alergiasCepamOffset;
+@alergiasCpamWidth: 250px;
+@alergiasCpamOffset: @urgenteCpamOffset + @urgenteCpamWidth;
+.column__header--alergiasCpam {
+	width: @alergiasCpamWidth;
+	left: @alergiasCpamOffset;
 	background-color: #107300;
 }
 
-.column__wrapper--alergias--cepam {
-	width: @alergiasCepamWidth;
-	left: @alergiasCepamOffset;
+.column__wrapper--alergias--cpam {
+	width: @alergiasCpamWidth;
+	left: @alergiasCpamOffset;
+}
+
+.span--altaHospitalar {
+	background-color: #f4110a;
+	padding: 5px;
+	color: #fff;
+	font-weight: bold;
+	border-radius: 3px;
+}
+
+.loading--header {
+	width: 40px;
+	position: absolute;
+	top: 5px;
+	left: 10px;
+}
+
+.loading--header--hidden {
+	display: none;
 }

@@ -14,8 +14,8 @@ toHash page =
         Asa asa ->
             "#asa/" ++ asa
 
-        Cepam ->
-            "#cepam"
+        Cpam ->
+            "#cpam"
 
         Farmacia ->
             "#farmacia"
@@ -32,7 +32,7 @@ pageParser =
         [ format Home (s "")
         , format Home (s "home")
         , format Asa (s "asa" </> string)
-        , format Cepam (s "cepam")
+        , format Cpam (s "cpam")
         , format Farmacia (s "farmacia")
         ]
 
@@ -40,7 +40,7 @@ pageParser =
 type Page
     = Home
     | Asa String
-    | Cepam
+    | Cpam
     | Farmacia
 
 

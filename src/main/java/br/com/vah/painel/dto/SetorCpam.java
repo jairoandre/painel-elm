@@ -6,9 +6,9 @@ import java.util.List;
 /**
  * Created by Jairoportela on 27/10/2016.
  */
-public class SetorCepam {
+public class SetorCpam {
   private String nome;
-  private List<PacienteCepam> pacientes = new ArrayList<>();
+  private List<PacienteCpam> pacientes = new ArrayList<>();
 
   public String getNome() {
     return nome;
@@ -18,11 +18,11 @@ public class SetorCepam {
     this.nome = nome;
   }
 
-  public List<PacienteCepam> getPacientes() {
+  public List<PacienteCpam> getPacientes() {
     return pacientes;
   }
 
-  public void setPacientes(List<PacienteCepam> pacientes) {
+  public void setPacientes(List<PacienteCpam> pacientes) {
     this.pacientes = pacientes;
   }
 

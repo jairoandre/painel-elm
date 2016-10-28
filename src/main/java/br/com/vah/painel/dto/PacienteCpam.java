@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by Jairoportela on 27/10/2016.
  */
-public class PacienteCepam {
+public class PacienteCpam {
   private String apto;
   private Integer atendimento;
   private String nome;

@@ -1,47 +1,47 @@
-module CepamModel exposing (..)
+module CpamModel exposing (..)
 
 import Json.Decode exposing (Decoder, int, string, float, bool, list, null, oneOf)
 import Json.Decode.Pipeline exposing (decode, required, optional, hardcoded)
 
 
-type alias CepamJson =
+type alias CpamJson =
     { date : String
     , version : String
-    , setores : List SetorCepamJson
+    , setores : List SetorCpamJson
     , setorCount : Int
     }
 
 
-cepamJsonDecoder : Decoder CepamJson
-cepamJsonDecoder =
-    decode CepamJson
+cpamJsonDecoder : Decoder CpamJson
+cpamJsonDecoder =
+    decode CpamJson
         |> required "date" string
         |> required "version" string
-        |> required "setores" (list setorCepamJsonDecoder)
+        |> required "setores" (list setorCpamJsonDecoder)
         |> optional "setorCount" int 0
 
 
-emptySetorCepam : SetorCepamJson
-emptySetorCepam =
-    SetorCepamJson "" [] 0
+emptySetorCpam : SetorCpamJson
+emptySetorCpam =
+    SetorCpamJson "" [] 0
 
 
-type alias SetorCepamJson =
+type alias SetorCpamJson =
     { nome : String
-    , pacientes : List PacienteCepamJson
+    , pacientes : List PacienteCpamJson
     , pageCount : Int
     }
 
 
-setorCepamJsonDecoder : Decoder SetorCepamJson
-setorCepamJsonDecoder =
-    decode SetorCepamJson
+setorCpamJsonDecoder : Decoder SetorCpamJson
+setorCpamJsonDecoder =
+    decode SetorCpamJson
         |> required "nome" string
-        |> required "pacientes" (list pacienteCepamJsonDecoder)
+        |> required "pacientes" (list pacienteCpamJsonDecoder)
         |> optional "pageCount" int 0
 
 
-type alias PacienteCepamJson =
+type alias PacienteCpamJson =
     { apto : String
     , atendimento : Int
     , nome : String
@@ -54,9 +54,9 @@ type alias PacienteCepamJson =
     }
 
 
-pacienteCepamJsonDecoder : Decoder PacienteCepamJson
-pacienteCepamJsonDecoder =
-    decode PacienteCepamJson
+pacienteCpamJsonDecoder : Decoder PacienteCpamJson
+pacienteCpamJsonDecoder =
+    decode PacienteCpamJson
         |> required "apto" string
         |> required "atendimento" int
         |> required "nome" string

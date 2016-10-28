@@ -4,8 +4,6 @@ import Html exposing (Html, div, ul, li, img, h2, h3, span, button, text)
 import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Model exposing (..)
-import Time
-import Task
 import Svg
 import Svg.Attributes as SvgAtt
 
@@ -194,27 +192,37 @@ legendas =
         ]
 
 
-header : String -> String -> String -> a -> Html a
-header title date version action =
-    div
-        [ class "header__wrapper"
-        ]
-        [ div [ class "logo__wrapper" ]
-            [ img
-                [ src "assets/imgs/logo.png", onClick action ]
-                []
+header : String -> String -> String -> Bool -> a -> Html a
+header title date version loading action =
+    let
+        loadingClass =
+            if loading then
+                "loading--header"
+            else
+                "loading--header--hidden"
+    in
+        div
+            [ class "header__wrapper"
             ]
-        , div [ class "title__wrapper" ]
-            [ div
-                [ class "title__wrapper--inner" ]
-                [ text title ]
-            , div
-                [ class "title__version" ]
-                [ text version ]
+            [ div [ class "logo__wrapper" ]
+                [ img
+                    [ src "assets/imgs/logo.png", onClick action ]
+                    []
+                ]
+            , div [ class "title__wrapper" ]
+                [ img
+                    [ src "assets/imgs/loading.gif", class loadingClass ]
+                    []
+                , div
+                    [ class "title__wrapper--inner" ]
+                    [ text title ]
+                , div
+                    [ class "title__version" ]
+                    [ text version ]
+                ]
+            , div [ class "date__wrapper" ]
+                [ text date ]
             ]
-        , div [ class "date__wrapper" ]
-            [ text date ]
-        ]
 
 
 columnH : String -> String -> Html a

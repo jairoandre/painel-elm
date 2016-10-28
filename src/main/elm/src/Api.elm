@@ -1,7 +1,7 @@
 module Api exposing (..)
 
 import Model exposing (PainelJson, painelJsonDecoder)
-import CepamModel exposing (CepamJson, cepamJsonDecoder)
+import CpamModel exposing (CpamJson, cpamJsonDecoder)
 import Http
 import Task
 
@@ -16,6 +16,6 @@ getJsonPainel asa error success =
     Task.perform error success (Http.get painelJsonDecoder ("rest/api/painel/" ++ asa))
 
 
-getJsonCepam : (Http.Error -> a) -> (CepamJson -> a) -> Cmd a
-getJsonCepam error success =
-    Task.perform error success (Http.get cepamJsonDecoder "rest/api/cepam")
+getJsonCpam : (Http.Error -> a) -> (CpamJson -> a) -> Cmd a
+getJsonCpam error success =
+    Task.perform error success (Http.get cpamJsonDecoder "rest/api/cpam")

@@ -5,8 +5,8 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Window exposing (Size)
 import Model exposing (..)
-import CepamModel exposing (..)
-import CepamView exposing (..)
+import CpamModel exposing (..)
+import CpamView exposing (..)
 import Time exposing (Time, minute, second)
 import View exposing (..)
 import Api exposing (..)
@@ -44,14 +44,14 @@ type alias Model =
     , subs : Maybe Int
     , version : String
     , page : Page
-    , cepam : Maybe CepamJson
+    , cpam : Maybe CpamJson
     }
 
 
 type AppView
     = HomeView
     | AsaView
-    | CepamView
+    | CpamView
     | FarmaciaView
 
 
@@ -80,16 +80,16 @@ urlUpdate result model =
             ( model, Navigation.modifyUrl (toHash model.page) )
 
         Ok (Home as page) ->
-            ( { model | view = HomeView, page = page, asa = Nothing, loading = False, subs = Nothing, cepam = Nothing }, setScale )
+            ( { model | view = HomeView, page = page, asa = Nothing, loading = False, subs = Nothing, cpam = Nothing }, setScale )
 
         Ok ((Asa asa) as page) ->
-            ( { model | view = AsaView, page = page, asa = Just asa, loading = True, subs = Just 1, cepam = Nothing }, getPainel asa )
+            ( { model | view = AsaView, page = page, asa = Just asa, loading = True, subs = Just 1, cpam = Nothing }, getPainel asa )
 
-        Ok (Cepam as page) ->
-            ( { model | view = CepamView, page = page, asa = Nothing, loading = True, subs = Just 2 }, getCepam )
+        Ok (Cpam as page) ->
+            ( { model | view = CpamView, page = page, asa = Nothing, loading = True, subs = Just 2 }, setScaleCpam )
 
         Ok (Farmacia as page) ->
-            ( { model | view = FarmaciaView, page = page, asa = Nothing, loading = True, subs = Just 2 }, getCepam )
+            ( { model | view = FarmaciaView, page = page, asa = Nothing, loading = True, subs = Just 2 }, setScaleCpam )
 
 
 
@@ -99,15 +99,25 @@ urlUpdate result model =
 type Msg
     = PickAsa (Maybe String)
     | MorePlease Time
-    | MorePleaseCepam Time
+    | MorePleaseCpam Time
     | PainelSucceed PainelJson
-    | CepamSucceed CepamJson
+    | CpamSucceed CpamJson
     | FetchFail Http.Error
     | RollItems Time
     | RollListItems Time
-    | RollItemsCepam Time
-    | RollListItemsCepam Time
+    | RollItemsCpam Time
+    | RollListItemsCpam Time
     | Resize Size
+    | ResizeCpam Size
+
+
+resizeCmd : Model -> Size -> Cmd Msg -> ( Model, Cmd Msg )
+resizeCmd model newSize cmd =
+    let
+        scale =
+            (toFloat newSize.width) / 1920.0
+    in
+        ( { model | size = newSize, scale = scale }, cmd )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -129,8 +139,8 @@ update message model =
                 Just asa ->
                     ( { model | loading = True }, getPainel asa )
 
-        MorePleaseCepam newTime ->
-            ( { model | loading = True }, getCepam )
+        MorePleaseCpam newTime ->
+            ( { model | loading = True }, getCpam )
 
         PainelSucceed painelJson ->
             let
@@ -139,11 +149,15 @@ update message model =
             in
                 ( { model | rooms = painel.rooms, loading = False, date = painel.date, version = painel.version }, setScale )
 
-        CepamSucceed cepamJson ->
-            ( { model | cepam = Just cepamJson, loading = False, date = cepamJson.date, version = cepamJson.version }, setScale )
+        CpamSucceed cpamJson ->
+            ( { model | cpam = Just cpamJson, loading = False, date = cpamJson.date, version = cpamJson.version }, setScale )
 
         FetchFail e ->
-            ( { model | loading = False }, setScale )
+            let
+                t =
+                    Debug.log (toString e) 0
+            in
+                ( { model | loading = False }, setScale )
 
         RollItems newTime ->
             rollItems model
@@ -151,41 +165,43 @@ update message model =
         RollListItems newTime ->
             rollListItems model
 
-        RollItemsCepam newTime ->
-            rollItemsCepam model
+        RollItemsCpam newTime ->
+            rollItemsCpam model
 
-        RollListItemsCepam newTime ->
+        RollListItemsCpam newTime ->
             ( model, Cmd.none )
 
-        Resize size ->
-            let
-                scale =
-                    (toFloat size.width) / 1920.0
-            in
-                ( { model | size = size, scale = scale }, Cmd.none )
+        Resize newSize ->
+            resizeCmd model newSize Cmd.none
+
+        ResizeCpam newSize ->
+            resizeCmd model newSize getCpam
 
 
-rollItemsCepam : Model -> ( Model, Cmd Msg )
-rollItemsCepam model =
-    case model.cepam of
+rollItemsCpam : Model -> ( Model, Cmd Msg )
+rollItemsCpam model =
+    case model.cpam of
         Nothing ->
             ( model, Cmd.none )
 
-        Just cepam ->
+        Just cpam ->
             let
                 currentSetor =
-                    case (List.head <| List.drop cepam.setorCount cepam.setores) of
+                    case (List.head <| List.drop cpam.setorCount cpam.setores) of
                         Nothing ->
-                            emptySetorCepam
+                            emptySetorCpam
 
                         Just s ->
                             s
 
                 maxPageCount =
-                    ceiling ((toFloat <| List.length currentSetor.pacientes) / 20)
+                    floor ((toFloat <| List.length currentSetor.pacientes) / 20)
 
                 lastPage =
                     (currentSetor.pageCount >= (maxPageCount - 1))
+
+                lastSetor =
+                    (cpam.setorCount >= ((List.length cpam.setores) - 1))
 
                 nextPageCount =
                     if lastPage then
@@ -195,20 +211,23 @@ rollItemsCepam model =
 
                 nextSetorCount =
                     if lastPage then
-                        cepam.setorCount + 1
+                        if lastSetor then
+                            0
+                        else
+                            cpam.setorCount + 1
                     else
-                        cepam.setorCount
+                        cpam.setorCount
 
-                nextCepamSetor =
+                nextCpamSetor =
                     { currentSetor | pageCount = nextPageCount }
 
                 nextSetores =
-                    (List.take cepam.setorCount cepam.setores) ++ [ nextCepamSetor ] ++ (List.drop (cepam.setorCount + 1) cepam.setores)
+                    (List.take cpam.setorCount cpam.setores) ++ [ nextCpamSetor ] ++ (List.drop (cpam.setorCount + 1) cpam.setores)
 
-                nextCepam =
-                    { cepam | setorCount = nextSetorCount, setores = nextSetores }
+                nextCpam =
+                    { cpam | setorCount = nextSetorCount, setores = nextSetores }
             in
-                ( { model | cepam = (Just nextCepam) }, Cmd.none )
+                ( { model | cpam = (Just nextCpam) }, Cmd.none )
 
 
 rollItems : Model -> ( Model, Cmd Msg )
@@ -282,36 +301,35 @@ printModel model =
 
 listRooms : String -> Model -> List (Html Msg)
 listRooms asa model =
-    [ header (asaTitle asa) model.date model.version (PickAsa Nothing)
+    [ header (asaTitle asa) model.date model.version model.loading (PickAsa Nothing)
     , columnHeaderASA
     , roomsToHtml model.rooms
     , loadingLayer model
     ]
 
 
-cepamListRooms : String -> Model -> List (Html Msg)
-cepamListRooms title model =
+cpamListRooms : String -> Model -> List (Html Msg)
+cpamListRooms title model =
     let
-        cepam =
-            case model.cepam of
+        cpam =
+            case model.cpam of
                 Just c ->
                     c
 
                 Nothing ->
-                    CepamJson "" "" [] 0
+                    CpamJson "" "" [] 0
 
         currentSetor =
-            case (List.head <| List.drop cepam.setorCount cepam.setores) of
+            case (List.head <| List.drop cpam.setorCount cpam.setores) of
                 Just s ->
                     s
 
                 Nothing ->
-                    SetorCepamJson "Não Definido" [] 0
+                    SetorCpamJson ("Carregando...") [] 0
     in
-        [ header (title ++ currentSetor.nome) model.date model.version (PickAsa Nothing)
-        , headerCepam
-        , cepamSetorToHtml currentSetor
-        , loadingLayer model
+        [ header (title ++ currentSetor.nome) model.date model.version model.loading (PickAsa Nothing)
+        , headerCpam
+        , cpamSetorToHtml currentSetor
         ]
 
 
@@ -380,11 +398,11 @@ view model =
                         Just asa ->
                             listRooms asa model
 
-                CepamView ->
-                    cepamListRooms "CEPAM - " model
+                CpamView ->
+                    cpamListRooms "CPAM - " model
 
                 FarmaciaView ->
-                    cepamListRooms "FARMÁCIA - " model
+                    cpamListRooms "FARMÁCIA - " model
     in
         div [ id "app", class "app", style [ ( "transform", "scale(" ++ (toString model.scale) ++ ")" ) ] ]
             content
@@ -407,9 +425,9 @@ subscriptions model =
 
         Just 2 ->
             Sub.batch
-                [ Time.every (5 * minute) MorePleaseCepam
-                , Time.every (10 * second) RollItemsCepam
-                , Time.every (1 * second) RollListItemsCepam
+                [ Time.every (5 * minute) MorePleaseCpam
+                , Time.every (5 * second) RollItemsCpam
+                , Time.every (1 * second) RollListItemsCpam
                 , Window.resizes Resize
                 ]
 
@@ -426,11 +444,16 @@ setScale =
     Task.perform (\_ -> Debug.crash "Oopss!!!") Resize Window.size
 
 
+setScaleCpam : Cmd Msg
+setScaleCpam =
+    Task.perform (\_ -> Debug.crash "Oopss!!!") ResizeCpam Window.size
+
+
 getPainel : String -> Cmd Msg
 getPainel asa =
     getJsonPainel asa FetchFail PainelSucceed
 
 
-getCepam : Cmd Msg
-getCepam =
-    getJsonCepam FetchFail CepamSucceed
+getCpam : Cmd Msg
+getCpam =
+    getJsonCpam FetchFail CpamSucceed

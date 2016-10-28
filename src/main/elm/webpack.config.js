@@ -14,7 +14,7 @@ if (TARGET_ENV === 'development') {
 
     entry: [
         //'webpack-dev-server/client?http://' + require("os").hostname() + ':9090/',
-        'webpack-dev-server/client?http://10.1.8.118:9090/',
+        'webpack-dev-server/client?http://localhost:9090/',
         path.join(__dirname, 'index.js')
     ],
 
@@ -101,4 +101,3 @@ if (TARGET_ENV === 'production') {
   };
 
 }
-
