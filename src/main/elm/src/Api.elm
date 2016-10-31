@@ -8,14 +8,15 @@ import Task
 
 apiHost : String
 apiHost =
-    "http://localhost:8080/painel/"
+    --"http://10.1.0.105:8080/painel/"
+    ""
 
 
 getJsonPainel : String -> (Http.Error -> a) -> (PainelJson -> a) -> Cmd a
 getJsonPainel asa error success =
-    Task.perform error success (Http.get painelJsonDecoder ("rest/api/painel/" ++ asa))
+    Task.perform error success (Http.get painelJsonDecoder (apiHost ++ "rest/api/painel/" ++ asa))
 
 
 getJsonCpam : (Http.Error -> a) -> (CpamJson -> a) -> Cmd a
 getJsonCpam error success =
-    Task.perform error success (Http.get cpamJsonDecoder "rest/api/cpam")
+    Task.perform error success (Http.get cpamJsonDecoder (apiHost ++ "rest/api/cpam"))

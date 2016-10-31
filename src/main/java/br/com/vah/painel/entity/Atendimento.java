@@ -2,6 +2,7 @@ package br.com.vah.painel.entity;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Jairoportela on 19/09/2016.
@@ -47,6 +48,9 @@ public class Atendimento {
 
   @Column(name = "CD_MULTI_EMPRESA")
   private Integer cdMultiEmpresa;
+
+  @OneToMany(mappedBy = "atendimento")
+  private Set<PrescricaoMedica> prescricoes;
 
   public Long getId() {
     return id;
@@ -136,5 +140,11 @@ public class Atendimento {
     this.cdMultiEmpresa = cdMultiEmpresa;
   }
 
+  public Set<PrescricaoMedica> getPrescricoes() {
+    return prescricoes;
+  }
 
+  public void setPrescricoes(Set<PrescricaoMedica> prescricoes) {
+    this.prescricoes = prescricoes;
+  }
 }

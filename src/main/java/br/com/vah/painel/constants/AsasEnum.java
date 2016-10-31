@@ -13,7 +13,7 @@ public enum AsasEnum {
   UTI2("UTI2/CARDIO", 7,8),
   UTI1("UT1", 9),
   CTQ("CTQ", 10),
-  NAOLISTADO("NÃO LISTADO");
+  NAOLISTADO("SALA DE ESPERA");
 
   Integer[] ids;
   String label;

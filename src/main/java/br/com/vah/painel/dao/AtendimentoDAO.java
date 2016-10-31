@@ -4,16 +4,15 @@ import br.com.vah.painel.entity.Atendimento;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.criterion.Conjunction;
+import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Restrictions;
 
 import javax.ejb.Stateless;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Jairoportela on 19/10/2016.
@@ -45,7 +44,7 @@ public class AtendimentoDAO extends AbstractDAO<Atendimento> {
     Criteria criteria = createCriteria();
 
     criteria.createAlias("leito", "l")
-        .add(Restrictions.not(Restrictions.in("l.unidadeInternacao", new Integer[] {12, 10, 6, 17, 7, 8, 9})));
+        .add(Restrictions.not(Restrictions.in("l.unidadeInternacao", new Integer[]{12, 10, 6, 17, 7, 8, 9})));
 
     Calendar cld = Calendar.getInstance();
     Date today = new Date();
@@ -53,7 +52,92 @@ public class AtendimentoDAO extends AbstractDAO<Atendimento> {
     cld.add(Calendar.HOUR_OF_DAY, -10);
     Date tenHoursBefore = cld.getTime();
 
-    criteria.add(Restrictions.between("horaAlta", tenHoursBefore, today));
+    Disjunction disjunction = Restrictions.disjunction();
+    Conjunction conjunction = Restrictions.conjunction();
+
+    disjunction.add(Restrictions.between("horaAlta", tenHoursBefore, today));
+    conjunction.add(Restrictions.isNull("horaAlta"));
+    conjunction.add(Restrictions.isNotNull("horaAltaMedica"));
+    disjunction.add(conjunction);
+
+    criteria.add(disjunction);
+
+    criteria.add(Restrictions.eq("cdMultiEmpresa", 1));
+    criteria.add(Restrictions.eq("tpAtendimento", "I"));
+
+    return criteria.list();
+  }
+
+  public Map<Long, List<String>> medSusp() {
+    String sql =
+    "SELECT" +
+        "  ATD.CD_ATENDIMENTO," +
+        "  PRO.DS_PRODUTO" +
+        "  FROM" +
+        "  DBAMV.TB_ATENDIME ATD" +
+        "  LEFT JOIN DBAMV.PRE_MED PM ON ATD.CD_ATENDIMENTO = PM.CD_ATENDIMENTO" +
+        "  LEFT JOIN DBAMV.ITPRE_MED IT ON PM.CD_PRE_MED = IT.CD_PRE_MED" +
+        "  LEFT JOIN DBAMV.TIP_PRESC TP ON IT.CD_TIP_PRESC = TP.CD_TIP_PRESC" +
+        "  LEFT JOIN DBAMV.TIP_FRE F ON IT.CD_TIP_FRE = F.CD_TIP_FRE" +
+        "  LEFT JOIN DBAMV.PRODUTO PRO ON TP.CD_PRODUTO = PRO.CD_PRODUTO" +
+        "  LEFT JOIN DBAMV.LEITO L ON ATD.CD_LEITO = L.CD_LEITO" +
+        "  WHERE" +
+        "  ATD.CD_MULTI_EMPRESA = 1" +
+        "  AND ATD.TP_ATENDIMENTO = 'I'" +
+        "  AND IT.SN_CANCELADO = 'S'" +
+        "  AND TP.CD_TIP_ESQ IN ('AT', 'ANT', 'AV', 'MED', 'KIT', 'DEP', 'MAC', 'MNP')" +
+        "  AND IT.DH_REGISTRO BETWEEN (SYSDATE - (10 / 24)) AND (SYSDATE)" +
+        "  AND PM.FL_IMPRESSO = 'S'" +
+        "  AND PM.TP_PRE_MED = 'M'" +
+        "  AND L.CD_UNID_INT NOT IN (12, 10, 6, 17, 7, 8, 9)" +
+        "  GROUP BY ATD.CD_ATENDIMENTO, PRO.DS_PRODUTO";
+
+    Session session = getSession();
+    SQLQuery query = session.createSQLQuery(sql);
+
+    List<Object[]> result = (List<Object[]>) query.list();
+
+    Map<Long, List<String>> map = new HashMap<>();
+
+    for (Object[] obj : result) {
+      Long value = ((BigDecimal) obj[0]).longValue();
+      String medicamento = (String) obj[1];
+
+      List<String> list = map.get(value);
+      if (list == null) {
+        list = new ArrayList<>();
+        map.put(value, list);
+      }
+
+      list.add(medicamento);
+
+    }
+
+    return map;
+
+  }
+
+  public List<Atendimento> medicamentosSuspensos() {
+    Criteria criteria = createCriteria();
+
+    criteria.createAlias("leito", "l")
+        .add(Restrictions.not(Restrictions.in("l.unidadeInternacao", new Integer[]{12, 10, 6, 17, 7, 8, 9})));
+
+    Calendar cld = Calendar.getInstance();
+    Date today = new Date();
+    cld.setTime(today);
+    cld.add(Calendar.HOUR_OF_DAY, -10);
+    Date tenHoursBefore = cld.getTime();
+
+    criteria.createAlias("prescricoes", "p");
+    criteria.createAlias("p.items", "it");
+    criteria.createAlias("it.tipo", "tp");
+
+    criteria.add(Restrictions.eq("p.impresso", "S"));
+    criteria.add(Restrictions.eq("p.tipo", "M"));
+    criteria.add(Restrictions.eq("it.cancelado", "S"));
+    criteria.add(Restrictions.in("tp.tipo", new String[]{"AT", "ANT", "AV", "MED", "KIT", "DEP", "MAC", "MNP"}));
+    criteria.add(Restrictions.between("it.dataRegistro", tenHoursBefore, today));
 
     criteria.add(Restrictions.eq("cdMultiEmpresa", 1));
     criteria.add(Restrictions.eq("tpAtendimento", "I"));
@@ -215,25 +299,25 @@ public class AtendimentoDAO extends AbstractDAO<Atendimento> {
           break;
         case 16382: // ESPARADRAPO
           String esp = obj[1].toString();
-          if(esp.contains("Sim") || esp.contains("checked")) {
+          if (esp.contains("Sim") || esp.contains("checked")) {
             list.add("ESPARADRAPO");
           }
           break;
         case 16383: // IODO
           String io = obj[1].toString();
-          if(io.contains("Sim") || io.contains("checked")) {
+          if (io.contains("Sim") || io.contains("checked")) {
             list.add("IODO");
           }
           break;
         case 16384: // LATEX
           String latex = obj[1].toString();
-          if(latex.contains("Sim") || latex.contains("checked")) {
+          if (latex.contains("Sim") || latex.contains("checked")) {
             list.add("LÁTEX");
           }
           break;
         case 16387: // MICROPORE
           String micropore = obj[1].toString();
-          if(micropore.contains("Sim") || micropore.contains("checked")) {
+          if (micropore.contains("Sim") || micropore.contains("checked")) {
             list.add("MICROPORE");
           }
           break;

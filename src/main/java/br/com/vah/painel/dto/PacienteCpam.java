@@ -1,5 +1,6 @@
 package br.com.vah.painel.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,10 +12,10 @@ public class PacienteCpam {
   private String nome;
   private String altaMedica;
   private String altaHospitalar;
-  private List<String> suspensos;
-  private List<String> agora;
-  private List<String> urgente;
-  private List<String> alergias;
+  private List<String> suspensos = new ArrayList<>();
+  private List<String> agora = new ArrayList<>();
+  private List<String> urgente = new ArrayList<>();
+  private List<String> alergias = new ArrayList<>();
 
   public String getApto() {
     return apto;

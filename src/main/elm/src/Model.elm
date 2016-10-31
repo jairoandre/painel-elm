@@ -21,7 +21,6 @@ type alias Room =
     , exames : List String
     , cirurgias : List String
     , jejum : Maybe String
-    , idx : Int
     }
 
 
@@ -98,8 +97,8 @@ appendIdx idx s =
     (toString (idx + 1)) ++ " - " ++ s
 
 
-roomJsonToModel : Int -> RoomJson -> Room
-roomJsonToModel idx json =
+roomJsonToModel : RoomJson -> Room
+roomJsonToModel json =
     let
         apto =
             json.apto
@@ -256,12 +255,11 @@ roomJsonToModel idx json =
             exames
             cirurgias
             jejum
-            idx
 
 
 roomsJsonToModel : List RoomJson -> List Room
 roomsJsonToModel roomsJson =
-    List.indexedMap roomJsonToModel roomsJson
+    List.map roomJsonToModel roomsJson
 
 
 painelJsonToModel : PainelJson -> Painel
@@ -298,8 +296,3 @@ type RiskLevel
     | Low
     | Average
     | High
-
-
-updateRoomIndex : Int -> Room -> Room
-updateRoomIndex idx room =
-    { room | idx = idx }

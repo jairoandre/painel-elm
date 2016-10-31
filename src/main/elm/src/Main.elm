@@ -11,6 +11,7 @@ import Time exposing (Time, minute, second)
 import View exposing (..)
 import Api exposing (..)
 import PainelNavigation exposing (..)
+import Legendas exposing (..)
 import Navigation
 import Http
 import Task
@@ -37,6 +38,8 @@ type alias Model =
     { view : AppView
     , asa : Maybe String
     , rooms : List Room
+    , currentPage : Int
+    , totalPages : Int
     , date : String
     , size : Window.Size
     , scale : Float
@@ -62,6 +65,8 @@ init result =
             HomeView
             Nothing
             []
+            1
+            1
             "Loading"
             { width = 1920, height = 1080 }
             1.0
@@ -83,13 +88,13 @@ urlUpdate result model =
             ( { model | view = HomeView, page = page, asa = Nothing, loading = False, subs = Nothing, cpam = Nothing }, setScale )
 
         Ok ((Asa asa) as page) ->
-            ( { model | view = AsaView, page = page, asa = Just asa, loading = True, subs = Just 1, cpam = Nothing }, getPainel asa )
+            ( { model | view = AsaView, page = page, asa = Just asa, loading = True, subs = Nothing, cpam = Nothing }, setScalePainel )
 
         Ok (Cpam as page) ->
-            ( { model | view = CpamView, page = page, asa = Nothing, loading = True, subs = Just 2 }, setScaleCpam )
+            ( { model | view = CpamView, page = page, asa = Nothing, loading = True, subs = Nothing }, setScaleCpam )
 
         Ok (Farmacia as page) ->
-            ( { model | view = FarmaciaView, page = page, asa = Nothing, loading = True, subs = Just 2 }, setScaleCpam )
+            ( { model | view = FarmaciaView, page = page, asa = Nothing, loading = True, subs = Nothing }, setScaleCpam )
 
 
 
@@ -109,6 +114,7 @@ type Msg
     | RollListItemsCpam Time
     | Resize Size
     | ResizeCpam Size
+    | ResizePainel Size
 
 
 resizeCmd : Model -> Size -> Cmd Msg -> ( Model, Cmd Msg )
@@ -146,18 +152,27 @@ update message model =
             let
                 painel =
                     painelJsonToModel painelJson
+
+                totalPages =
+                    (floor <| (toFloat <| List.length <| painel.rooms) / 20) + 1
             in
-                ( { model | rooms = painel.rooms, loading = False, date = painel.date, version = painel.version }, setScale )
+                ( { model
+                    | rooms = painel.rooms
+                    , totalPages = totalPages
+                    , currentPage = 1
+                    , loading = False
+                    , date = painel.date
+                    , subs = Just 1
+                    , version = painel.version
+                  }
+                , Cmd.none
+                )
 
         CpamSucceed cpamJson ->
-            ( { model | cpam = Just cpamJson, loading = False, date = cpamJson.date, version = cpamJson.version }, setScale )
+            ( { model | cpam = Just cpamJson, loading = False, date = cpamJson.date, subs = Just 2, version = cpamJson.version }, Cmd.none )
 
         FetchFail e ->
-            let
-                t =
-                    Debug.log (toString e) 0
-            in
-                ( { model | loading = False }, setScale )
+            ( { model | loading = False, subs = Nothing, date = "Erro!" }, Cmd.none )
 
         RollItems newTime ->
             rollItems model
@@ -177,6 +192,14 @@ update message model =
         ResizeCpam newSize ->
             resizeCmd model newSize getCpam
 
+        ResizePainel newSize ->
+            case model.asa of
+                Nothing ->
+                    resizeCmd model newSize Cmd.none
+
+                Just asa ->
+                    resizeCmd model newSize (getPainel asa)
+
 
 rollItemsCpam : Model -> ( Model, Cmd Msg )
 rollItemsCpam model =
@@ -195,7 +218,7 @@ rollItemsCpam model =
                             s
 
                 maxPageCount =
-                    floor ((toFloat <| List.length currentSetor.pacientes) / 20)
+                    (floor <| (toFloat <| List.length <| currentSetor.pacientes) / 20) + 1
 
                 lastPage =
                     (currentSetor.pageCount >= (maxPageCount - 1))
@@ -234,19 +257,16 @@ rollItems : Model -> ( Model, Cmd Msg )
 rollItems model =
     if (List.length model.rooms) > 20 then
         let
-            head =
-                List.take 5 model.rooms
+            lastPage =
+                (model.currentPage == model.totalPages)
 
-            tail =
-                List.drop 5 model.rooms
-
-            tempList =
-                List.append tail head
-
-            updatedList =
-                List.indexedMap updateRoomIndex tempList
+            nextPage =
+                if lastPage then
+                    1
+                else
+                    model.currentPage + 1
         in
-            ( { model | rooms = updatedList }, Cmd.none )
+            ( { model | currentPage = nextPage }, Cmd.none )
     else
         ( model, Cmd.none )
 
@@ -301,11 +321,18 @@ printModel model =
 
 listRooms : String -> Model -> List (Html Msg)
 listRooms asa model =
-    [ header (asaTitle asa) model.date model.version model.loading (PickAsa Nothing)
-    , columnHeaderASA
-    , roomsToHtml model.rooms
-    , loadingLayer model
-    ]
+    let
+        roomsToPrint =
+            List.take 20 (List.drop ((model.currentPage - 1) * 20) model.rooms)
+
+        page =
+            (toString model.currentPage) ++ "/" ++ (toString model.totalPages)
+    in
+        [ header (asaTitle asa) model.date model.version model.loading page (PickAsa Nothing)
+        , columnHeaderASA
+        , roomsToHtml roomsToPrint
+        , loadingLayer model
+        ]
 
 
 cpamListRooms : String -> Model -> List (Html Msg)
@@ -326,8 +353,14 @@ cpamListRooms title model =
 
                 Nothing ->
                     SetorCpamJson ("Carregando...") [] 0
+
+        maxPageCount =
+            (floor <| (toFloat <| List.length <| currentSetor.pacientes) / 20) + 1
+
+        page =
+            (toString (currentSetor.pageCount + 1)) ++ "/" ++ (toString maxPageCount)
     in
-        [ header (title ++ currentSetor.nome) model.date model.version model.loading (PickAsa Nothing)
+        [ header (title ++ currentSetor.nome) model.date model.version model.loading page (PickAsa Nothing)
         , headerCpam
         , cpamSetorToHtml currentSetor
         ]
@@ -447,6 +480,11 @@ setScale =
 setScaleCpam : Cmd Msg
 setScaleCpam =
     Task.perform (\_ -> Debug.crash "Oopss!!!") ResizeCpam Window.size
+
+
+setScalePainel : Cmd Msg
+setScalePainel =
+    Task.perform (\_ -> Debug.crash "Oopss!!!") ResizePainel Window.size
 
 
 getPainel : String -> Cmd Msg

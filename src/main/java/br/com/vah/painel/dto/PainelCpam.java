@@ -9,7 +9,7 @@ import java.util.List;
 public class PainelCpam {
   private String date;
   private String version;
-  private List<SetorCepam> setores = new ArrayList<>();
+  private List<SetorCpam> setores = new ArrayList<>();
 
   public String getDate() {
     return date;
@@ -27,11 +27,11 @@ public class PainelCpam {
     this.version = version;
   }
 
-  public List<SetorCepam> getSetores() {
+  public List<SetorCpam> getSetores() {
     return setores;
   }
 
-  public void setSetores(List<SetorCepam> setores) {
+  public void setSetores(List<SetorCpam> setores) {
     this.setores = setores;
   }
 }
