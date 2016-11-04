@@ -172,7 +172,11 @@ update message model =
             ( { model | cpam = Just cpamJson, loading = False, date = cpamJson.date, subs = Just 2, version = cpamJson.version }, Cmd.none )
 
         FetchFail e ->
-            ( { model | loading = False, subs = Nothing, date = "Erro!" }, Cmd.none )
+            let
+                t =
+                    Debug.log (toString e) 0
+            in
+                ( { model | loading = False, subs = Nothing, date = "Erro!" }, Cmd.none )
 
         RollItems newTime ->
             rollItems model
@@ -450,7 +454,7 @@ subscriptions model =
     case model.subs of
         Just 1 ->
             Sub.batch
-                [ Time.every (5 * minute) MorePlease
+                [ Time.every (3 * minute) MorePlease
                 , Time.every (10 * second) RollItems
                 , Time.every (1 * second) RollListItems
                 , Window.resizes Resize
@@ -458,8 +462,8 @@ subscriptions model =
 
         Just 2 ->
             Sub.batch
-                [ Time.every (5 * minute) MorePleaseCpam
-                , Time.every (5 * second) RollItemsCpam
+                [ Time.every (3 * minute) MorePleaseCpam
+                , Time.every (10 * second) RollItemsCpam
                 , Time.every (1 * second) RollListItemsCpam
                 , Window.resizes Resize
                 ]

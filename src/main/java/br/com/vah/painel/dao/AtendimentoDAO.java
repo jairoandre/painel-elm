@@ -1,5 +1,6 @@
 package br.com.vah.painel.dao;
 
+import br.com.vah.painel.dto.SuspensosAgoraUrgenteDTO;
 import br.com.vah.painel.entity.Atendimento;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
@@ -68,48 +69,72 @@ public class AtendimentoDAO extends AbstractDAO<Atendimento> {
     return criteria.list();
   }
 
-  public Map<Long, List<String>> medSusp() {
+  public Map<Long, List<SuspensosAgoraUrgenteDTO>> suspensosAgoraUrgente() {
     String sql =
-    "SELECT" +
-        "  ATD.CD_ATENDIMENTO," +
-        "  PRO.DS_PRODUTO" +
-        "  FROM" +
-        "  DBAMV.TB_ATENDIME ATD" +
-        "  LEFT JOIN DBAMV.PRE_MED PM ON ATD.CD_ATENDIMENTO = PM.CD_ATENDIMENTO" +
-        "  LEFT JOIN DBAMV.ITPRE_MED IT ON PM.CD_PRE_MED = IT.CD_PRE_MED" +
-        "  LEFT JOIN DBAMV.TIP_PRESC TP ON IT.CD_TIP_PRESC = TP.CD_TIP_PRESC" +
-        "  LEFT JOIN DBAMV.TIP_FRE F ON IT.CD_TIP_FRE = F.CD_TIP_FRE" +
-        "  LEFT JOIN DBAMV.PRODUTO PRO ON TP.CD_PRODUTO = PRO.CD_PRODUTO" +
-        "  LEFT JOIN DBAMV.LEITO L ON ATD.CD_LEITO = L.CD_LEITO" +
-        "  WHERE" +
-        "  ATD.CD_MULTI_EMPRESA = 1" +
-        "  AND ATD.TP_ATENDIMENTO = 'I'" +
-        "  AND IT.SN_CANCELADO = 'S'" +
-        "  AND TP.CD_TIP_ESQ IN ('AT', 'ANT', 'AV', 'MED', 'KIT', 'DEP', 'MAC', 'MNP')" +
-        "  AND IT.DH_REGISTRO BETWEEN (SYSDATE - (10 / 24)) AND (SYSDATE)" +
-        "  AND PM.FL_IMPRESSO = 'S'" +
-        "  AND PM.TP_PRE_MED = 'M'" +
-        "  AND L.CD_UNID_INT NOT IN (12, 10, 6, 17, 7, 8, 9)" +
-        "  GROUP BY ATD.CD_ATENDIMENTO, PRO.DS_PRODUTO";
+        "SELECT" +
+            "  ATD.CD_ATENDIMENTO," +
+            "  PRO.DS_PRODUTO," +
+            "  F.DS_TIP_FRE," +
+            "  IT.SN_CANCELADO" +
+            "  FROM" +
+            "  DBAMV.TB_ATENDIME ATD" +
+            "  LEFT JOIN DBAMV.PRE_MED PM ON ATD.CD_ATENDIMENTO = PM.CD_ATENDIMENTO" +
+            "  LEFT JOIN DBAMV.ITPRE_MED IT ON PM.CD_PRE_MED = IT.CD_PRE_MED" +
+            "  LEFT JOIN DBAMV.TIP_PRESC TP ON IT.CD_TIP_PRESC = TP.CD_TIP_PRESC" +
+            "  LEFT JOIN DBAMV.TIP_FRE F ON IT.CD_TIP_FRE = F.CD_TIP_FRE" +
+            "  LEFT JOIN DBAMV.PRODUTO PRO ON TP.CD_PRODUTO = PRO.CD_PRODUTO" +
+            "  LEFT JOIN DBAMV.LEITO L ON ATD.CD_LEITO = L.CD_LEITO" +
+            "  WHERE" +
+            "  ATD.CD_MULTI_EMPRESA = 1" +
+            "  AND PM.DT_PRE_MED >= (SYSDATE - 5)" +
+            "  AND ATD.TP_ATENDIMENTO = 'I'" +
+            "  AND ((IT.SN_CANCELADO = 'S' AND TP.CD_TIP_ESQ IN ('AT', 'ANT', 'AV', 'MED', 'KIT', 'DEP', 'MAC', 'MNP'))" +
+            "       OR (IT.SN_CANCELADO = 'N' AND IT.SN_URGENTE = 'S' AND TP.CD_TIP_ESQ IN ('AT', 'ANT', 'AV', 'MAC', 'MED', 'POR')))" +
+            "  AND IT.DH_REGISTRO BETWEEN (SYSDATE - (6 / 24)) AND (SYSDATE)" +
+            "  AND PM.FL_IMPRESSO = 'S'" +
+            "  AND PM.TP_PRE_MED = 'M'" +
+            "  AND L.CD_UNID_INT NOT IN (12, 10, 6, 17, 7, 8, 9)" +
+            "  GROUP BY ATD.CD_ATENDIMENTO, PRO.DS_PRODUTO, F.DS_TIP_FRE, IT.SN_CANCELADO";
 
     Session session = getSession();
     SQLQuery query = session.createSQLQuery(sql);
 
     List<Object[]> result = (List<Object[]>) query.list();
 
-    Map<Long, List<String>> map = new HashMap<>();
+    Map<Long, List<SuspensosAgoraUrgenteDTO>> map = new HashMap<>();
 
     for (Object[] obj : result) {
       Long value = ((BigDecimal) obj[0]).longValue();
       String medicamento = (String) obj[1];
+      String frequencia = (String) obj[2];
+      String cancelado = (String) obj[3];
 
-      List<String> list = map.get(value);
+      SuspensosAgoraUrgenteDTO dto = new SuspensosAgoraUrgenteDTO();
+      if (cancelado.equals("S")) {
+        String suspenso = medicamento;
+        if (frequencia != null) {
+          suspenso += " " + frequencia;
+        }
+        dto.setSuspenso(suspenso);
+      } else {
+        if (frequencia.equals("AGORA")) {
+          dto.setAgora(medicamento);
+        } else {
+          String med = medicamento;
+          if (frequencia != null) {
+            med += " " + frequencia;
+          }
+          dto.setUrgente(med);
+        }
+      }
+
+      List<SuspensosAgoraUrgenteDTO> list = map.get(value);
       if (list == null) {
         list = new ArrayList<>();
         map.put(value, list);
       }
 
-      list.add(medicamento);
+      list.add(dto);
 
     }
 
@@ -117,32 +142,40 @@ public class AtendimentoDAO extends AbstractDAO<Atendimento> {
 
   }
 
-  public List<Atendimento> medicamentosSuspensos() {
-    Criteria criteria = createCriteria();
+  public List<Long> atendimentosComAlergias() {
+    String sql =
+        "SELECT" +
+            "  DISTINCT ATD.CD_ATENDIMENTO" +
+            "  FROM DBAMV.TB_ATENDIME ATD" +
+            "  LEFT JOIN DBAMV.REGISTRO_DOCUMENTO RD ON ATD.CD_ATENDIMENTO = RD.CD_ATENDIMENTO" +
+            "  LEFT JOIN DBAMV.REGISTRO_RESPOSTA RR ON RD.CD_REGISTRO_DOCUMENTO = RR.CD_REGISTRO_DOCUMENTO" +
+            "  LEFT JOIN DBAMV.LEITO L ON ATD.CD_LEITO = L.CD_LEITO" +
+            "  WHERE RR.DS_RESPOSTA IS NOT NULL" +
+            "  AND ATD.CD_MULTI_EMPRESA = 1" +
+            "  AND RR.DS_RESPOSTA <> '0;Não'" +
+            "  AND ATD.TP_ATENDIMENTO = 'I'" +
+            "  AND L.CD_UNID_INT NOT IN (12, 10, 6, 17, 7, 8, 9)" +
+            "  AND L.TP_SITUACAO = 'A'" +
+            "  AND ATD.DT_ALTA IS NULL" +
+            "  AND RR.CD_PERGUNTA_DOC IN (16361,16362,16381,16382,16383,16384,16385,16386,16387,16388,16389)" +
+            "  AND RD.DT_REGISTRO > (SYSDATE - 5)";
 
-    criteria.createAlias("leito", "l")
-        .add(Restrictions.not(Restrictions.in("l.unidadeInternacao", new Integer[]{12, 10, 6, 17, 7, 8, 9})));
+    Session session = getSession();
+    SQLQuery query = session.createSQLQuery(sql);
 
-    Calendar cld = Calendar.getInstance();
-    Date today = new Date();
-    cld.setTime(today);
-    cld.add(Calendar.HOUR_OF_DAY, -10);
-    Date tenHoursBefore = cld.getTime();
+    List<Object> result = query.list();
+    List<Long> ids = new ArrayList<>();
 
-    criteria.createAlias("prescricoes", "p");
-    criteria.createAlias("p.items", "it");
-    criteria.createAlias("it.tipo", "tp");
+    if (result == null || result.isEmpty()) {
+      return null;
+    } else {
+      for (int i = 0, len = result.size(); i < len; i++) {
+        Long id = ((BigDecimal) result.get(i)).longValue();
+        ids.add(id);
+      }
 
-    criteria.add(Restrictions.eq("p.impresso", "S"));
-    criteria.add(Restrictions.eq("p.tipo", "M"));
-    criteria.add(Restrictions.eq("it.cancelado", "S"));
-    criteria.add(Restrictions.in("tp.tipo", new String[]{"AT", "ANT", "AV", "MED", "KIT", "DEP", "MAC", "MNP"}));
-    criteria.add(Restrictions.between("it.dataRegistro", tenHoursBefore, today));
-
-    criteria.add(Restrictions.eq("cdMultiEmpresa", 1));
-    criteria.add(Restrictions.eq("tpAtendimento", "I"));
-
-    return criteria.list();
+    }
+    return ids;
   }
 
   public String previsaoAlta(Long atendimentoId) {
@@ -264,6 +297,7 @@ public class AtendimentoDAO extends AbstractDAO<Atendimento> {
         "  JOIN DBAMV.REGISTRO_RESPOSTA RR ON RD.CD_REGISTRO_DOCUMENTO = RR.CD_REGISTRO_DOCUMENTO" +
         "  WHERE RD.CD_ATENDIMENTO = :CD_ATENDIMENTO" +
         "  AND RR.DS_RESPOSTA IS NOT NULL" +
+        "  AND RR.DS_RESPOSTA <> '0;Não'" +
         "  AND RR.CD_PERGUNTA_DOC IN (16361,16362,16381,16382,16383,16384,16385,16386,16387,16388,16389)" +
         "  AND RD.DT_REGISTRO =" +
         "  (" +
@@ -372,7 +406,7 @@ public class AtendimentoDAO extends AbstractDAO<Atendimento> {
       if (val == null) {
         return -1;
       } else {
-        if (val.intValue() > 45) {
+        if (val.intValue() >= 45) {
           return 2;
         } else {
           return 0;
@@ -406,7 +440,7 @@ public class AtendimentoDAO extends AbstractDAO<Atendimento> {
         Integer scp = val.intValue();
         if (scp >= 9 && scp <= 14) {
           return 0;
-        } else if (scp >= 15 && scp <= 13) {
+        } else if (scp >= 15 && scp <= 23) {
           return 1;
         } else if (scp >= 24 && scp <= 31) {
           return 2;

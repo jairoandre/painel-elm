@@ -157,18 +157,36 @@ public class MainSrv {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yy HH:mm");
     SimpleDateFormat sdfYear = new SimpleDateFormat("dd/MM/yyyy");
     PainelCpam painel = new PainelCpam();
+    Set<Long> ids = new HashSet<>();
     List<Atendimento> atendimentos = atendimentoDAO.listForCepam();
+
+    for (Atendimento atendimento : atendimentos) {
+      ids.add(atendimento.getId());
+    }
+
     Map<AsasEnum, SetorCpam> mapSetor = new HashMap<>();
     List<SetorCpam> setores = new ArrayList<>();
 
-    Map<Long, List<String>> suspensos = atendimentoDAO.medSusp();
+    Map<Long, List<SuspensosAgoraUrgenteDTO>> saus = atendimentoDAO.suspensosAgoraUrgente();
 
-    for (Long atendimentoId : suspensos.keySet()) {
+    for (Long atendimentoId : saus.keySet()) {
+      ids.add(atendimentoId);
       Atendimento atendimento = atendimentoDAO.find(atendimentoId);
       atendimentos.add(atendimento);
     }
 
+    // Atendimentos com alergia
+    List<Long> idsComAlergia = atendimentoDAO.atendimentosComAlergias();
+
+    for (Long id : idsComAlergia) {
+      if (!ids.contains(id)) {
+        atendimentos.add(atendimentoDAO.find(id));
+      }
+    }
+
     for (Atendimento atendimento : atendimentos) {
+
+      boolean atLeastOneFilled = false;
 
       if (atendimento.getHoraAltaMedica() != null) {
         Calendar cldDtAlta = Calendar.getInstance();
@@ -180,6 +198,7 @@ public class MainSrv {
         cldHrMedica.set(Calendar.MONTH, cldDtAlta.get(Calendar.MONTH));
         cldHrMedica.set(Calendar.YEAR, cldDtAlta.get(Calendar.YEAR));
         atendimento.setHoraAltaMedica(cldHrMedica.getTime());
+        atLeastOneFilled = true;
       }
 
       AsasEnum curr = AsasEnum.byInt(atendimento.getLeito().getUnidadeInternacao());
@@ -196,16 +215,51 @@ public class MainSrv {
       paciente.setApto(atendimento.getLeito().getNome());
       if (atendimento.getHoraAltaMedica() != null) {
         paciente.setAltaMedica(sdf.format(atendimento.getHoraAltaMedica()));
+        atLeastOneFilled = true;
       }
       if (atendimento.getHoraAlta() != null) {
         paciente.setAltaHospitalar(sdf.format(atendimento.getHoraAlta()));
+        atLeastOneFilled = true;
       }
 
       paciente.setAtendimento(atendimento.getId().intValue());
 
-      paciente.setSuspensos(suspensos.get(atendimento.getId()));
+      List<SuspensosAgoraUrgenteDTO> sauList = saus.get(atendimento.getId());
 
-      setor.getPacientes().add(paciente);
+      if (sauList != null) {
+        paciente.setSuspensos(new ArrayList<>());
+        paciente.setAgora(new ArrayList<>());
+        paciente.setUrgente(new ArrayList<>());
+
+        for (SuspensosAgoraUrgenteDTO sau : sauList) {
+          String suspenso = sau.getSuspenso();
+          String agora = sau.getAgora();
+          String urgente = sau.getUrgente();
+          if (suspenso != null) {
+            paciente.getSuspensos().add(suspenso);
+            atLeastOneFilled = true;
+          }
+          if (agora != null) {
+            paciente.getAgora().add(agora);
+            atLeastOneFilled = true;
+          }
+          if (urgente != null) {
+            paciente.getUrgente().add(urgente);
+            atLeastOneFilled = true;
+          }
+        }
+      }
+
+      List<String> alergias = atendimentoDAO.alergias(atendimento.getId());
+
+      if (alergias != null && !alergias.isEmpty()) {
+        paciente.setAlergias(alergias);
+        atLeastOneFilled = true;
+      }
+
+      if (atLeastOneFilled) {
+        setor.getPacientes().add(paciente);
+      }
     }
 
     Collections.sort(setores, new Comparator<SetorCpam>() {

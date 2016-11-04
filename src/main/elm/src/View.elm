@@ -246,7 +246,7 @@ riscoQuedaToHtml risk =
                     "riscoQuedaAverage"
 
                 High ->
-                    "riscoQuedaLow"
+                    "riscoQuedaHigh"
 
                 _ ->
                     ""
@@ -407,11 +407,11 @@ roomToHtml idx room =
                 Nothing ->
                     ""
 
-        previsaoClass =
+        previsaoHtml =
             if room.previsaoToday then
-                "previsao--alerta"
+                span [ class "span--altaHospitalar" ] [ text previsao ]
             else
-                "previsao"
+                span [] [ text previsao ]
     in
         div [ class rowClass, style [ ( "top", top ) ] ]
             [ columnTextPadding room.apto "apto"
@@ -420,7 +420,7 @@ roomToHtml idx room =
             , columnTextPadding medico "medico"
             , columnTextPadding convenio "convenio"
             , columnTextPadding observacao "observacao"
-            , columnTextCenter previsao previsaoClass
+            , columnHtml previsaoHtml "previsao"
             , columnHtml precaucao "precaucao"
             , columnHtml scp "scp"
             , columnHtml riscoQueda "riscoQueda"

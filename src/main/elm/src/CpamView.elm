@@ -12,15 +12,15 @@ headerCpam : Html a
 headerCpam =
     div
         [ class "column__header__wrapper" ]
-        [ columnH "LEITO" "aptoCpam"
-        , columnH "ATEND." "atendimentoCpam"
-        , columnH "PACIENTE" "pacienteCpam"
-        , columnH "ALTA MÉD." "altaMedicaCpam"
-        , columnH "ALTA HOSP." "altaHospitalarCpam"
-        , columnH "MÉD. SUSPENSOS" "suspensosCpam"
-        , columnH "MÉD. AGORA" "agoraCpam"
-        , columnH "MÉD. URGENTE" "urgenteCpam"
-        , columnH "ALERGIAS" "alergiasCpam"
+        [ columnH "LEITO" "apto--cpam"
+        , columnH "ATEND." "atendimento--cpam"
+        , columnH "PACIENTE" "paciente--cpam"
+        , columnH "ALTA MÉD." "altaMedica--cpam"
+        , columnH "ALTA HOSP." "altaHospitalar--cpam"
+        , columnH "MED. SUSPENSOS" "suspensos--cpam"
+        , columnH "MED. AGORA" "agora--cpam"
+        , columnH "MED. URGENTE" "urgente--cpam"
+        , columnH "ALERGIAS" "alergias--cpam"
         ]
 
 
@@ -29,7 +29,7 @@ cpamSetorToHtml setorCpam =
     div [ class "rows__wrapper" ]
         (List.indexedMap
             cpamToHtml
-            (List.take 20 (List.drop setorCpam.pageCount setorCpam.pacientes))
+            (List.take 20 (List.drop (setorCpam.pageCount * 20) setorCpam.pacientes))
         )
 
 
@@ -53,6 +53,15 @@ cpamToHtml idx paciente =
 
         suspensos =
             stringListToHtml paciente.suspensos "suspensos--cpam"
+
+        agora =
+            stringListToHtml paciente.agora "agora--cpam"
+
+        urgente =
+            stringListToHtml paciente.urgente "urgente--cpam"
+
+        alergias =
+            stringListToHtml paciente.alergias "alergias--cpam"
     in
         div [ class rowClass, style [ ( "top", top ) ] ]
             [ columnTextPadding paciente.apto "apto--cpam"
@@ -61,7 +70,7 @@ cpamToHtml idx paciente =
             , columnTextPadding paciente.altaMedica "altaMedica--cpam"
             , columnHtml altaHospitalar "altaHospitalar--cpam"
             , columnHtml suspensos "suspensos--cpam"
-            , stringListToHtml paciente.agora "agora--cpam"
-            , stringListToHtml paciente.urgente "urgente--cpam"
-            , stringListToHtml paciente.alergias "alergias--cpam"
+            , columnHtml agora "agora--cpam"
+            , columnHtml urgente "urgente--cpam"
+            , columnHtml alergias "alergias--cpam"
             ]

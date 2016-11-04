@@ -99,8 +99,8 @@ body {
 	height: @columnHeaderHeight;
 	background-color: @thinBlue;
 	color: #fff;
-  	text-shadow: #111 2px 2px 5px;
-  	font-weight: bold;
+	text-shadow: #111 2px 2px 5px;
+	font-weight: bold;
 	line-height: @columnHeaderHeight;
 }
 
@@ -192,7 +192,7 @@ body {
 
 // ESTILOS ASA
 
-@aptoWidth: 95px;
+@aptoWidth: 140px;
 .column__header--apto {
 	width: @aptoWidth;
 }
@@ -206,14 +206,14 @@ body {
 	left: @statusOffset;
 }
 
-@pacienteASAWidth: 300px + 125px; // JEJUM WIDTH
+@pacienteASAWidth: 250px + 125px; // JEJUM WIDTH
 @pacienteASAOffset: @statusWidth + @statusOffset;
 .column__header--pacienteASA {
 	width: @pacienteASAWidth;
 	left: @pacienteASAOffset;
 }
 
-@medicoASAWidth: 230px;
+@medicoASAWidth: 250px;
 @medicoASAOffset: @pacienteASAWidth + @pacienteASAOffset;
 .column__header--medicoASA {
 	width: @medicoASAWidth;
@@ -282,7 +282,7 @@ body {
 	background-color: #a95b41;
 }
 
-@alergiaASAWidth: 165px;
+@alergiaASAWidth: 150px;
 @alergiaASAOffset: @ulceraWidth + @ulceraOffset;
 .column__header--alergiaASA {
 	width: @alergiaASAWidth;
@@ -362,7 +362,7 @@ body {
 
 .column__wrapper--apto {
 	width: @aptoWidth;
-	font-size: 16px;
+	font-size: 25px;
 }
 
 
@@ -396,17 +396,11 @@ body {
 	left: @obsASAOffset;
 }
 
-.column__wrapper--previsao, .column__wrapper--previsao--alerta {
+.column__wrapper--previsao {
 	width: @previsaoASAWidth;
 	left: @previsaoASAOffset;
 	font-size: 18px;
 	text-align: center;
-}
-
-.column__wrapper--previsao--alerta {
-	background-color: #ff4300;
-	color: #fff;
-	font-weight: bold;
 }
 
 .column__wrapper--precaucao {
@@ -481,8 +475,8 @@ body {
 // UL LI LISTS
 
 .list__painel {
-	font-size: 12px;
-	line-height: 15px;
+	font-size: 14px;
+	line-height: 16px;
 	text-align: left;
 	overflow: hidden;
 	border-radius: 5px;
@@ -623,7 +617,7 @@ body {
 // COLUMNS
 
 @aptoCpamWidth: 155px;
-.column__header--aptoCpam {
+.column__header--apto--cpam {
 	width: @aptoCpamWidth;
 }
 
@@ -633,7 +627,7 @@ body {
 
 @atendimentoCpamWidth: 95px;
 @atendimentoCpamOffset: @aptoCpamWidth;
-.column__header--atendimentoCpam {
+.column__header--atendimento--cpam {
 	width: @atendimentoCpamWidth;
 	left: @atendimentoCpamOffset;
 }
@@ -645,7 +639,7 @@ body {
 
 @pacienteCpamWidth: 370px;
 @pacienteCpamOffset: @atendimentoCpamOffset + @atendimentoCpamWidth;
-.column__header--pacienteCpam {
+.column__header--paciente--cpam {
 	width: @pacienteCpamWidth;
 	left: @pacienteCpamOffset;
 }
@@ -658,7 +652,7 @@ body {
 
 @altaMedicaCpamWidth: 150px;
 @altaMedicaCpamOffset: @pacienteCpamOffset + @pacienteCpamWidth;
-.column__header--altaMedicaCpam {
+.column__header--altaMedica--cpam {
 	width: @altaMedicaCpamWidth;
 	left: @altaMedicaCpamOffset;
 }
@@ -671,7 +665,7 @@ body {
 
 @altaHospitalarCpamWidth: 150px;
 @altaHospitalarCpamOffset: @altaMedicaCpamOffset + @altaMedicaCpamWidth;
-.column__header--altaHospitalarCpam {
+.column__header--altaHospitalar--cpam {
 	width: @altaHospitalarCpamWidth;
 	left: @altaHospitalarCpamOffset;
 }
@@ -684,7 +678,7 @@ body {
 
 @suspensosCpamWidth: 250px;
 @suspensosCpamOffset: @altaHospitalarCpamOffset + @altaHospitalarCpamWidth;
-.column__header--suspensosCpam {
+.column__header--suspensos--cpam {
 	width: @suspensosCpamWidth;
 	left: @suspensosCpamOffset;
 	background-color: #d26b00;
@@ -697,12 +691,13 @@ body {
 
 .list__painel--suspensos--cpam {
 	width: @suspensosCpamWidth - 2;
-	background-color: #f0bf8d;
+	background-color: #d17719;
+	color: #fff;
 }
 
 @agoraCpamWidth: 250px;
 @agoraCpamOffset: @suspensosCpamOffset + @suspensosCpamWidth;
-.column__header--agoraCpam {
+.column__header--agora--cpam {
 	width: @agoraCpamWidth;
 	left: @agoraCpamOffset;
 	background-color: #d23f00;
@@ -713,10 +708,16 @@ body {
 	left: @agoraCpamOffset;
 }
 
+.list__painel--agora--cpam {
+	width: @agoraCpamWidth - 2;
+	background-color: #de7548;
+	color: #fff;
+}
+
 
 @urgenteCpamWidth: 250px;
 @urgenteCpamOffset: @agoraCpamOffset + @agoraCpamWidth;
-.column__header--urgenteCpam {
+.column__header--urgente--cpam {
 	width: @urgenteCpamWidth;
 	left: @urgenteCpamOffset;
 	background-color: #d21300;
@@ -727,10 +728,16 @@ body {
 	left: @urgenteCpamOffset;
 }
 
+.list__painel--urgente--cpam {
+	width: @urgenteCpamWidth - 2;
+	background-color: #d0574b;
+	color: #fff;
+}
+
 
 @alergiasCpamWidth: 250px;
 @alergiasCpamOffset: @urgenteCpamOffset + @urgenteCpamWidth;
-.column__header--alergiasCpam {
+.column__header--alergias--cpam {
 	width: @alergiasCpamWidth;
 	left: @alergiasCpamOffset;
 	background-color: #107300;
@@ -739,6 +746,12 @@ body {
 .column__wrapper--alergias--cpam {
 	width: @alergiasCpamWidth;
 	left: @alergiasCpamOffset;
+}
+
+.list__painel--alergias--cpam {
+	width: @alergiasCpamWidth - 2;
+	background-color: #407537;
+	color: #fff;
 }
 
 .span--altaHospitalar {
