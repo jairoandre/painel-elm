@@ -88,13 +88,13 @@ urlUpdate result model =
             ( { model | view = HomeView, page = page, asa = Nothing, loading = False, subs = Nothing, cpam = Nothing }, setScale )
 
         Ok ((Asa asa) as page) ->
-            ( { model | view = AsaView, page = page, asa = Just asa, loading = True, subs = Nothing, cpam = Nothing }, setScalePainel )
+            ( { model | view = AsaView, page = page, asa = Just asa, loading = True, subs = Nothing, cpam = Nothing }, Cmd.batch [ setScale, getPainel asa] )
 
         Ok (Cpam as page) ->
-            ( { model | view = CpamView, page = page, asa = Nothing, loading = True, subs = Nothing }, setScaleCpam )
+            ( { model | view = CpamView, page = page, asa = Nothing, loading = True, subs = Nothing }, Cmd.batch [ setScale, getCpam ] )
 
         Ok (Farmacia as page) ->
-            ( { model | view = FarmaciaView, page = page, asa = Nothing, loading = True, subs = Nothing }, setScaleCpam )
+            ( { model | view = FarmaciaView, page = page, asa = Nothing, loading = True, subs = Nothing }, Cmd.batch [ setScale, getCpam ] )
 
 
 
@@ -103,6 +103,7 @@ urlUpdate result model =
 
 type Msg
     = PickAsa (Maybe String)
+    | PickCpam
     | MorePlease Time
     | MorePleaseCpam Time
     | PainelSucceed PainelJson
@@ -113,8 +114,6 @@ type Msg
     | RollItemsCpam Time
     | RollListItemsCpam Time
     | Resize Size
-    | ResizeCpam Size
-    | ResizePainel Size
 
 
 resizeCmd : Model -> Size -> Cmd Msg -> ( Model, Cmd Msg )
@@ -136,6 +135,10 @@ update message model =
 
                 Just asa ->
                     ( model, Navigation.modifyUrl (toHash (Asa asa)) )
+
+        PickCpam ->
+            ( model, Navigation.modifyUrl "#cpam" )
+
 
         MorePlease newTime ->
             case model.asa of
@@ -192,17 +195,6 @@ update message model =
 
         Resize newSize ->
             resizeCmd model newSize Cmd.none
-
-        ResizeCpam newSize ->
-            resizeCmd model newSize getCpam
-
-        ResizePainel newSize ->
-            case model.asa of
-                Nothing ->
-                    resizeCmd model newSize Cmd.none
-
-                Just asa ->
-                    resizeCmd model newSize (getPainel asa)
 
 
 rollItemsCpam : Model -> ( Model, Cmd Msg )
@@ -416,7 +408,10 @@ asaToButton tuple =
 
 asaSelection : List (Html Msg)
 asaSelection =
-    [ div [] (List.map asaToButton asas) ] ++ [ legendas ]
+    [ div [] (List.map asaToButton asas)
+    , div [] [ button [ class "button__asa", onClick PickCpam ] [ text "CPAM" ] ]
+    , legendas
+    ]
 
 
 view : Model -> Html Msg
@@ -463,7 +458,7 @@ subscriptions model =
         Just 2 ->
             Sub.batch
                 [ Time.every (3 * minute) MorePleaseCpam
-                , Time.every (10 * second) RollItemsCpam
+                , Time.every (20 * second) RollItemsCpam
                 , Time.every (1 * second) RollListItemsCpam
                 , Window.resizes Resize
                 ]
@@ -479,16 +474,6 @@ subscriptions model =
 setScale : Cmd Msg
 setScale =
     Task.perform (\_ -> Debug.crash "Oopss!!!") Resize Window.size
-
-
-setScaleCpam : Cmd Msg
-setScaleCpam =
-    Task.perform (\_ -> Debug.crash "Oopss!!!") ResizeCpam Window.size
-
-
-setScalePainel : Cmd Msg
-setScalePainel =
-    Task.perform (\_ -> Debug.crash "Oopss!!!") ResizePainel Window.size
 
 
 getPainel : String -> Cmd Msg
