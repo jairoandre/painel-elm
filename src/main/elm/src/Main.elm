@@ -88,7 +88,7 @@ urlUpdate result model =
             ( { model | view = HomeView, page = page, asa = Nothing, loading = False, subs = Nothing, cpam = Nothing }, setScale )
 
         Ok ((Asa asa) as page) ->
-            ( { model | view = AsaView, page = page, asa = Just asa, loading = True, subs = Nothing, cpam = Nothing }, Cmd.batch [ setScale, getPainel asa] )
+            ( { model | view = AsaView, page = page, asa = Just asa, loading = True, subs = Nothing, cpam = Nothing }, Cmd.batch [ setScale, getPainel asa ] )
 
         Ok (Cpam as page) ->
             ( { model | view = CpamView, page = page, asa = Nothing, loading = True, subs = Nothing }, Cmd.batch [ setScale, getCpam ] )
@@ -138,7 +138,6 @@ update message model =
 
         PickCpam ->
             ( model, Navigation.modifyUrl "#cpam" )
-
 
         MorePlease newTime ->
             case model.asa of
@@ -450,7 +449,7 @@ subscriptions model =
         Just 1 ->
             Sub.batch
                 [ Time.every (3 * minute) MorePlease
-                , Time.every (10 * second) RollItems
+                , Time.every (20 * second) RollItems
                 , Time.every (1 * second) RollListItems
                 , Window.resizes Resize
                 ]
