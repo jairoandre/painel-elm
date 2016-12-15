@@ -23,6 +23,7 @@ public class Room implements Serializable {
   private List<String> exames;
   private List<String> cirurgias;
   private String jejum;
+  private Boolean altaMedica;
 
   public String getApto() {
     return apto;
@@ -150,5 +151,13 @@ public class Room implements Serializable {
 
   public void setJejum(String jejum) {
     this.jejum = jejum;
+  }
+
+  public Boolean getAltaMedica() {
+    return altaMedica;
+  }
+
+  public void setAltaMedica(Boolean altaMedica) {
+    this.altaMedica = altaMedica;
   }
 }

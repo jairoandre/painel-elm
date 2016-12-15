@@ -319,6 +319,12 @@ roomToHtml idx room =
             else
                 "row__wrapper row__wrapper--zebra"
 
+        rowClassAltaMedica =
+            if room.altaMedica then
+                " room__wrapper--bgaltaMedica"
+            else
+                ""
+
         paciente =
             case room.paciente of
                 Nothing ->
@@ -413,7 +419,7 @@ roomToHtml idx room =
             else
                 span [] [ text previsao ]
     in
-        div [ class rowClass, style [ ( "top", top ) ] ]
+        div [ class (rowClass ++ rowClassAltaMedica), style [ ( "top", top ) ] ]
             [ columnTextPadding room.apto "apto"
             , columnHtml (roomStatusToHtml room.status) "status"
             , columnTextPadding paciente "paciente"

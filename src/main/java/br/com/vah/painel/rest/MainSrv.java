@@ -98,6 +98,7 @@ public class MainSrv {
       room.setAlergias(atendimentoDAO.alergias(id));
       room.setCirurgias(atendimentoDAO.cirurgias(id));
       // room.setExames(atendimentoDAO.exames(id));
+      room.setAltaMedica(atendimento.getDataAltaMedica() != null);
       rooms.add(room);
     }
 

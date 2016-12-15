@@ -21,6 +21,7 @@ type alias Room =
     , exames : List String
     , cirurgias : List String
     , jejum : Maybe String
+    , altaMedica : Bool
     }
 
 
@@ -41,6 +42,7 @@ type alias RoomJson =
     , exames : List String
     , cirurgias : List String
     , jejum : String
+    , altaMedica : Bool
     }
 
 
@@ -77,6 +79,7 @@ roomJsonDecoder =
         |> optional "exames" (list string) []
         |> optional "cirurgias" (list string) []
         |> optional "jejum" string ""
+        |> optional "altaMedica" bool False
 
 
 roomsJsonDecoder : Decoder (List RoomJson)
@@ -255,6 +258,7 @@ roomJsonToModel json =
             exames
             cirurgias
             jejum
+            json.altaMedica
 
 
 roomsJsonToModel : List RoomJson -> List Room
