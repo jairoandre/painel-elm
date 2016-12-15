@@ -77,6 +77,8 @@ public class MainSrv {
 
     List<Atendimento> atendimentos = atendimentoDAO.list(asaEnum.getIds());
 
+    int count = 0;
+
     for (Atendimento atendimento : atendimentos) {
       Room room = new Room();
       room.setApto(atendimento.getLeito().getResumo());

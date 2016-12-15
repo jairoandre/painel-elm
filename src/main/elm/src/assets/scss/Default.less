@@ -14,769 +14,778 @@
 @thinBlue: #7481ae;
 
 body {
-	margin: 0;
-	font-family: Helvetica;
-	overflow: hidden;
+  margin: 0;
+  font-family: Helvetica;
+  overflow: hidden;
 }
 
 .app {
-	position: relative;
-	transform-origin: top left;
+  position: relative;
+  transform-origin: top left;
 }
 
 .header__wrapper {
-	position: absolute;
-	top: 0;
-	left: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .logo__wrapper {
-	position: absolute;
+  position: absolute;
 }
 
 .logo__wrapper img {
-	height: 40px;
-	margin-top: (@headerHeight - 40) / 2;
-	margin-left: (@dateWrapperWidth - 135) / 2;
-	cursor: pointer;
+  height: 40px;
+  margin-top: (@headerHeight - 40) / 2;
+  margin-left: (@dateWrapperWidth - 135) / 2;
+  cursor: pointer;
 }
 
 .title__wrapper {
-	position: absolute;
-	text-align: center;
-	font-size: 50px;
-	background: #233269;
-	color: #fff;
-  	text-shadow: #222 2px 2px 5px;
-	left: @titleWrapperOffset;
-	width: @titleWrapperWidth;
-	height: @headerHeight;
-	line-height: @headerHeight;
+  position: absolute;
+  text-align: center;
+  font-size: 50px;
+  background: #233269;
+  color: #fff;
+  text-shadow: #222 2px 2px 5px;
+  left: @titleWrapperOffset;
+  width: @titleWrapperWidth;
+  height: @headerHeight;
+  line-height: @headerHeight;
 }
 
 .title__wrapper--inner {
-	border-bottom: 1px solid #fff;
+  border-bottom: 1px solid #fff;
 }
 
 .title__version {
-	position: absolute;
-	font-size: 15px;
-	text-align: right;
-	left: 5px;
-	bottom: 0;
-	padding-right: 5px;
+  position: absolute;
+  font-size: 15px;
+  text-align: right;
+  left: 5px;
+  bottom: 0;
+  padding-right: 5px;
 }
 
 .title__page {
-	position: absolute;
-	font-size: 20px;
-	text-align: left;
-	right: 0;
-	bottom: 0;
-	padding-right: 5px;
+  position: absolute;
+  font-size: 20px;
+  text-align: left;
+  right: 0;
+  bottom: 0;
+  padding-right: 5px;
 }
 
 .date__wrapper {
-	position: absolute;
-	text-align: center;
-	font-size: 30px;
-	left: @dateWrapperOffset;
-	width: @dateWrapperWidth;
-	height: @headerHeight;
-	line-height: @headerHeight;
+  position: absolute;
+  text-align: center;
+  font-size: 30px;
+  left: @dateWrapperOffset;
+  width: @dateWrapperWidth;
+  height: @headerHeight;
+  line-height: @headerHeight;
 }
 
 // COLUMNS
 
 @columnHeaderHeight: 30px;
 .column__header__wrapper {
-	position: absolute;
-	top: @headerHeight;
+  position: absolute;
+  top: @headerHeight;
 }
 
 .column__header {
-	position: absolute;
-	height: @columnHeaderHeight;
-	background-color: @thinBlue;
-	color: #fff;
-	text-shadow: #111 2px 2px 5px;
-	font-weight: bold;
-	line-height: @columnHeaderHeight;
+  position: absolute;
+  height: @columnHeaderHeight;
+  background-color: @thinBlue;
+  color: #fff;
+  text-shadow: #111 2px 2px 5px;
+  font-weight: bold;
+  line-height: @columnHeaderHeight;
 }
 
 .column__header__inner {
-	padding-left: 5px;
-	border-right: 1px solid #fff;
+  padding-left: 5px;
+  border-right: 1px solid #fff;
 }
 
 .column__header__inner--center {
-	text-align: center;
-	border-right: 1px solid #fff;
+  text-align: center;
+  border-right: 1px solid #fff;
 }
 
 @specialtyWidth: 150px;
 .column__header--specialty {
-	width: @specialtyWidth;
+  width: @specialtyWidth;
 }
 
 @riskWidth: 130px;
 @riskOffset: @specialtyWidth;
 .column__header--risk {
-	width: @riskWidth;
-	left: @riskOffset;
+  width: @riskWidth;
+  left: @riskOffset;
 }
 
 @pacienteWidth: 350px;
 @pacienteOffset: @riskOffset + @riskWidth;
 .column__header--paciente {
-	width: @pacienteWidth;
-	left: @pacienteOffset;
+  width: @pacienteWidth;
+  left: @pacienteOffset;
 }
 
 @convenioWidth: 150px;
 @convenioOffset: @pacienteOffset + @pacienteWidth;
 .column__header--convenio {
-	width: @convenioWidth;
-	left: @convenioOffset;
+  width: @convenioWidth;
+  left: @convenioOffset;
 }
 
 @obsWidth: 250px;
 @obsOffset: @convenioOffset + @convenioWidth;
 .column__header--obs {
-	width: @obsWidth;
-	left: @obsOffset;
+  width: @obsWidth;
+  left: @obsOffset;
 }
 
 @localizacaoWidth: 150px;
 @localizacaoOffset: @obsWidth + @obsOffset;
 .column__header--localizacao {
-	width: @localizacaoWidth;
-	left: @localizacaoOffset;
+  width: @localizacaoWidth;
+  left: @localizacaoOffset;
 }
 
 @tempoWidth: 140px;
 @tempoOffset: @localizacaoWidth + @localizacaoOffset;
 .column__header--tempo {
-	width: @tempoWidth;
-	left: @tempoOffset;
+  width: @tempoWidth;
+  left: @tempoOffset;
 }
 
 @alergiaWidth: 150px;
 @alergiaOffset: @tempoWidth + @tempoOffset;
 .column__header--alergia {
-	width: @alergiaWidth;
-	left: @alergiaOffset;
+  width: @alergiaWidth;
+  left: @alergiaOffset;
 }
 
 @exameWidth: 150px;
 @exameOffset: @alergiaWidth + @alergiaOffset;
 .column__header--exame {
-	width: @exameWidth;
-	left: @exameOffset;
+  width: @exameWidth;
+  left: @exameOffset;
 }
 
 @protocoloWidth: 150px;
 @protocoloOffset: @exameWidth + @exameOffset;
 .column__header--protocolo {
-	width: @protocoloWidth;
-	left: @protocoloOffset;
+  width: @protocoloWidth;
+  left: @protocoloOffset;
 }
 
 @internacaoWidth: 150px;
 @internacaoOffset: @protocoloWidth + @protocoloOffset;
 .column__header--internacao {
-	width: @internacaoWidth;
-	left: @internacaoOffset;
+  width: @internacaoWidth;
+  left: @internacaoOffset;
 }
-
 
 // ESTILOS ASA
 
 @aptoWidth: 140px;
 .column__header--apto {
-	width: @aptoWidth;
+  width: @aptoWidth;
 }
-
-
 
 @statusWidth: 70px;
 @statusOffset: @aptoWidth;
 .column__header--status {
-	width: @statusWidth;
-	left: @statusOffset;
+  width: @statusWidth;
+  left: @statusOffset;
 }
 
 @pacienteASAWidth: 250px + 125px; // JEJUM WIDTH
 @pacienteASAOffset: @statusWidth + @statusOffset;
 .column__header--pacienteASA {
-	width: @pacienteASAWidth;
-	left: @pacienteASAOffset;
+  width: @pacienteASAWidth;
+  left: @pacienteASAOffset;
 }
 
 @medicoASAWidth: 250px;
 @medicoASAOffset: @pacienteASAWidth + @pacienteASAOffset;
 .column__header--medicoASA {
-	width: @medicoASAWidth;
-	left: @medicoASAOffset;
+  width: @medicoASAWidth;
+  left: @medicoASAOffset;
 }
 
 @convenioASAWidth: 120px;
 @convenioASAOffset: @medicoASAWidth + @medicoASAOffset;
 .column__header--convenioASA {
-	width: @convenioASAWidth;
-	left: @convenioASAOffset;
+  width: @convenioASAWidth;
+  left: @convenioASAOffset;
 }
 
 @obsASAWidth: 150px;
 @obsASAOffset: @convenioASAWidth + @convenioASAOffset;
 .column__header--obsASA {
-	width: @obsASAWidth;
-	left: @obsASAOffset;
+  width: @obsASAWidth;
+  left: @obsASAOffset;
 }
 
 @previsaoASAWidth: 110px;
 @previsaoASAOffset: @obsASAWidth + @obsASAOffset;
 .column__header--previsaoASA {
-	width: @previsaoASAWidth;
-	left: @previsaoASAOffset;
-	font-size: 15px;
-	font-weight: bold;
-	background-color: red;
+  width: @previsaoASAWidth;
+  left: @previsaoASAOffset;
+  font-size: 15px;
+  font-weight: bold;
+  background-color: red;
 }
 
 @precaucaoWidth: 70px;
 @precaucaoOffset: @previsaoASAWidth + @previsaoASAOffset;
 .column__header--precaucao {
-	width: @precaucaoWidth;
-	left: @precaucaoOffset;
-	font-size: 13px;
-	font-weight: bold;
-	background-color: #4b3f9d;
+  width: @precaucaoWidth;
+  left: @precaucaoOffset;
+  font-size: 13px;
+  font-weight: bold;
+  background-color: #4b3f9d;
 }
 
 @scpWidth: 70px;
 @scpOffset: @precaucaoWidth + @precaucaoOffset;
 .column__header--scp {
-	width: @scpWidth;
-	left: @scpOffset;
-	font-size: 13px;
-	font-weight: bold;
-	background-color: #00afee;
+  width: @scpWidth;
+  left: @scpOffset;
+  font-size: 13px;
+  font-weight: bold;
+  background-color: #00afee;
 }
 
 @riscoWidth: 70px;
 @riscoOffset: @scpWidth + @scpOffset;
 .column__header--risco {
-	width: @riscoWidth;
-	left: @riscoOffset;
-	font-size: 11px;
-	background-color: #00a95a;
+  width: @riscoWidth;
+  left: @riscoOffset;
+  font-size: 11px;
+  background-color: #00a95a;
 }
 
 @ulceraWidth: 70px;
 @ulceraOffset: @riscoWidth + @riscoOffset;
 .column__header--ulcera {
-	width: @ulceraWidth;
-	left: @ulceraOffset;
-	font-size: 10px;
-	background-color: #a95b41;
+  width: @ulceraWidth;
+  left: @ulceraOffset;
+  font-size: 10px;
+  background-color: #a95b41;
 }
 
 @alergiaASAWidth: 150px;
 @alergiaASAOffset: @ulceraWidth + @ulceraOffset;
 .column__header--alergiaASA {
-	width: @alergiaASAWidth;
-	left: @alergiaASAOffset;
-	background-color: #ff6fbc;
+  width: @alergiaASAWidth;
+  left: @alergiaASAOffset;
+  background-color: #ff6fbc;
 }
 
 @exameASAWidth: 165px;
 @exameASAOffset: @alergiaASAWidth + @alergiaASAOffset;
 .column__header--exameASA {
-	width: @exameASAWidth;
-	left: @exameASAOffset;
-	background-color: #989898;
+  width: @exameASAWidth;
+  left: @exameASAOffset;
+  background-color: #989898;
 }
 
 @cirurgiaWidth: @exameASAWidth + 110px;
 //@cirurgiaOffset: @exameASAWidth + @exameASAOffset;
 @cirurgiaOffset: @alergiaASAWidth + @alergiaASAOffset;
 .column__header--cirurgia {
-	width: @cirurgiaWidth;
-	left: @cirurgiaOffset;
-	background-color: #f38634;
+  width: @cirurgiaWidth;
+  left: @cirurgiaOffset;
+  background-color: #f38634;
 }
 
 @jejumWidth: 125px;
 @jejumOffset: @cirurgiaWidth + @cirurgiaOffset;
 .column__header--jejum {
-	width: @jejumWidth;
-	left: @jejumOffset;
-	background-color: #85706d;
+  width: @jejumWidth;
+  left: @jejumOffset;
+  background-color: #85706d;
 }
 
 // COLUMNS ASA
 
 .rows__wrapper {
-	position: absolute;
-	top: 80px;
-	font-size: 20px;
-	height: 1000px;
-	width: 1920px;
+  position: absolute;
+  top: 80px;
+  font-size: 20px;
+  height: 1000px;
+  width: 1920px;
 }
 
 .column__wrapper--padding {
-	padding-left: 5px;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+  padding-left: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .column__wrapper--center {
-	text-align: center;
-	overflow: hidden;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 @rowHeight: 50px;
 
 .row__wrapper {
-	position: absolute;
-	width: 1920px;
-	font-size: 20px;
-	height: @rowHeight;
-
+  position: absolute;
+  width: 1920px;
+  font-size: 20px;
+  height: @rowHeight;
+  cursor: none;
 }
 
 .row__wrapper--zebra {
-	background-color: #dffcff;
+  background-color: #dffcff;
 }
 
 .row__wrapper--bgaltaMedica {
-	background-color: #dadada;
-  background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,.5) 50%);
+  background-color: #dadada;
+  background-image: linear-gradient(90deg, transparent 50%, rgba(255, 255, 255, .5) 50%);
   background-size: 50px 50px;
-  color: #5d5656;
-  font-style: italic;
 }
 
 .column__wrapper {
-	height: @rowHeight;
-	line-height: @rowHeight;
-	position: absolute;
+  height: @rowHeight;
+  line-height: @rowHeight;
+  position: absolute;
 
 }
 
 .column__wrapper--apto {
-	width: @aptoWidth;
-	font-size: 25px;
+  width: @aptoWidth;
+  font-size: 25px;
 }
 
-
 .column__wrapper--status {
-	width: @statusWidth;
-	left: @statusOffset;
-	text-align: center;
-	margin-top: 5px;
+  width: @statusWidth;
+  left: @statusOffset;
+  text-align: center;
+  margin-top: 5px;
 }
 
 .column__wrapper--paciente {
-	width: @pacienteASAWidth;
-	left: @pacienteASAOffset;
-	font-size: 25px;
-	font-height: bold;
+  width: @pacienteASAWidth;
+  left: @pacienteASAOffset;
+  font-size: 25px;
+  font-height: bold;
 }
 
 .column__wrapper--medico {
-	width: @medicoASAWidth;
-	left: @medicoASAOffset;
+  width: @medicoASAWidth;
+  left: @medicoASAOffset;
 }
 
 .column__wrapper--convenio {
-	width: @convenioASAWidth;
-	left: @convenioASAOffset;
-	font-size: 16px;
+  width: @convenioASAWidth;
+  left: @convenioASAOffset;
+  font-size: 16px;
 }
 
 .column__wrapper--observacao {
-	width: @obsASAWidth;
-	left: @obsASAOffset;
+  width: @obsASAWidth;
+  left: @obsASAOffset;
 }
 
 .column__wrapper--previsao {
-	width: @previsaoASAWidth;
-	left: @previsaoASAOffset;
-	font-size: 18px;
-	text-align: center;
+  width: @previsaoASAWidth;
+  left: @previsaoASAOffset;
+  font-size: 18px;
+  text-align: center;
 }
 
 .column__wrapper--precaucao {
-	width: @precaucaoWidth;
-	left: @precaucaoOffset;
-	text-align: center;
-	margin-top: 5px;
+  width: @precaucaoWidth;
+  left: @precaucaoOffset;
+  text-align: center;
+  margin-top: 5px;
 }
 
 .column__wrapper--scp {
-	width: @scpWidth;
-	left: @scpOffset;
-	text-align: center;
-	margin-top: 5px;
+  width: @scpWidth;
+  left: @scpOffset;
+  text-align: center;
+  margin-top: 5px;
 }
 
 .column__wrapper--riscoQueda {
-	width: @riscoWidth;
-	left: @riscoOffset;
-	text-align: center;
-	margin-top: 5px;
+  width: @riscoWidth;
+  left: @riscoOffset;
+  text-align: center;
+  margin-top: 5px;
 }
 
 .button__asa {
-	width: 250px;
-	height: 100px;
-	font-size: 20px;
-	margin: 5px;
-	padding: 0;
+  width: 250px;
+  height: 100px;
+  font-size: 20px;
+  margin: 5px;
+  padding: 0;
 }
 
 .column__wrapper--ulceraPressao {
-	width: @ulceraWidth;
-	left: @ulceraOffset;
-	text-align: center;
-	margin-top: 5px;
+  width: @ulceraWidth;
+  left: @ulceraOffset;
+  text-align: center;
+  margin-top: 5px;
 }
 
 .column__wrapper--alergiaASA {
-	width: @alergiaASAWidth;
-	left: @alergiaASAOffset;
-	text-align: left;
-	overflow: hidden;
-	font-size: 15px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
-	line-height: normal;
+  width: @alergiaASAWidth;
+  left: @alergiaASAOffset;
+  text-align: left;
+  overflow: hidden;
+  font-size: 15px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  line-height: normal;
 }
 
 .column__wrapper--examesASA {
-	width: @exameASAWidth;
-	left: @exameASAOffset;
-	text-align: center;
-	overflow: hidden;
-	font-size: 15px;
-	white-space: normal;
+  width: @exameASAWidth;
+  left: @exameASAOffset;
+  text-align: center;
+  overflow: hidden;
+  font-size: 15px;
+  white-space: normal;
 }
 
 .column__wrapper--cirurgias {
-	width: @cirurgiaWidth;
-	left: @cirurgiaOffset;
-	font-size: 15px;
+  width: @cirurgiaWidth;
+  left: @cirurgiaOffset;
+  font-size: 15px;
 }
 
 .column__wrapper--jejum {
-	width: @jejumWidth;
-	left: @jejumOffset;
-	font-size: 15px;
+  width: @jejumWidth;
+  left: @jejumOffset;
+  font-size: 15px;
 }
 
 // UL LI LISTS
 
 .list__painel {
-	font-size: 14px;
-	line-height: 16px;
-	text-align: left;
-	overflow: hidden;
-	border-radius: 5px;
-	height: @cellHeight - 2;
-	white-space: nowrap;
-	position: absolute;
-	top: 1px;
-	left: 1px;
+  font-size: 14px;
+  line-height: 16px;
+  text-align: left;
+  overflow: hidden;
+  border-radius: 5px;
+  height: @cellHeight - 2;
+  white-space: nowrap;
+  position: absolute;
+  top: 1px;
+  left: 1px;
 }
 
 .list__painel--exames {
-	width: @exameASAWidth - 2;
-	background-color: #ddd;
+  width: @exameASAWidth - 2;
+  background-color: #ddd;
 }
 
 .list__painel--alergias {
-	width: @alergiaASAWidth - 2;
-	background-color: #FFAFBC;
+  width: @alergiaASAWidth - 2;
+  background-color: #FFAFBC;
 }
 
 .list__painel--cirurgias {
-	width: @cirurgiaWidth - 2;
-	background-color: #ffd1a0;
+  width: @cirurgiaWidth - 2;
+  background-color: #ffd1a0;
 }
 
 .list__item__painel {
-	width: 100%;
-	overflow: hidden;
+  width: 100%;
+  overflow: hidden;
 }
 
 .list__item__painel__inner {
-	text-overflow: ellipsis;
-	padding-left: 5px;
-	overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 5px;
+  overflow: hidden;
 }
 
 // IMAGE
 
 .image__icon {
-	width: 30px;
-	height: 30px;
-	padding: 5px;
-	border-radius: 5px;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  border-radius: 5px;
 }
+
 .image__icon--ocupada {
-	background-color: #ff5f33;
+  background-color: #ff5f33;
 }
+
 .image__icon--alta {
-	background-color: #59f956;
+  background-color: #59f956;
 }
+
 .image__icon--vago {
-	background-color: #5dde93;
+  background-color: #5dde93;
 }
+
 .image__icon--acompanhante {
-	background-color: #dc6fff;
+  background-color: #dc6fff;
 }
+
 .image__icon--higienizacao {
-	background-color: #00E3CB;
+  background-color: #00E3CB;
 }
+
 .image__icon--reservada {
-	background-color: #FBAD50;
+  background-color: #FBAD50;
 }
+
 .image__icon--manutencao {
-	background-color: #ffeb21;
+  background-color: #ffeb21;
 }
+
 .image__icon--interditado {
-	background-color: #ff9540;
+  background-color: #ff9540;
 }
+
 .image__icon--empty {
-	background-color: #A3A3A3;
+  background-color: #A3A3A3;
 }
+
 .image__icon--precaucao--padrao {
-	background-color: #88dc88;
+  background-color: #88dc88;
 }
+
 .image__icon--precaucao--preventiva {
-	background-color: #F7AA25;
+  background-color: #F7AA25;
 }
+
 .image__icon--precaucao--aerossois {
-	background-color: #ffeb21;
+  background-color: #ffeb21;
 }
+
 .image__icon--precaucao--contato {
-	background-color: #FF4200;
+  background-color: #FF4200;
 }
+
 .image__icon--precaucao--contato--aerossois {
-	background-color: #ffbe1e;
+  background-color: #ffbe1e;
 }
+
 .image__icon--precaucao--contato--goticulas {
-	background-color: #548cff;
+  background-color: #548cff;
 }
+
 .image__icon--precaucao--goticulas {
-	background-color: #33ABFF;
+  background-color: #33ABFF;
 }
+
 .image__icon--precaucao--sem {
-	background-color: #fff;
+  background-color: #fff;
 }
+
 .image__icon--ulceraLow,
 .image__icon--riscoQuedaLow {
-	background-color: #88dc88;
+  background-color: #88dc88;
 }
+
 .image__icon--ulceraAverage,
 .image__icon--riscoQuedaAverage {
-	background-color: #ff9933;
+  background-color: #ff9933;
 }
+
 .image__icon--ulceraHigh,
 .image__icon--riscoQuedaHigh {
-	background-color: #FF3333;
+  background-color: #FF3333;
 }
 
 // LOADING LAYER
 
 .loadingLayer {
-	position: absolute;
-	background-color: #ccc;
-	text-align: center;
-	width: @width;
-	height: @height;
-	opacity: 0.8;
+  position: absolute;
+  background-color: #ccc;
+  text-align: center;
+  width: @width;
+  height: @height;
+  opacity: 0.8;
 }
 
 .loadingLayer--image {
-	position: absolute;
-    margin: auto;
-    top: -300px;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  position: absolute;
+  margin: auto;
+  top: -300px;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .loadingLayer--gif {
-	position: absolute;
-    margin: auto;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 // COLUMNS
 
 @aptoCpamWidth: 155px;
 .column__header--apto--cpam {
-	width: @aptoCpamWidth;
+  width: @aptoCpamWidth;
 }
 
 .column__wrapper--apto--cpam {
-	width: @aptoCpamWidth;
+  width: @aptoCpamWidth;
 }
 
 @atendimentoCpamWidth: 95px;
 @atendimentoCpamOffset: @aptoCpamWidth;
 .column__header--atendimento--cpam {
-	width: @atendimentoCpamWidth;
-	left: @atendimentoCpamOffset;
+  width: @atendimentoCpamWidth;
+  left: @atendimentoCpamOffset;
 }
 
 .column__wrapper--atendimento--cpam {
-	width: @atendimentoCpamWidth;
-	left: @atendimentoCpamOffset;
+  width: @atendimentoCpamWidth;
+  left: @atendimentoCpamOffset;
 }
 
 @pacienteCpamWidth: 370px;
 @pacienteCpamOffset: @atendimentoCpamOffset + @atendimentoCpamWidth;
 .column__header--paciente--cpam {
-	width: @pacienteCpamWidth;
-	left: @pacienteCpamOffset;
+  width: @pacienteCpamWidth;
+  left: @pacienteCpamOffset;
 }
 
 .column__wrapper--paciente--cpam {
-	width: @pacienteCpamWidth;
-	left: @pacienteCpamOffset;
+  width: @pacienteCpamWidth;
+  left: @pacienteCpamOffset;
 }
-
 
 @altaMedicaCpamWidth: 150px;
 @altaMedicaCpamOffset: @pacienteCpamOffset + @pacienteCpamWidth;
 .column__header--altaMedica--cpam {
-	width: @altaMedicaCpamWidth;
-	left: @altaMedicaCpamOffset;
+  width: @altaMedicaCpamWidth;
+  left: @altaMedicaCpamOffset;
 }
 
 .column__wrapper--altaMedica--cpam {
-	width: @altaMedicaCpamWidth;
-	left: @altaMedicaCpamOffset;
+  width: @altaMedicaCpamWidth;
+  left: @altaMedicaCpamOffset;
 }
-
 
 @altaHospitalarCpamWidth: 150px;
 @altaHospitalarCpamOffset: @altaMedicaCpamOffset + @altaMedicaCpamWidth;
 .column__header--altaHospitalar--cpam {
-	width: @altaHospitalarCpamWidth;
-	left: @altaHospitalarCpamOffset;
+  width: @altaHospitalarCpamWidth;
+  left: @altaHospitalarCpamOffset;
 }
 
 .column__wrapper--altaHospitalar--cpam {
-	width: @altaHospitalarCpamWidth;
-	left: @altaHospitalarCpamOffset;
+  width: @altaHospitalarCpamWidth;
+  left: @altaHospitalarCpamOffset;
 }
-
 
 @suspensosCpamWidth: 250px;
 @suspensosCpamOffset: @altaHospitalarCpamOffset + @altaHospitalarCpamWidth;
 .column__header--suspensos--cpam {
-	width: @suspensosCpamWidth;
-	left: @suspensosCpamOffset;
-	background-color: #d26b00;
+  width: @suspensosCpamWidth;
+  left: @suspensosCpamOffset;
+  background-color: #d26b00;
 }
 
 .column__wrapper--suspensos--cpam {
-	width: @suspensosCpamWidth;
-	left: @suspensosCpamOffset;
+  width: @suspensosCpamWidth;
+  left: @suspensosCpamOffset;
 }
 
 .list__painel--suspensos--cpam {
-	width: @suspensosCpamWidth - 2;
-	background-color: #d17719;
-	color: #fff;
+  width: @suspensosCpamWidth - 2;
+  background-color: #d17719;
+  color: #fff;
 }
 
 @agoraCpamWidth: 250px;
 @agoraCpamOffset: @suspensosCpamOffset + @suspensosCpamWidth;
 .column__header--agora--cpam {
-	width: @agoraCpamWidth;
-	left: @agoraCpamOffset;
-	background-color: #d23f00;
+  width: @agoraCpamWidth;
+  left: @agoraCpamOffset;
+  background-color: #d23f00;
 }
 
 .column__wrapper--agora--cpam {
-	width: @agoraCpamWidth;
-	left: @agoraCpamOffset;
+  width: @agoraCpamWidth;
+  left: @agoraCpamOffset;
 }
 
 .list__painel--agora--cpam {
-	width: @agoraCpamWidth - 2;
-	background-color: #de7548;
-	color: #fff;
+  width: @agoraCpamWidth - 2;
+  background-color: #de7548;
+  color: #fff;
 }
-
 
 @urgenteCpamWidth: 250px;
 @urgenteCpamOffset: @agoraCpamOffset + @agoraCpamWidth;
 .column__header--urgente--cpam {
-	width: @urgenteCpamWidth;
-	left: @urgenteCpamOffset;
-	background-color: #d21300;
+  width: @urgenteCpamWidth;
+  left: @urgenteCpamOffset;
+  background-color: #d21300;
 }
 
 .column__wrapper--urgente--cpam {
-	width: @urgenteCpamWidth;
-	left: @urgenteCpamOffset;
+  width: @urgenteCpamWidth;
+  left: @urgenteCpamOffset;
 }
 
 .list__painel--urgente--cpam {
-	width: @urgenteCpamWidth - 2;
-	background-color: #d0574b;
-	color: #fff;
+  width: @urgenteCpamWidth - 2;
+  background-color: #d0574b;
+  color: #fff;
 }
-
 
 @alergiasCpamWidth: 250px;
 @alergiasCpamOffset: @urgenteCpamOffset + @urgenteCpamWidth;
 .column__header--alergias--cpam {
-	width: @alergiasCpamWidth;
-	left: @alergiasCpamOffset;
-	background-color: #107300;
+  width: @alergiasCpamWidth;
+  left: @alergiasCpamOffset;
+  background-color: #107300;
 }
 
 .column__wrapper--alergias--cpam {
-	width: @alergiasCpamWidth;
-	left: @alergiasCpamOffset;
+  width: @alergiasCpamWidth;
+  left: @alergiasCpamOffset;
 }
 
 .list__painel--alergias--cpam {
-	width: @alergiasCpamWidth - 2;
-	background-color: #407537;
-	color: #fff;
+  width: @alergiasCpamWidth - 2;
+  background-color: #407537;
+  color: #fff;
 }
 
 .span--altaHospitalar {
-	background-color: #f4110a;
-	padding: 5px;
-	color: #fff;
-	font-weight: bold;
-	border-radius: 3px;
+  background-color: #f4110a;
+  padding: 5px;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 3px;
 }
 
 .loading--header {
-	width: 40px;
-	position: absolute;
-	top: 5px;
-	left: 10px;
+  width: 40px;
+  position: absolute;
+  top: 5px;
+  left: 10px;
 }
 
 .loading--header--hidden {
-	display: none;
+  display: none;
 }

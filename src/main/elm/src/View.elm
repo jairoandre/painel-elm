@@ -321,7 +321,7 @@ roomToHtml idx room =
 
         rowClassAltaMedica =
             if room.altaMedica then
-                " room__wrapper--bgaltaMedica"
+                " row__wrapper--bgaltaMedica"
             else
                 ""
 
